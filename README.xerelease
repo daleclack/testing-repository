@@ -1,0 +1,3 @@
+xerelease*.cpp or xerelease*.c are suitable for 32 bit platform(windows x86&x64 and Linux x86&64)
+On 32-bit platform xerelease*.c or xerelease*.cpp may face 2038 question
+xerelease*-x86.c is only suitable for complier on 32-bit platforms to complie
