@@ -54,7 +54,7 @@ void dale(struct tm *local){
 void release(struct tm *local){
 	int rel=0;//release version
 	int year1=2019,month1=1,day1=11,year2=local->tm_year+1900,month2=local->tm_mon+1,day2=local->tm_mday;
-	char str[30];//Xeinit LTS release name
+	char str[30];//Xeinit LTS Version
 	rel=total_year_day(year1,year2)-total_day(year1,month1,day1)+total_day(year2,month2,day2);//get release version
     sprintf(str,"Xeinit LTS version:5.2.%d\n",rel);
     MessageBox(NULL,str,"Xe 5",MB_OK|MB_ICONINFORMATION);
@@ -65,7 +65,7 @@ void release(struct tm *local){
     return ;
 }
 void develop(struct tm *local){
-	char devel[57],str[30];int devel1;//development version
+	char devel[57],str[30];int devel1;//development version(char str[] for MessageBox)
 	printf("xeinit 6 version:");
 	int year1=2017,month1=6,day1=17,year2=local->tm_year+1900,month2=local->tm_mon+1,day2=local->tm_mday;
 	devel1=total_year_day(year1,year2)-total_day(year1,month1,day1)+total_day(year2,month2,day2);//get release version
@@ -80,17 +80,17 @@ void develop(struct tm *local){
 }
 int main(int argc, char **argv) {
     struct tm *local;
-    time_t t;
-    t=time(NULL);
-    local=localtime(&t);//Get local time
+    __time64_t t;
+    t=_time64(NULL);
+    local=_localtime64(&t);//Get local time
     LP a[]={dale,release,develop};
     int x;
-    char str[30];//Xe api version
+    char str[30];//Xeinit api version
     sprintf(str,"Xe api version:%d\n",xeapi1(local));
-    MessageBox(NULL,str,"Xe api",MB_OK|MB_ICONINFORMATION);
+    MessageBox(NULL,str,"xerelease7",MB_OK|MB_ICONINFORMATION);
     printf("Input branch:1.release 2.development\n");
     printf("Your choice:");
-	scanf("%d",&x);
+    scanf("%d",&x);
     a[x](local);
     system("pause");
     return 0;
