@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
     MessageBox(NULL,str,"Xe api",MB_OK|MB_ICONINFORMATION);
     printf("Input branch:1.release 2.development\n");
     printf("Your choice:");
-    scanf("%d",&x);
+	scanf("%d",&x);
     a[x](local);
     system("pause");
     return 0;
