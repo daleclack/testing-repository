@@ -65,11 +65,13 @@ void release(struct tm *local){
     return ;
 }
 void develop(struct tm *local){
-	char devel[57];int devel1;//development version
+	char devel[57],str[30];int devel1;//development version
 	printf("xeinit 6 version:");
 	int year1=2017,month1=6,day1=17,year2=local->tm_year+1900,month2=local->tm_mon+1,day2=local->tm_mday;
 	devel1=total_year_day(year1,year2)-total_day(year1,month1,day1)+total_day(year2,month2,day2);//get release version
     scanf("%s",&devel);//get development version
+    sprintf(str,"Xeinit 6 Version:%s.%d",devel,devel1);
+    MessageBox(NULL,str,"Xe 6",MB_OK|MB_ICONINFORMATION);
     freopen("xe-6.x","a",stdout);
     printf("%d-%d-%d ",local->tm_year+1900,local->tm_mon+1,local->tm_mday);//output:development branch time in xe-release
     printf("%s.%d Api:%d\n",devel,devel1,xeapi1(local));
@@ -87,7 +89,8 @@ int main(int argc, char **argv) {
     sprintf(str,"Xe api version:%d\n",xeapi1(local));
     MessageBox(NULL,str,"Xe api",MB_OK|MB_ICONINFORMATION);
     printf("Input branch:1.release 2.development\n");
-    scanf("%d",&x);
+    printf("Your choice:");
+	scanf("%d",&x);
     a[x](local);
     system("pause");
     return 0;
