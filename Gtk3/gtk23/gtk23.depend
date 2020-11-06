@@ -1,0 +1,39 @@
+# depslib dependency file v1.0
+1607090807 source:/root/cpp44/gtk23/main.cpp
+	<gtk/gtk.h>
+	"gtkwin.h"
+
+1607092105 /root/cpp44/gtk23/gtkwin.h
+
+1607088105 source:/root/cpp44/gtk23/gtkwin.cpp
+	"gtkwin.h"
+
+1607090807 source:/root/cpp44/gtk23/config-test.cpp
+	"config-test.h"
+
+1607090688 /root/cpp44/gtk23/config-test.h
+	<stdio.h>
+
+1607093702 source:/root/cpp44/main.cpp
+	<gtk/gtk.h>
+	"gtkwin.h"
+
+1607240278 /root/cpp44/gtkwin.h
+	<gtk/gtk.h>
+
+1607223317 source:/root/cpp44/config-test.cpp
+	"config-test.h"
+
+1607223135 /root/cpp44/config-test.h
+	<stdio.h>
+	<string.h>
+	"gtkwin.h"
+
+1607223270 source:/root/cpp44/gtkwin.cpp
+	<gtk/gtk.h>
+	"gtkwin.h"
+	"config-test.h"
+	"img.xpm"
+
+1607094268 /root/cpp44/img.xpm
+
