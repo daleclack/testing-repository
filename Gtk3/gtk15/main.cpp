@@ -18,6 +18,10 @@ void change(GtkWidget *widget,gpointer data){
     }
 }
 
+void entry_activate(GtkWidget widget,gpointer data){
+    gtk_dialog_response(GTK_DIALOG(data),GTK_RESPONSE_OK);
+}
+
 void change_text(GtkWidget *widget,gpointer data){
     //This function is for change progress bar text
     const gchar *progress_text;
@@ -34,6 +38,7 @@ void change_text(GtkWidget *widget,gpointer data){
     gtk_entry_set_text(GTK_ENTRY(entry),"Progress...");
     gtk_container_add(GTK_CONTAINER(content_area),entry);
     gtk_widget_show(entry);
+    g_signal_connect(G_OBJECT(entry),"activate",G_CALLBACK(entry_activate),(gpointer)dialog);
     gtk_dialog_run(GTK_DIALOG(dialog));
     progress_text=gtk_entry_get_text(GTK_ENTRY(entry));
     //g_print(progress_text);
