@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1605162044 source:/root/cpp34/xeapi.cpp
+	"xeapi.h"
+
+1605166916 /root/cpp34/xeapi.h
+	<time.h>
+
+1605166390 source:/root/cpp34/main.cpp
+	<gtk/gtk.h>
+	"img.xpm"
+	"xeapi.h"
+
+1604801822 /root/cpp34/img.xpm
+
