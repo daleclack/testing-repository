@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.2 -->
+<interface>
+  <requires lib="gtk+" version="3.20"/>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name sddjdddn -->
+      <column type="gchar"/>
+      <!-- column-name sndndjdnff -->
+      <column type="gchar"/>
+    </columns>
+  </object>
+  <object class="GtkWindow">
+    <property name="can_focus">False</property>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child>
+      <object class="GtkFixed">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkComboBox">
+            <property name="width_request">100</property>
+            <property name="height_request">80</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="model">liststore1</property>
+            <property name="active">2</property>
+            <property name="has_entry">True</property>
+            <child internal-child="entry">
+              <object class="GtkEntry">
+                <property name="can_focus">False</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="x">252</property>
+            <property name="y">89</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText">
+            <property name="width_request">100</property>
+            <property name="height_request">80</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="active">2</property>
+            <property name="has_entry">True</property>
+            <property name="active_id">1</property>
+            <items>
+              <item translatable="yes">Hello</item>
+              <item translatable="yes">ajsnsjnsk</item>
+            </items>
+            <child internal-child="entry">
+              <object class="GtkEntry">
+                <property name="can_focus">False</property>
+                <property name="text" translatable="yes">Hello</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="x">118</property>
+            <property name="y">137</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
