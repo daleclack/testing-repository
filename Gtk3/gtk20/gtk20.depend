@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1606308880 source:/sdcard/testing-repository/Gtk3/gtk20/main.cpp
+	<gtk/gtk.h>
+	<stdio.h>
+

@@ -30,8 +30,14 @@ void activate(GtkApplication *app,gpointer user_data){
     //Create a button with label
     GtkWidget *button=gtk_button_new_with_label("Print");
     gtk_widget_set_size_request(button,100,50);
-    gtk_fixed_put(GTK_FIXED(fixed),button,150,100);
+    gtk_fixed_put(GTK_FIXED(fixed),button,75,100);
     g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(entry_activate),(gpointer)entry);
+
+    //Create a Exit button
+    GtkWidget *button_exit=gtk_button_new_with_label("Exit");
+    gtk_widget_set_size_request(button_exit,100,50);
+    gtk_fixed_put(GTK_FIXED(fixed),button_exit,225,100);
+    g_signal_connect(G_OBJECT(button_exit),"clicked",G_CALLBACK(gtk_main_quit),NULL);
 
     //Add everything to window
     gtk_container_add(GTK_CONTAINER(window),fixed);
