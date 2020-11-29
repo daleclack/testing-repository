@@ -18,6 +18,7 @@ void activate(GtkApplication *app,gpointer user_data){
     gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
     gtk_window_set_title(GTK_WINDOW(window),"gtk (20)");
     gtk_window_set_default_size(GTK_WINDOW(window),400,200);
+    gtk_window_set_resizable(GTK_WINDOW(window),FALSE);
     GtkWidget *fixed=gtk_fixed_new();
 
     //Create a entry
@@ -37,7 +38,7 @@ void activate(GtkApplication *app,gpointer user_data){
     GtkWidget *button_exit=gtk_button_new_with_label("Exit");
     gtk_widget_set_size_request(button_exit,100,50);
     gtk_fixed_put(GTK_FIXED(fixed),button_exit,225,100);
-    g_signal_connect(G_OBJECT(button_exit),"clicked",G_CALLBACK(gtk_main_quit),NULL);
+    g_signal_connect_swapped(G_OBJECT(button_exit),"clicked",G_CALLBACK(gtk_widget_destroy),window);
 
     //Add everything to window
     gtk_container_add(GTK_CONTAINER(window),fixed);
@@ -51,5 +52,6 @@ int main(int argc,char *argv[]){
     app=gtk_application_new("com.github.daleclack.gtk20",G_APPLICATION_FLAGS_NONE);
     g_signal_connect(app,"activate",G_CALLBACK(activate),NULL);
     status=g_application_run(G_APPLICATION(app),argc,argv);
+    g_object_unref(app);
     return status;
 }
