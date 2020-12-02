@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1606889146 source:/root/cpp42/main.cpp
+	<gtk/gtk.h>
+	"winpe.xpm"
+	"img.xpm"
+
+1606780433 /root/cpp42/winpe.xpm
+
+1606888264 /root/cpp42/img.xpm
+
