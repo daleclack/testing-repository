@@ -1,0 +1,35 @@
+# depslib dependency file v1.0
+1607504652 source:/root/cpp46/gtkwin.cpp
+	<stdio.h>
+	"gtkwin.h"
+	"xerelease.h"
+	"winpe.xpm"
+	"img.xpm"
+	"xeapi.h"
+
+1607518930 /root/cpp46/gtkwin.h
+	<gtk/gtk.h>
+
+1606780433 /root/cpp46/winpe.xpm
+
+1607478869 source:/root/cpp46/main.cpp
+	<gtk/gtk.h>
+	"gtkwin.h"
+
+1605162044 source:/root/cpp46/xeapi.cpp
+	"xeapi.h"
+
+1605271910 /root/cpp46/xeapi.h
+	<time.h>
+
+1607094268 /root/cpp46/img.xpm
+
+1607504690 source:/root/cpp46/xerelease.cpp
+	<stdio.h>
+	<time.h>
+	<string.h>
+	<stdlib.h>
+	"xeapi.h"
+
+1607504384 /root/cpp46/xerelease.h
+
