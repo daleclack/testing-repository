@@ -1,0 +1,7 @@
+In Xe release 8:
+
+Core code is based on xerelease7
+
+Use gtk+ 3 to make the application more simple to use and more great
+
+Note:I only test the code on gtk+3.24.23(I don't know if the code supports gtk+4)
