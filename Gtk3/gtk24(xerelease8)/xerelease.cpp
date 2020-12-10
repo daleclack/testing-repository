@@ -4,7 +4,7 @@
 #include<stdlib.h>
 #include"xeapi.h"
 
-typedef void(*LP)(struct tm *local);//define a  pointer function
+//typedef void(*LP)(struct tm *local);//define a  pointer function
 
 int total_day(int year,int month,int day)
 {

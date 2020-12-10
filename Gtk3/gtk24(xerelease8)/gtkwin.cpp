@@ -7,10 +7,16 @@
 
 void gtkwin_config(GtkWidget *window)
 {
+    //Config main window
     gtk_window_set_title(GTK_WINDOW(window),"Xe release 8");
     gtk_window_set_default_size(GTK_WINDOW(window),400,300);
     gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
     gtk_window_set_resizable(GTK_WINDOW(window),FALSE);
+
+    //Icon config
+    GdkPixbuf *pixbuf=gdk_pixbuf_new_from_xpm_data(img);
+    gtk_window_set_icon(GTK_WINDOW(window),pixbuf);
+    g_object_unref(pixbuf);
 }
 
 void image_config(GtkImage *image)
