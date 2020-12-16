@@ -1,3 +1,7 @@
 //Note:gtk15 and above changed from Dev-Cpp to Code::bloks
+
 Gtk3 code by Dev-C++ 5.11
+
 (I think these code can be compiled on linux)
+
+Warning!Project gtk25 has critical bugs,do not try to compile it
