@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1608044009 source:/root/cpp47/main.cpp
+	<gtk/gtk.h>
+	<cstdlib>
+	<ctime>
+

@@ -1,0 +1,4 @@
+# depslib dependency file v1.0
+1607866846 source:/root/cpp47/main.cpp
+	<gtk/gtk.h>
+
