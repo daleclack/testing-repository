@@ -1,5 +1,11 @@
 #include <gtk/gtk.h>
 
+class Winlayout{
+    public:
+    GtkWidget *layout=gtk_layout_new(NULL,NULL);
+    void put(GtkWidget *child,int x,int y);
+};
+
 class GtkWin{
     GtkWindow *_window;
     public:
@@ -19,8 +25,3 @@ class Winheader{
     void pack_end(GtkWidget *child);
 };
 
-class Winlayout{
-    public:
-    GtkWidget *layout=gtk_layout_new(NULL,NULL);
-    void put(GtkWidget *child,int x,int y);
-};
