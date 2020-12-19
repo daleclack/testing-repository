@@ -1,0 +1,18 @@
+# depslib dependency file v1.0
+1608348169 source:/root/cpp49/main.cpp
+	"GtkClass.h"
+	"winclass.h"
+
+1608348789 /root/cpp49/GtkClass.h
+	<gtk/gtk.h>
+
+1608347671 source:/root/cpp49/GtkClass.cpp
+	"GtkClass.h"
+
+1608348251 /root/cpp49/winclass.h
+	<gtk/gtk.h>
+
+1608348243 source:/root/cpp49/winclass.cpp
+	"winclass.h"
+	"GtkClass.h"
+
