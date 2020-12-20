@@ -1,0 +1,21 @@
+# depslib dependency file v1.0
+1608374440 source:/root/cpp50/gtkclass.cpp
+	"gtkclass.h"
+
+1608375016 /root/cpp50/gtkclass.h
+	<gtk/gtk.h>
+
+1608431207 source:/root/cpp50/gtkwin.cpp
+
+1608433745 /root/cpp50/gtkwin.h
+	<gtk/gtk.h>
+
+1608432192 source:/root/cpp50/main.cpp
+	"gtkwin.h"
+
+1608433787 source:/root/cpp50/test.cpp
+	"test.h"
+
+1608433607 /root/cpp50/test.h
+	<gtk/gtk.h>
+
