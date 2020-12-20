@@ -22,7 +22,28 @@ class WinHeader{
     public:
     GtkWidget *header=gtk_header_bar_new();
     GtkHeaderBar *_header=GTK_HEADER_BAR(header);
-    void init();
+    void init(GtkWidget *window);
+    void pack_start(GtkWidget *child);
+};
+
+class Menuitem{
+    public:
+    GtkWidget *menuitem;
+    void menuitem_init(const gchar *str,pfun func,gpointer data);
+};
+
+class MenuBar{
+    public:
+    GtkWidget *menubar=gtk_menu_bar_new();
+    void menubar_append(Menuitem child);
+    void menu_init(GtkWidget *window);
+};
+
+class Menu{
+    public:
+    GtkWidget *menu;
+    void menu_append(Menuitem child);
+    void set_submenu(Menuitem menuitem);
 };
 
 //GtkWindow class

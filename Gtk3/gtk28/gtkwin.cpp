@@ -25,9 +25,48 @@ void Winlayout::init(){
     put(button1.button,150,100);
 }
 
-void WinHeader::init(){
+void WinHeader::init(GtkWidget *window){
+    MenuBar menubar;
+    menubar.menu_init(window);
     gtk_header_bar_set_show_close_button(_header,TRUE);
     gtk_header_bar_set_decoration_layout(_header,"close,minimize,maximize:menu");
+    pack_start(menubar.menubar);
+}
+
+void WinHeader::pack_start(GtkWidget *child){
+    gtk_header_bar_pack_start(_header,child);
+}
+
+void MenuBar::menubar_append(Menuitem child){
+    gtk_menu_shell_append(GTK_MENU_SHELL(menubar),child.menuitem);
+}
+
+void MenuBar::menu_init(GtkWidget *window){
+    Menuitem menuitem2;
+    Menu menu;
+    menuitem2.menuitem_init("File",NULL,NULL);
+    menubar_append(menuitem2);
+    menu.set_submenu(menuitem2);
+    menuitem2.menuitem_init("Exit",quit,(gpointer)window);
+    menu.menu_append(menuitem2);
+    menuitem2.menuitem_init("Help",NULL,NULL);
+    menubar_append(menuitem2);
+}
+
+void Menu::menu_append(Menuitem child){
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu),child.menuitem);
+}
+
+void Menu::set_submenu(Menuitem menuitem){
+    menu=gtk_menu_new();
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem.menuitem),menu);
+}
+
+void Menuitem::menuitem_init(const gchar *str,pfun func,gpointer data){
+    menuitem=gtk_menu_item_new_with_label(str);
+    if(func!=NULL){
+    g_signal_connect(menuitem,"activate",G_CALLBACK(func),data);
+    }
 }
 
 //Add widget to window
@@ -44,7 +83,7 @@ void GtkWin::win_init(GtkApplication *app,int width,int height){
     gtk_window_set_position(_window,GTK_WIN_POS_CENTER);
     //Set window titlebar
     WinHeader header1;
-    header1.init();
+    header1.init(window);
     set_titlebar(header1.header);
     //Put a layout
     Winlayout layout1;
