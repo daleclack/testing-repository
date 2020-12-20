@@ -25,6 +25,11 @@ void Winlayout::init(){
     put(button1.button,150,100);
 }
 
+void WinHeader::init(){
+    gtk_header_bar_set_show_close_button(_header,TRUE);
+    gtk_header_bar_set_decoration_layout(_header,"close,minimize,maximize:menu");
+}
+
 //Add widget to window
 void GtkWin::add(GtkWidget *widget){
     gtk_container_add(GTK_CONTAINER(window),widget);
@@ -37,10 +42,18 @@ void GtkWin::win_init(GtkApplication *app,int width,int height){
     _window=GTK_WINDOW(window);
     gtk_window_set_default_size(_window,width,height);
     gtk_window_set_position(_window,GTK_WIN_POS_CENTER);
+    //Set window titlebar
+    WinHeader header1;
+    header1.init();
+    set_titlebar(header1.header);
     //Put a layout
     Winlayout layout1;
     layout1.init();
     add(layout1.layout);
+}
+
+void GtkWin::set_titlebar(GtkWidget *title){
+    gtk_window_set_titlebar(_window,title);
 }
 
 //Show everything

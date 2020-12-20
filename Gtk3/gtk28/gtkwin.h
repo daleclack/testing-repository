@@ -18,12 +18,20 @@ class Winlayout{
     void init();
 };
 
+class WinHeader{
+    public:
+    GtkWidget *header=gtk_header_bar_new();
+    GtkHeaderBar *_header=GTK_HEADER_BAR(header);
+    void init();
+};
+
 //GtkWindow class
 class GtkWin{
     GtkWidget *window;
     GtkWindow *_window;
     void add(GtkWidget *widget);
     public:
+    void set_titlebar(GtkWidget *title);
     void win_init(GtkApplication *app,int width,int height);
     void show_all();
 };
