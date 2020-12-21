@@ -1,5 +1,6 @@
 #include "gtkwin.h"
 #include "test.h"
+#include "winpe.xpm"
 #include "360.xpm"
 
 void Icon::get_image(const gchar **str,int width,int height){
@@ -26,6 +27,9 @@ void Winlayout::put(GtkWidget *child,int x,int y){
 
 //Initalize Gtklayout
 void Winlayout::init(){
+    Icon background;
+    background.get_image(winpe,400,300);
+    put(background.img1,0,0);
     GtkBtn button1;
     button1.init("Test",100,50);
     button1.signal_clicked(print,NULL);
@@ -56,8 +60,18 @@ void MenuBar::menu_init(GtkWidget *window){
     menu.set_submenu(menuitem2);
     menuitem2.menuitem_init("Exit",quit,(gpointer)window);
     menu.menu_append(menuitem2);
+
+    menuitem2.menuitem_init("config",NULL,NULL);
+    menubar_append(menuitem2);
+    menu.set_submenu(menuitem2);
+    menuitem2.menuitem_init("Change config",config_activate,NULL);
+    menu.menu_append(menuitem2);
+
     menuitem2.menuitem_init("Help",NULL,NULL);
     menubar_append(menuitem2);
+    menu.set_submenu(menuitem2);
+    menuitem2.menuitem_init("About",NULL,NULL);
+    menu.menu_append(menuitem2);
 }
 
 void Menu::menu_append(Menuitem child){
