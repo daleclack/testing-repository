@@ -1,5 +1,12 @@
 #include "gtkwin.h"
 #include "test.h"
+#include "360.xpm"
+
+void Icon::get_image(const gchar **str,int width,int height){
+    pixbuf=gdk_pixbuf_new_from_xpm_data(str);
+    sized=gdk_pixbuf_scale_simple(pixbuf,width,height,GDK_INTERP_BILINEAR);
+    img1=gtk_image_new_from_pixbuf(sized);
+}
 
 //Initalize GtkButton
 void GtkBtn::init(const gchar *str,int width,int height){
@@ -29,7 +36,7 @@ void WinHeader::init(GtkWidget *window){
     MenuBar menubar;
     menubar.menu_init(window);
     gtk_header_bar_set_show_close_button(_header,TRUE);
-    gtk_header_bar_set_decoration_layout(_header,"close,minimize,maximize:menu");
+    gtk_header_bar_set_decoration_layout(_header,"close,minimize,maximize:icon");
     pack_start(menubar.menubar);
 }
 
@@ -76,11 +83,14 @@ void GtkWin::add(GtkWidget *widget){
 
 
 void GtkWin::win_init(GtkApplication *app,int width,int height){
+    Icon icon1;
+    icon1.get_image(_60,50,50);
     //Create a window and set window proprites
     window=gtk_application_window_new(app);
     _window=GTK_WINDOW(window);
     gtk_window_set_default_size(_window,width,height);
     gtk_window_set_position(_window,GTK_WIN_POS_CENTER);
+    gtk_window_set_icon(_window,icon1.pixbuf);
     //Set window titlebar
     WinHeader header1;
     header1.init(window);

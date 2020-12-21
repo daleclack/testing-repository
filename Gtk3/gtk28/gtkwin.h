@@ -1,6 +1,13 @@
 #include <gtk/gtk.h>
 
 typedef void(*pfun)(GtkWidget *,gpointer);//define a pointer to function
+class Icon{
+    GdkPixbuf *sized;
+    public:
+    GdkPixbuf *pixbuf;
+    GtkWidget *img1;
+    void get_image(const gchar **str,int width,int height);
+};
 
 //GtkButton class
 class GtkBtn{
