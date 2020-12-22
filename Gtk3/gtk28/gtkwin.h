@@ -64,3 +64,8 @@ class GtkWin{
     void show_all();
 };
 
+class HBox{
+    public:
+    GtkWidget *hbox=gtk_box_new(GTK_ORIENTATION_HORIZONTAL,5);
+    void pack_start(GtkWidget *child,gboolean expand,gboolean full,gint padding);
+};

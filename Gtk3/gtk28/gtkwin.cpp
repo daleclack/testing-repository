@@ -70,7 +70,7 @@ void MenuBar::menu_init(GtkWidget *window){
     menuitem2.menuitem_init("Help",NULL,NULL);
     menubar_append(menuitem2);
     menu.set_submenu(menuitem2);
-    menuitem2.menuitem_init("About",NULL,NULL);
+    menuitem2.menuitem_init("About",about_activate,NULL);
     menu.menu_append(menuitem2);
 }
 
@@ -122,4 +122,8 @@ void GtkWin::set_titlebar(GtkWidget *title){
 //Show everything
 void GtkWin::show_all(){
     gtk_widget_show_all(window);
+}
+
+void HBox::pack_start(GtkWidget *child,gboolean expand,gboolean full,gint padding){
+    gtk_box_pack_start(GTK_BOX(hbox),child,expand,full,padding);
 }
