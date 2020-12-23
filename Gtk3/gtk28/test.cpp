@@ -21,6 +21,10 @@ void about_activate(GtkWidget *widget,gpointer data){
 }
 
 void config_activate(GtkWidget *widget,gpointer data){
+    InputBox("config");
+}
+
+void InputBox(const char *filename){
     const gchar *str;
     int response;
     GtkWidget *dialog=gtk_dialog_new();
@@ -35,6 +39,7 @@ void config_activate(GtkWidget *widget,gpointer data){
     GtkContainer *_content_area=GTK_CONTAINER(content_area);
     GtkWidget *label=gtk_label_new("Input config");
     GtkWidget *entry=gtk_entry_new();
+    gtk_entry_set_text(GTK_ENTRY(entry),"default config");
 
     gtk_container_add(_content_area,label);
     gtk_container_add(_content_area,entry);
@@ -42,7 +47,7 @@ void config_activate(GtkWidget *widget,gpointer data){
     response=gtk_dialog_run(dialog1);
     if(response==GTK_RESPONSE_OK){
         str=gtk_entry_get_text(GTK_ENTRY(entry));
-        freopen("config","w",stdout);
+        freopen(filename,"w",stdout);
         g_print(str);
         fclose(stdout);
         gtk_widget_destroy(dialog);

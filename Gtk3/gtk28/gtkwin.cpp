@@ -3,6 +3,7 @@
 #include "winpe.xpm"
 #include "360.xpm"
 
+//Get a GtkImage from xpm.data
 void Icon::get_image(const gchar **str,int width,int height){
     pixbuf=gdk_pixbuf_new_from_xpm_data(str);
     sized=gdk_pixbuf_scale_simple(pixbuf,width,height,GDK_INTERP_BILINEAR);
@@ -36,6 +37,7 @@ void Winlayout::init(){
     put(button1.button,150,100);
 }
 
+//Initalize GtkHeader
 void WinHeader::init(GtkWidget *window){
     MenuBar menubar;
     menubar.menu_init(window);
@@ -44,14 +46,17 @@ void WinHeader::init(GtkWidget *window){
     pack_start(menubar.menubar);
 }
 
+//pack widgets on GtkHeader
 void WinHeader::pack_start(GtkWidget *child){
     gtk_header_bar_pack_start(_header,child);
 }
 
+//Append item to GtkMenuBar
 void MenuBar::menubar_append(Menuitem child){
     gtk_menu_shell_append(GTK_MENU_SHELL(menubar),child.menuitem);
 }
 
+//Initalize the menu
 void MenuBar::menu_init(GtkWidget *window){
     Menuitem menuitem2;
     Menu menu;
@@ -74,6 +79,7 @@ void MenuBar::menu_init(GtkWidget *window){
     menu.menu_append(menuitem2);
 }
 
+//append item to GtkMenu
 void Menu::menu_append(Menuitem child){
     gtk_menu_shell_append(GTK_MENU_SHELL(menu),child.menuitem);
 }

@@ -1,6 +1,8 @@
 #include <gtk/gtk.h>
 
 typedef void(*pfun)(GtkWidget *,gpointer);//define a pointer to function
+
+//Convert xpm data to a GtkImage
 class Icon{
     GdkPixbuf *sized;
     public:
@@ -25,6 +27,7 @@ class Winlayout{
     void init();
 };
 
+//GtkHeaderbar class
 class WinHeader{
     public:
     GtkWidget *header=gtk_header_bar_new();
@@ -33,12 +36,14 @@ class WinHeader{
     void pack_start(GtkWidget *child);
 };
 
+//GtkMenuitem class
 class Menuitem{
     public:
     GtkWidget *menuitem;
     void menuitem_init(const gchar *str,pfun func,gpointer data);
 };
 
+//GtkMenuBar class
 class MenuBar{
     public:
     GtkWidget *menubar=gtk_menu_bar_new();
@@ -46,6 +51,7 @@ class MenuBar{
     void menu_init(GtkWidget *window);
 };
 
+//GtkMenu class
 class Menu{
     public:
     GtkWidget *menu;
@@ -64,6 +70,7 @@ class GtkWin{
     void show_all();
 };
 
+//GtkHBox class (Not the deprecated GtkHbox)
 class HBox{
     public:
     GtkWidget *hbox=gtk_box_new(GTK_ORIENTATION_HORIZONTAL,5);

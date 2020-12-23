@@ -5,23 +5,25 @@
 1608375016 /root/cpp50/gtkclass.h
 	<gtk/gtk.h>
 
-1608632226 source:/root/cpp50/gtkwin.cpp
+1608645959 source:/root/cpp50/gtkwin.cpp
 	"gtkwin.h"
 	"test.h"
 	"winpe.xpm"
 	"360.xpm"
 
-1608631524 /root/cpp50/gtkwin.h
+1608645795 /root/cpp50/gtkwin.h
 	<gtk/gtk.h>
 
 1608434422 source:/root/cpp50/main.cpp
 	"gtkwin.h"
 
-1608611669 source:/root/cpp50/test.cpp
+1608632300 source:/root/cpp50/test.cpp
 	"test.h"
 	<stdio.h>
+	"360.xpm"
+	"gtkwin.h"
 
-1608631234 /root/cpp50/test.h
+1608728677 /root/cpp50/test.h
 	<gtk/gtk.h>
 
 1608125195 /root/cpp50/360.xpm

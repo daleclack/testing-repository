@@ -6,6 +6,10 @@ void quit(GtkWidget *widget,gpointer data);
 
 void config_activate(GtkWidget *widget,gpointer data);
 
-void about_activate(GtkWidget *widget,gpointer data);
+void InputBox(const char *filename);
 
 void MsgBox(const gchar *msg);
+
+void config_activate(GtkWidget *widget,gpointer data);
+
+void about_activate(GtkWidget *widget,gpointer data);
