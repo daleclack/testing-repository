@@ -30,3 +30,29 @@
 
 1606780433 /root/cpp50/winpe.xpm
 
+1608645959 source:/root/gtk28/gtkwin.cpp
+	"gtkwin.h"
+	"test.h"
+	"winpe.xpm"
+	"360.xpm"
+
+1608645795 /root/gtk28/gtkwin.h
+	<gtk/gtk.h>
+
+1608728677 /root/gtk28/test.h
+	<gtk/gtk.h>
+
+1606780433 /root/gtk28/winpe.xpm
+
+1608125195 /root/gtk28/360.xpm
+
+1608434422 source:/root/gtk28/main.cpp
+	"gtkwin.h"
+
+1608728736 source:/root/gtk28/test.cpp
+	"test.h"
+	<cstdio>
+	<cstring>
+	"360.xpm"
+	"gtkwin.h"
+

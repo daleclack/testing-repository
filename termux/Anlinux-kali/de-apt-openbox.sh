@@ -2,9 +2,9 @@
 
 #Get the necessary components
 apt-get update
-apt-get install awesome xterm -y
+apt-get install openbox xterm -y
 apt install tigervnc-common tigervnc-scraping-server tigervnc-standalone-server tigervnc-xorg-extension -y
-apt-get install thunar mate-terminal -y
+apt-get install thunar mate-terminal xfce4-panel -y
 
 #Setup the necessary files
 mkdir ~/.vnc
