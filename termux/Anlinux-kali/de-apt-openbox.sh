@@ -2,15 +2,15 @@
 
 #Get the necessary components
 apt-get update
-apt-get install openbox xterm -y
+apt-get install openbox xterm dbus-x11 desktop-base -y
 apt install tigervnc-common tigervnc-scraping-server tigervnc-standalone-server tigervnc-xorg-extension -y
 apt-get install thunar mate-terminal xfce4-panel -y
 
 #Setup the necessary files
 mkdir ~/.vnc
-cd ./xstartup -P ~/.vnc/
-cd ./vncserver-start -P /usr/local/bin/
-cd ./vncserver-stop /usr/local/bin/
+cp ./xstartup ~/.vnc/
+cp ./vncserver-start /usr/local/bin/
+cp ./vncserver-stop /usr/local/bin/
 
 chmod +x ~/.vnc/xstartup
 chmod +x /usr/local/bin/vncserver-start
@@ -43,7 +43,6 @@ apt install apt-utils aptitude -y
 apt install codeblocks build-essential -y 
 apt install pavucontrol pulseaudio glade -y
 apt install gedit firefox-esr audacious -y
-apt install brasero atril synaptic -y
-apt install gnome-core-devel -y
+apt install brasero atril synaptic imagemagick -y
 
 vncserver-start
