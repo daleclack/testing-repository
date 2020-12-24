@@ -8,7 +8,7 @@ void print(GtkWidget *widget,gpointer data){
     char str[57];
     freopen("config","r",stdin);
     fgets(str,57,stdin);
-    g_print("%s",str);
+    MsgBox("Test",str);
     fclose(stdin);
 }
 
@@ -17,7 +17,7 @@ void quit(GtkWidget *widget,gpointer data){
 }
 
 void about_activate(GtkWidget *widget,gpointer data){
-    MsgBox("gtk28 by daleclack\n2020 Xe Corporation");
+    MsgBox("About gtk(28)","gtk28 by daleclack\n2020 Xe Corporation");
 }
 
 void config_activate(GtkWidget *widget,gpointer data){
@@ -51,18 +51,18 @@ void InputBox(const char *filename){
         g_print(str);
         fclose(stdout);
         gtk_widget_destroy(dialog);
-        MsgBox("Config changed!\nPlease Restart the application");
+        MsgBox("Change config","Config changed!\nPlease Restart the application");
     }else{
     gtk_widget_destroy(dialog);
     }
 }
 
-void MsgBox(const gchar *msg){
+void MsgBox(const gchar *title,const gchar *msg){
     GtkWidget *dialog=gtk_dialog_new();
     GtkWindow *win=GTK_WINDOW(dialog);
     gtk_window_set_default_size(win,300,150);
     gtk_window_set_position(win,GTK_WIN_POS_CENTER);
-    gtk_window_set_title(win,"Change config");
+    gtk_window_set_title(win,title);
     gtk_dialog_add_button(GTK_DIALOG(dialog),"OK",GTK_RESPONSE_OK);
 
     GtkWidget *content_area=gtk_dialog_get_content_area(GTK_DIALOG(dialog));

@@ -8,7 +8,7 @@ void config_activate(GtkWidget *widget,gpointer data);
 
 void InputBox(const char *filename);
 
-void MsgBox(const gchar *msg);
+void MsgBox(const gchar *title,const gchar *msg);
 
 void config_activate(GtkWidget *widget,gpointer data);
 
