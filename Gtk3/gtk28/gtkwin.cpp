@@ -69,7 +69,9 @@ void MenuBar::menu_init(GtkWidget *window){
     menuitem2.menuitem_init("config",NULL,NULL);
     menubar_append(menuitem2);
     menu.set_submenu(menuitem2);
-    menuitem2.menuitem_init("Change config",config_activate,NULL);
+    menuitem2.menuitem_init("Change config1",config1_activate,NULL);
+    menu.menu_append(menuitem2);
+    menuitem2.menuitem_init("Change config2",NULL,NULL);
     menu.menu_append(menuitem2);
 
     menuitem2.menuitem_init("Help",NULL,NULL);

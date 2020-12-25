@@ -20,11 +20,11 @@ void about_activate(GtkWidget *widget,gpointer data){
     MsgBox("About gtk(28)","gtk28 by daleclack\n2020 Xe Corporation");
 }
 
-void config_activate(GtkWidget *widget,gpointer data){
-    InputBox("config");
+void config1_activate(GtkWidget *widget,gpointer data){
+    InputBox("Input config1","config_1");
 }
 
-void InputBox(const char *filename){
+void InputBox(const gchar *content,const char *filename){
     const gchar *str;
     int response;
     GtkWidget *dialog=gtk_dialog_new();
@@ -37,7 +37,11 @@ void InputBox(const char *filename){
 
     GtkWidget *content_area=gtk_dialog_get_content_area(GTK_DIALOG(_dialog));
     GtkContainer *_content_area=GTK_CONTAINER(content_area);
-    GtkWidget *label=gtk_label_new("Input config");
+    GtkWidget *label=gtk_label_new(" ");
+    gtk_container_add(_content_area,label);
+    label=gtk_label_new(content);
+    gtk_container_add(_content_area,label);
+    label=gtk_label_new(" ");
     GtkWidget *entry=gtk_entry_new();
     gtk_entry_set_text(GTK_ENTRY(entry),"default config");
 
