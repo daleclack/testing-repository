@@ -24,6 +24,10 @@ void config1_activate(GtkWidget *widget,gpointer data){
     InputBox("Input config1","config_1");
 }
 
+void config2_activate(GtkWidget *widget,gpointer data){
+    InputBox("Input config2","config_2");
+}
+
 void InputBox(const gchar *content,const char *filename){
     const gchar *str;
     int response;
