@@ -62,6 +62,7 @@ void InputBox(const gchar *content,const char *filename){
     label=gtk_label_new(" ");
     GtkWidget *entry=gtk_entry_new();
     gtk_entry_set_text(GTK_ENTRY(entry),"default config");
+    g_signal_connect(entry,"activate",G_CALLBACK(entry_activate),(gpointer)dialog);
 
     gtk_container_add(_content_area,label);
     gtk_container_add(_content_area,entry);
@@ -77,6 +78,10 @@ void InputBox(const gchar *content,const char *filename){
     }else{
     gtk_widget_destroy(dialog);
     }
+}
+
+void entry_activate(GtkWidget *widget,gpointer data){
+    gtk_dialog_response(GTK_DIALOG(data),GTK_RESPONSE_OK);
 }
 
 void MsgBox(const gchar *title,const gchar *msg){
