@@ -5,8 +5,16 @@
 #include "gtkwin.h"
 
 void print(GtkWidget *widget,gpointer data){
+    const gchar *filename;
+    int id=gtk_combo_box_get_active(GTK_COMBO_BOX(data));
+    switch(id){
+        case 0:
+        filename="config_1";break;
+        case 1:
+        filename="config_2";break;
+    }
     char str[57];
-    freopen("config","r",stdin);
+    freopen(filename,"r",stdin);
     fgets(str,57,stdin);
     MsgBox("Test",str);
     fclose(stdin);

@@ -76,3 +76,10 @@ class HBox{
     GtkWidget *hbox=gtk_box_new(GTK_ORIENTATION_HORIZONTAL,5);
     void pack_start(GtkWidget *child,gboolean expand,gboolean full,gint padding);
 };
+
+class Combobox{
+    public:
+    GtkWidget *combo;
+    void append_item(const gchar *str);
+    void init(int width,int height);
+};

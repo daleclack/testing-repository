@@ -31,10 +31,15 @@ void Winlayout::init(){
     Icon background;
     background.get_image(winpe,400,300);
     put(background.img1,0,0);
+
+    Combobox combo1;
+    combo1.init(100,50);
+    put(combo1.combo,150,70);
+
     GtkBtn button1;
     button1.init("Test",100,50);
-    button1.signal_clicked(print,NULL);
-    put(button1.button,150,100);
+    button1.signal_clicked(print,(gpointer)combo1.combo);
+    put(button1.button,150,170);
 }
 
 //Initalize GtkHeader
@@ -134,4 +139,16 @@ void GtkWin::show_all(){
 
 void HBox::pack_start(GtkWidget *child,gboolean expand,gboolean full,gint padding){
     gtk_box_pack_start(GTK_BOX(hbox),child,expand,full,padding);
+}
+
+void Combobox::append_item(const gchar *str){
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo),str);
+}
+
+void Combobox::init(int width,int height){
+    combo=gtk_combo_box_text_new();
+    gtk_widget_set_size_request(combo,width,height);
+    append_item("config_1");
+    append_item("config_2");
+    gtk_combo_box_set_active(GTK_COMBO_BOX(combo),0);
 }
