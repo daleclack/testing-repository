@@ -74,6 +74,8 @@ void MenuBar::menu_init(GtkWidget *window){
     menuitem2.menuitem_init("config",NULL,NULL);
     menubar_append(menuitem2);
     menu.set_submenu(menuitem2);
+    menuitem2.menuitem_init("Change config",config_activate,NULL);
+    menu.menu_append(menuitem2);
     menuitem2.menuitem_init("Change config1",config1_activate,NULL);
     menu.menu_append(menuitem2);
     menuitem2.menuitem_init("Change config2",config2_activate,NULL);
@@ -91,11 +93,13 @@ void Menu::menu_append(Menuitem child){
     gtk_menu_shell_append(GTK_MENU_SHELL(menu),child.menuitem);
 }
 
+//Set a submenu of a menuitem
 void Menu::set_submenu(Menuitem menuitem){
     menu=gtk_menu_new();
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem.menuitem),menu);
 }
 
+//initalize menuitem
 void Menuitem::menuitem_init(const gchar *str,pfun func,gpointer data){
     menuitem=gtk_menu_item_new_with_label(str);
     if(func!=NULL){
@@ -108,7 +112,7 @@ void GtkWin::add(GtkWidget *widget){
     gtk_container_add(GTK_CONTAINER(window),widget);
 }
 
-
+//Initalize window
 void GtkWin::win_init(GtkApplication *app,int width,int height){
     Icon icon1;
     icon1.get_image(_60,50,50);
@@ -128,6 +132,7 @@ void GtkWin::win_init(GtkApplication *app,int width,int height){
     add(layout1.layout);
 }
 
+//Set the window titlwbar as a custom widget
 void GtkWin::set_titlebar(GtkWidget *title){
     gtk_window_set_titlebar(_window,title);
 }
@@ -137,17 +142,21 @@ void GtkWin::show_all(){
     gtk_widget_show_all(window);
 }
 
+//Pack widget at a gtkbox
 void HBox::pack_start(GtkWidget *child,gboolean expand,gboolean full,gint padding){
     gtk_box_pack_start(GTK_BOX(hbox),child,expand,full,padding);
 }
 
+//Append item to a combo box
 void Combobox::append_item(const gchar *str){
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo),str);
 }
 
+//Initalize combo box
 void Combobox::init(int width,int height){
     combo=gtk_combo_box_text_new();
     gtk_widget_set_size_request(combo,width,height);
+    append_item("config");
     append_item("config_1");
     append_item("config_2");
     gtk_combo_box_set_active(GTK_COMBO_BOX(combo),0);

@@ -4,6 +4,8 @@ void print(GtkWidget *widget,gpointer data);
 
 void quit(GtkWidget *widget,gpointer data);
 
+void config_activate(GtkWidget *widget,gpointer data);
+
 void config1_activate(GtkWidget *widget,gpointer data);
 
 void InputBox(const gchar *content,const char *filename);

@@ -9,8 +9,10 @@ void print(GtkWidget *widget,gpointer data){
     int id=gtk_combo_box_get_active(GTK_COMBO_BOX(data));
     switch(id){
         case 0:
-        filename="config_1";break;
+        filename="config";break;
         case 1:
+        filename="config_1";break;
+        case 2:
         filename="config_2";break;
     }
     char str[57];
@@ -26,6 +28,10 @@ void quit(GtkWidget *widget,gpointer data){
 
 void about_activate(GtkWidget *widget,gpointer data){
     MsgBox("About gtk(28)","gtk28 by daleclack\n2020 Xe Corporation");
+}
+
+void config_activate(GtkWidget *widget,gpointer data){
+    InputBox("Input config","config");
 }
 
 void config1_activate(GtkWidget *widget,gpointer data){

@@ -77,6 +77,7 @@ class HBox{
     void pack_start(GtkWidget *child,gboolean expand,gboolean full,gint padding);
 };
 
+//GtkComboBox class
 class Combobox{
     public:
     GtkWidget *combo;
