@@ -1,1 +1,3 @@
-Some C/C++ code using gimp tookit(gtk) 2.24.10
+ Some C/C++ code using gimp tookit(gtk) 2.24.10
+
+ the gtk+2 has end-of-life at 2020-12-21,Goodbye,Gtk+2!
