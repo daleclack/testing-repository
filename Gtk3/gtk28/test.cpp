@@ -17,9 +17,14 @@ void print(GtkWidget *widget,gpointer data){
         filename="config_2";break;
     }
     char str[57];
-    freopen(filename,"r",stdin);
-    fgets(str,57,stdin);
-    MsgBox("Test",str);
+    FILE *fp;
+    fp=fopen(filename,"r");
+    if(fp==NULL){
+        MsgBox("Error","The config file not exist!\nUse Change config menu for a config");
+    }else{
+        fgets(str,57,fp);
+        MsgBox("Test",str);
+    }
     fclose(stdin);
 }
 
@@ -74,11 +79,15 @@ void InputBox(const gchar *content,const char *filename){
     //Check the response and update the file with the "OK" Response
     if(response==GTK_RESPONSE_OK){
         str=gtk_entry_get_text(GTK_ENTRY(entry));
-        freopen(filename,"w",stdout);
-        g_print(str);
-        fclose(stdout);
-        gtk_widget_destroy(dialog);
-        MsgBox("Change config","Config changed!\nPlease Restart the application");
+        if(strlen(str)!=0){
+            freopen(filename,"w",stdout);
+            g_print(str);
+            fclose(stdout);
+            gtk_widget_destroy(dialog);
+            MsgBox("Change config","Config changed!\nPlease Restart the application");
+        }else{
+            gtk_widget_destroy(dialog);
+        }
     }else{
     gtk_widget_destroy(dialog);
     }
