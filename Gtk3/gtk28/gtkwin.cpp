@@ -121,6 +121,7 @@ void GtkWin::win_init(GtkApplication *app,int width,int height){
     _window=GTK_WINDOW(window);
     gtk_window_set_default_size(_window,width,height);
     gtk_window_set_position(_window,GTK_WIN_POS_CENTER);
+    gtk_window_set_resizable(_window,FALSE);
     gtk_window_set_icon(_window,icon1.pixbuf);
     //Set window titlebar
     WinHeader header1;
