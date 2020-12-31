@@ -1,0 +1,17 @@
+# depslib dependency file v1.0
+1609331636 source:/root/gtk29/gtkclass.cpp
+	"gtkclass.h"
+
+1609331594 /root/gtk29/gtkclass.h
+	<gtk/gtk.h>
+
+1609402080 source:/root/gtk29/main.cpp
+	<gtk/gtk.h>
+	"360.xpm"
+
+1609402973 source:/root/gtk29/resources.cpp
+	<gio/gio.h>
+	<stdlib.h>
+
+1608125195 /root/gtk29/360.xpm
+

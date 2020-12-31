@@ -1,0 +1,5 @@
+export PULSE_SERVER=tcp:127.0.0.1:4713
+export USER=root
+export HOME=/root
+
+vncserver -geometry 1066x600 -dpi 100 -depth 24 -name remote-desktop :1
