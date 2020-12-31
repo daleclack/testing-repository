@@ -50,10 +50,13 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     GtkBuilder *builder;
     builder=gtk_builder_new();
     gtk_builder_add_from_resource(builder,"/gtk29/window.ui",NULL);
+    GtkBuilder *builder1=gtk_builder_new_from_resource("/gtk29/header.ui");
 
     GObject *window;
+    GObject *header=gtk_builder_get_object(builder1,"header");
     window=gtk_builder_get_object(builder,"window");
     gtk_application_add_window(app,GTK_WINDOW(window));
+    gtk_window_set_titlebar(GTK_WINDOW(window),GTK_WIDGET(header));
     window_init(GTK_WINDOW(window));
 
     GObject *label=gtk_builder_get_object(builder,"label1");
