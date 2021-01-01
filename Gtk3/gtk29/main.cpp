@@ -42,7 +42,7 @@ void image_init(GtkImage *img){
 }
 
 void window_init(GtkWindow *window1){
-    GdkPixbuf *pixbuf=gdk_pixbuf_new_from_xpm_data(_60);
+    GdkPixbuf *pixbuf=gdk_pixbuf_new_from_resource("/gtk29/icon.jpg",NULL);
     gtk_window_set_icon(window1,pixbuf);
 }
 
@@ -69,6 +69,8 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     g_signal_connect(btn_next,"clicked",G_CALLBACK(BtnNext_click),(gpointer)label);
     GObject *btn_OK=gtk_builder_get_object(builder,"btn_OK");
     g_signal_connect(btn_OK,"clicked",G_CALLBACK(BtnOK_click),(gpointer)window);
+
+    gtk_widget_set_sensitive(GTK_WIDGET(btn_pre),FALSE);
     gtk_widget_show_all(GTK_WIDGET(window));
 }
 
