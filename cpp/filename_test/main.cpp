@@ -18,14 +18,13 @@ void write1(){
 }
 
 void test(){
-    char filename[57];
+    char filename[57],str[57];
     FILE *fp;
     fp=fopen("test","r");
         if(fp==NULL){printf("File not exist!");return ;}
-        fgets(filename,57,fp);
+        fgets(str,57,fp);
     fclose(fp);
-    int length=strlen(filename);
-    filename[length-1]='\0';
+    sprintf(filename,"xe-%c.x",str[0]);
     fp=fopen(filename,"w");
     fclose(fp);
 }
