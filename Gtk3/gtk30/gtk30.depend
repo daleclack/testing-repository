@@ -1,0 +1,43 @@
+# depslib dependency file v1.0
+1608434422 source:/root/gtk30/main.cpp
+	"gtkwin.h"
+
+1608952150 /root/gtk30/gtkwin.h
+	<gtk/gtk.h>
+
+1609560614 source:/root/gtk30/xerel.cpp
+	"xerel.h"
+	<cstdio>
+	<cstring>
+	"360.xpm"
+	"gtkwin.h"
+	"xerelease.h"
+
+1609035234 /root/gtk30/xerel.h
+	<gtk/gtk.h>
+
+1608125195 /root/gtk30/360.xpm
+
+1609560753 source:/root/gtk30/gtkwin.cpp
+	"gtkwin.h"
+	"xerel.h"
+	"winpe.xpm"
+	"360.xpm"
+
+1606780433 /root/gtk30/winpe.xpm
+
+1608333801 source:/root/gtk30/xeapi.cpp
+	"xeapi.h"
+
+1608333801 /root/gtk30/xeapi.h
+	<time.h>
+
+1609560556 source:/root/gtk30/xerelease.cpp
+	<stdio.h>
+	<time.h>
+	<string.h>
+	<stdlib.h>
+	"xeapi.h"
+
+1609560154 /root/gtk30/xerelease.h
+
