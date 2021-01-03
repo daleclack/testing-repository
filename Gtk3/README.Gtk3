@@ -1,4 +1,6 @@
-//Note:gtk15 and above changed from Dev-Cpp to Code::bloks
+//Note:1.gtk15 and above changed from Dev-Cpp to Code::blocks
+
+2.Some project contain "compile-resource.sh",please run it first before compile the project
 
 Gtk3 code by Dev-C++ 5.11
 
