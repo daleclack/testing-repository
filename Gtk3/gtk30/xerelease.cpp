@@ -58,38 +58,44 @@ void dale(struct tm *local)
 	printf("xeinit release maker by dale\n");
 }
 
-void longterm(struct tm *local,const char *lts,char *str)
+void longterm(struct tm *local,char lts[],char *str)
 {
+    char filename[57];
+    sprintf(filename,"xe-%c.x",lts[0]);
 	int lts_ver=0;//release version
 	int year1=2019,month1=1,day1=11,year2=local->tm_year+1900,month2=local->tm_mon+1,day2=local->tm_mday;
 	lts_ver=total_year_day(year1,year2)-total_day(year1,month1,day1)+total_day(year2,month2,day2);//get release version
     sprintf(str,"Xeinit LTS version:%s.%d\n",lts,lts_ver);
-	freopen("xe-lts","a",stdout);//put all output in xe-release file
+	freopen(filename,"a",stdout);//put all output in xe-release file
     printf("%d-%d-%d ",local->tm_year+1900,local->tm_mon+1,local->tm_mday);//output:release branch time in xe-release
     printf("5.2.%d Api:%d\n",lts_ver,xeapi1(local));
     fclose(stdout);
     return ;
 }
 
-void stable(struct tm *local,const char *rel,char *str)
+void stable(struct tm *local,char rel[],char *str)
 {
+    char filename[57];
+    sprintf(filename,"xe-%c.x",rel[0]);
 	int devel1;//stable release version
 	int year1=2017,month1=6,day1=17,year2=local->tm_year+1900,month2=local->tm_mon+1,day2=local->tm_mday;
 	devel1=total_year_day(year1,year2)-total_day(year1,month1,day1)+total_day(year2,month2,day2);//get release version
     sprintf(str,"Xeinit stable Version:%s.%d\n",rel,devel1);
-    freopen("xe-stable","a",stdout);
+    freopen(filename,"a",stdout);
     printf("%d-%d-%d ",local->tm_year+1900,local->tm_mon+1,local->tm_mday);//output:development branch time in xe-release
     printf("%s.%d Api:%d\n",rel,devel1,xeapi1(local));
     fclose(stdout);
     return ;
 }
 
-void develop(struct tm *local,const char *devel,char *str){
+void develop(struct tm *local,char devel[],char *str){
+    char filename[57];
+    sprintf(filename,"xe-%c.x",devel[0]);
     int devel1;//development version
 	int year1=2017,month1=6,day1=17,year2=local->tm_year+1900,month2=local->tm_mon+1,day2=local->tm_mday;
 	devel1=total_year_day(year1,year2)-total_day(year1,month1,day1)+total_day(year2,month2,day2);//get release version
     sprintf(str,"Xeinit devel Version:%s.%d\n",devel,devel1);
-    freopen("xe-devel","a",stdout);
+    freopen(filename,"a",stdout);
     printf("%d-%d-%d ",local->tm_year+1900,local->tm_mon+1,local->tm_mday);//output:development branch time in xe-release
     printf("%s.%d Api:%d\n",devel,devel1,xeapi1(local));
     fclose(stdout);
