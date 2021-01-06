@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1609853621 source:/root/gtk31/main.cpp
+	<gtk/gtk.h>
+	<ctime>
+	<cstdlib>
+	<cstring>
+
+1609935959 source:/root/gtk31/resources.cpp
+	<gio/gio.h>
+	<stdlib.h>
+
