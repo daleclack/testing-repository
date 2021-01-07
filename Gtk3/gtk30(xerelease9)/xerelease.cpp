@@ -68,7 +68,7 @@ void longterm(struct tm *local,char lts[],char *str)
     sprintf(str,"Xeinit LTS version:%s.%d\n",lts,lts_ver);
 	freopen(filename,"a",stdout);//put all output in xe-release file
     printf("%d-%d-%d ",local->tm_year+1900,local->tm_mon+1,local->tm_mday);//output:release branch time in xe-release
-    printf("5.2.%d Api:%d\n",lts_ver,xeapi1(local));
+    printf("%s.%d Api:%d\n",lts,lts_ver,xeapi1(local));
     fclose(stdout);
     return ;
 }
