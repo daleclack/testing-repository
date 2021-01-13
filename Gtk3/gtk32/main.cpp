@@ -9,6 +9,7 @@ void win1_activate(GtkWidget *widget,gpointer data){
     g_signal_connect_swapped(btn_minimize,"clicked",G_CALLBACK(gtk_widget_hide),window1);
     //Window close button
     GObject *btnclose=gtk_builder_get_object(builder,"btn_close");
+    g_signal_connect_swapped(btnclose,"clicked",G_CALLBACK(g_object_unref),window1);
     g_signal_connect_swapped(btnclose,"clicked",G_CALLBACK(gtk_widget_destroy),window1);
     //button box signal
     g_signal_connect_swapped(G_OBJECT(data),"clicked",G_CALLBACK(gtk_widget_show),window1);

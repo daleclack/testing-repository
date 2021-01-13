@@ -22,10 +22,20 @@
               <placeholder/>
             </child>
             <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
               <object class="GtkButton" id="btn_mini">
-                <property name="label" translatable="yes">----</property>
-                <property name="width-request">75</property>
-                <property name="height-request">20</property>
+                <property name="label" translatable="yes">---</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
@@ -33,14 +43,12 @@
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">5</property>
               </packing>
             </child>
             <child>
               <object class="GtkButton" id="btn_close">
-                <property name="label" translatable="yes">X</property>
-                <property name="width-request">75</property>
-                <property name="height-request">20</property>
+                <property name="label" translatable="yes">x</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
@@ -48,7 +56,7 @@
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">6</property>
               </packing>
             </child>
           </object>
