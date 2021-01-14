@@ -7,8 +7,7 @@ void print(GtkWidget *widget,GtkBuilder *builder){
     for(int i=1;i<4;i++){
         char name[57];
         sprintf(name,"check%d",i);
-        check[i]=
-        gtk_builder_get_object(builder,name);
+        check[i]=gtk_builder_get_object(builder,name);
     }
     //Check and print
     for(int i=1;i<4;i++){
