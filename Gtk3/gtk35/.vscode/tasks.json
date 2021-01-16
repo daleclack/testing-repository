@@ -8,13 +8,20 @@
                 "-g",
                 "*.cpp",
                 "-o",
-                "${fileDirname}/gtk34",
+                "${fileDirname}/gtk35",
                 "-pthread",
+                //For Arm64 linux 
+                /*
+                "-I/usr/lib/aarch64-linux-gnu/dbus-1.0/include",
+                "-I/usr/lib/aarch64-linux-gnu/glib-2.0/include",
+                */
+                //For amd64 linux
+                "-I/usr/lib/x86_64-linux-gnu/dbus-1.0/include",
+                "-I/usr/lib/x86_64-linux-gnu/glib-2.0/include",
                 "-I/usr/include/gtk-3.0",
                 "-I/usr/include/at-spi2-atk/2.0",
                 "-I/usr/include/at-spi-2.0",
                 "-I/usr/include/dbus-1.0",
-                "-I/usr/lib/aarch64-linux-gnu/dbus-1.0/include",
                 "-I/usr/include/gtk-3.0",
                 "-I/usr/include/gio-unix-2.0",
                 "-I/usr/include/cairo",
@@ -31,7 +38,6 @@
                 "-I/usr/include/libmount",
                 "-I/usr/include/blkid",
                 "-I/usr/include/glib-2.0",
-                "-I/usr/lib/aarch64-linux-gnu/glib-2.0/include",
                 "-lgtk-3",
                 "-lgdk-3",
                 "-lpangocairo-1.0",
