@@ -17,7 +17,7 @@ void fileopen_dialog(GtkWidget *widget,gpointer data){
 void filesave_dialog(GtkWidget *widget,gpointer data){
     GtkFileChooserAction action=GTK_FILE_CHOOSER_ACTION_SAVE;
     GtkWidget *dialog=gtk_file_chooser_dialog_new("Save File",GTK_WINDOW(data),action,
-    "Cencel",GTK_RESPONSE_CANCEL,"OK",GTK_RESPONSE_OK,NULL);
+    "Cancel",GTK_RESPONSE_CANCEL,"OK",GTK_RESPONSE_OK,NULL);
     gint res;
     res=gtk_dialog_run(GTK_DIALOG(dialog));
     if(res==GTK_RESPONSE_OK){
@@ -48,6 +48,7 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     GtkBuilder *builder=gtk_builder_new_from_resource("/gtk35/window.ui");
     GObject *window=gtk_builder_get_object(builder,"window");
     GdkPixbuf *icon=gdk_pixbuf_new_from_resource("/gtk35/icon.jpg",NULL);
+    gtk_window_set_icon(GTK_WINDOW(window),icon);
     gtk_application_add_window(app,GTK_WINDOW(window));
     //fileopen dialog button
     GObject *btn_dialog=gtk_builder_get_object(builder,"btnchoose");
