@@ -13,18 +13,53 @@
     <property name="default_width">440</property>
     <property name="default_height">250</property>
     <child type="titlebar">
-      <object class="GtkButton" id="btnchoose">
-        <property name="label" translatable="yes">File Chooser dialog</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-      </object>
+      <placeholder/>
     </child>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
+        <property name="baseline_position">bottom</property>
+        <child>
+          <object class="GtkButton" id="btnchoose">
+            <property name="label" translatable="yes">File open dialog</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btnsave">
+            <property name="label" translatable="yes">File save dialog</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btnfolder">
+            <property name="label" translatable="yes">Folder open dialog</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
         <child>
           <object class="GtkScrolledWindow">
             <property name="visible">True</property>
@@ -37,7 +72,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>
@@ -52,7 +87,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">4</property>
           </packing>
         </child>
       </object>
