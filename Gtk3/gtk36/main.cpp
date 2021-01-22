@@ -26,7 +26,7 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     GObject *btn_alt=gtk_builder_get_object(builder,"btnalt");
     g_signal_connect(btn_alt,"clicked",G_CALLBACK(print_letters),NULL);
     GObject *btn_space=gtk_builder_get_object(builder,"btnspace");
-    g_signal_connect(btn_space,"clicked",G_CALLBACK(print),(gpointer)" ");
+    g_signal_connect(btn_space,"clicked",G_CALLBACK(print),(gpointer)" _");
     GObject *btn_enter=gtk_builder_get_object(builder,"btnenter");
     g_signal_connect(btn_enter,"clicked",G_CALLBACK(print),(gpointer)"");
     GObject *btn_quit=gtk_builder_get_object(builder,"btnquit");
