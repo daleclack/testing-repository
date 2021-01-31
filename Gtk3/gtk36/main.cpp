@@ -10,7 +10,7 @@ void print(GtkWidget *widget,gchar *data){
 }
 
 static void gtkmain(GtkApplication *app,gpointer user_data){
-    GtkBuilder *builder=gtk_builder_new_from_file("window.ui");
+    GtkBuilder *builder=gtk_builder_new_from_resource("/gtk36/window.ui");
     GObject *window=gtk_builder_get_object(builder,"window");
     gtk_application_add_window(app,GTK_WINDOW(window));
     //charactor buttons
