@@ -23,9 +23,10 @@ void change_clicked(GtkWidget *widget,GtkBuilder *builder){
 
 static void gtkmain(GtkApplication *app,gpointer user_data){
     //Initalize window
-    GtkBuilder *builder=gtk_builder_new_from_file("res/window.ui");
+    GtkBuilder *builder=gtk_builder_new_from_resource("/gtk37/window.ui");
     GObject *window=gtk_builder_get_object(builder,"window");
-    gtk_window_set_icon_from_file(GTK_WINDOW(window),"res/icon.jpg",NULL);
+    GdkPixbuf *pixbuf=gdk_pixbuf_new_from_resource("/gtk37/icon.jpg",NULL);
+    gtk_window_set_icon(GTK_WINDOW(window),pixbuf);
     gtk_application_add_window(app,GTK_WINDOW(window));
     //"Change" button
     GObject *btn_change=gtk_builder_get_object(builder,"btnchange");
