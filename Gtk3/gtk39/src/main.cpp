@@ -1,8 +1,14 @@
 #include "gtk/gtk.h"
 
 static void gtkmain(GtkApplication *app,gpointer user_data){
-    GtkWidget *window=gtk_application_window_new(app);
-    gtk_widget_show_all(window);
+    //Main window
+    GtkBuilder *builder=gtk_builder_new_from_file("res/window.ui");
+    GObject *window=gtk_builder_get_object(builder,"window");
+    gtk_application_add_window(app,GTK_WINDOW(window));
+    //"Exit" button
+    GObject *btn_exit=gtk_builder_get_object(builder,"btnexit");
+    g_signal_connect_swapped(btn_exit,"clicked",G_CALLBACK(gtk_widget_destroy),window);
+    gtk_widget_show_all(GTK_WIDGET(window));
 }
 
 int main(int argc,char *argv[]){
