@@ -19,19 +19,19 @@
   </object>
   <object class="GtkWindow" id="window">
     <property name="can-focus">False</property>
-    <property name="border-width">10</property>
+    <property name="border-width">5</property>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">10</property>
+        <property name="spacing">20</property>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <child>
-              <object class="GtkScale">
+              <object class="GtkScale" id="scale1">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="orientation">vertical</property>
@@ -51,7 +51,7 @@
                 <property name="orientation">vertical</property>
                 <property name="spacing">10</property>
                 <child>
-                  <object class="GtkScale">
+                  <object class="GtkScale" id="scale2">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="adjustment">adjustment1</property>
@@ -93,11 +93,12 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton">
+          <object class="GtkCheckButton" id="btnshow">
             <property name="label" translatable="yes">Display Value on scale widgets</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
+            <property name="active">True</property>
             <property name="draw-indicator">True</property>
           </object>
           <packing>
@@ -132,7 +133,7 @@
                   <placeholder/>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText">
+                  <object class="GtkComboBoxText" id="combo_pos">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="active">0</property>
@@ -190,10 +191,10 @@
                   <placeholder/>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText">
+                  <object class="GtkComboBoxText" id="combo_update">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="active">0</property>
+                    <property name="active">1</property>
                     <items>
                       <item>Continuous</item>
                       <item>Discontinuous</item>
@@ -238,7 +239,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkScale">
+              <object class="GtkScale" id="digit_scale">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="adjustment">adjustment2</property>
