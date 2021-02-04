@@ -1,13 +1,15 @@
 #include <gtk/gtk.h>
+#include <res/winpe.xpm>
+
 GtkWidget *background;
 
 void dialog_response(GtkWidget *widget,int response){
     const gchar *filename;
     GFile *file;
-    file=gtk_file_chooser_get_file(GTK_FILE_CHOOSER(widget));
-    filename=g_file_get_path(file);
     //g_print("%s\n",filename);
     if(response==GTK_RESPONSE_OK){
+        file=gtk_file_chooser_get_file(GTK_FILE_CHOOSER(widget));
+        filename=g_file_get_path(file);
         GdkPixbuf *pixbuf=gdk_pixbuf_new_from_file(filename,NULL);
         GdkPixbuf *sized=gdk_pixbuf_scale_simple(pixbuf,480,360,GDK_INTERP_BILINEAR);
         gtk_image_set_from_pixbuf(GTK_IMAGE(background),sized);
@@ -33,7 +35,9 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     //GtkFixed
     fixed=gtk_fixed_new();
     //Image as background
-    background=gtk_image_new();
+    GdkPixbuf *pixbuf=gdk_pixbuf_new_from_xpm_data(winpe);
+    GdkPixbuf *sized=gdk_pixbuf_scale_simple(pixbuf,480,360,GDK_INTERP_BILINEAR);
+    background=gtk_image_new_from_pixbuf(sized);
     gtk_widget_set_size_request(background,480,360);
     gtk_fixed_put(GTK_FIXED(fixed),background,0,0);
     //GtkButton
