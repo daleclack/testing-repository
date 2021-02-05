@@ -8,8 +8,8 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     window=gtk_application_window_new(app);
     pixbuf=gdk_pixbuf_new_from_xpm_data(winpe);
     sized=gdk_pixbuf_scale_simple(pixbuf,480,360,GDK_INTERP_BILINEAR);
-    image=gtk_image_new_from_pixbuf(sized);
-    gtk_widget_set_size_request(image,400,300);
+    image=gtk_picture_new_for_pixbuf(sized);
+    //gtk_widget_set_size_request(image,400,300);
     gtk_box_append(GTK_BOX(box),image);
     gtk_window_set_child(GTK_WINDOW(window),box);
     gtk_widget_show(window);
