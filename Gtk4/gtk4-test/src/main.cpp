@@ -4,6 +4,7 @@
 GtkWidget *background;
 
 void dialog_response(GtkWidget *widget,int response){
+    //Handle file chooser response and set background
     const gchar *filename;
     GFile *file;
     //g_print("%s\n",filename);
@@ -18,10 +19,19 @@ void dialog_response(GtkWidget *widget,int response){
 }
 
 void change_background(GtkWidget *widget,GtkWindow *parent){
+    //Change background
     GtkWidget *dialog;
     GtkFileChooserAction action=GTK_FILE_CHOOSER_ACTION_OPEN;
-    dialog=gtk_file_chooser_dialog_new("Choose a image",parent,action,
+    dialog=gtk_file_chooser_dialog_new("Choose a image File",parent,action,
     "OK",GTK_RESPONSE_OK,"Cancel",GTK_RESPONSE_CANCEL,NULL);
+    //Use GtkFileFilter to select image file
+    GtkFileFilter *filter=gtk_file_filter_new();
+    gtk_file_filter_add_pattern(filter,"*.png");
+    gtk_file_filter_add_pattern(filter,"*.jpg");
+    gtk_file_filter_add_pattern(filter,"*.jpeg");
+    gtk_file_filter_add_pattern(filter,"*.bmp");
+    gtk_file_filter_add_pattern(filter,"*.xpm");
+    gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog),filter);
     gtk_widget_show(dialog);
     g_signal_connect(dialog,"response",G_CALLBACK(dialog_response),NULL);
 }
