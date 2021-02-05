@@ -12,7 +12,7 @@ void dialog_response(GtkWidget *widget,int response){
         filename=g_file_get_path(file);
         GdkPixbuf *pixbuf=gdk_pixbuf_new_from_file(filename,NULL);
         GdkPixbuf *sized=gdk_pixbuf_scale_simple(pixbuf,480,360,GDK_INTERP_BILINEAR);
-        gtk_image_set_from_pixbuf(GTK_IMAGE(background),sized);
+        gtk_picture_set_pixbuf(GTK_PICTURE(background),sized);
     }
     gtk_window_destroy(GTK_WINDOW(widget));
 }
@@ -37,8 +37,8 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     //Image as background
     GdkPixbuf *pixbuf=gdk_pixbuf_new_from_xpm_data(winpe);
     GdkPixbuf *sized=gdk_pixbuf_scale_simple(pixbuf,480,360,GDK_INTERP_BILINEAR);
-    background=gtk_image_new_from_pixbuf(sized);
-    gtk_widget_set_size_request(background,480,360);
+    background=gtk_picture_new_for_pixbuf(sized);
+    //gtk_widget_set_size_request(background,480,360);
     gtk_fixed_put(GTK_FIXED(fixed),background,0,0);
     //GtkButton
     button=gtk_button_new_with_label("Change Background");
