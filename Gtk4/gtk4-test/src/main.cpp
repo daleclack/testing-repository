@@ -42,6 +42,8 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     window=gtk_application_window_new(app);
     gtk_window_set_default_size(GTK_WINDOW(window),480,360);
     gtk_window_set_title(GTK_WINDOW(window),"Gtk4 test");
+    //Window icon
+    gtk_window_set_icon_name(GTK_WINDOW(window),"gtk3-demo");
     //GtkFixed
     fixed=gtk_fixed_new();
     //Image as background

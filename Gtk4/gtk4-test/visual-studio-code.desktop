@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=gtk4-test
+Icon=gtk4-icon
+StartupNotify=true
+Exec=bin/gtk4-test
