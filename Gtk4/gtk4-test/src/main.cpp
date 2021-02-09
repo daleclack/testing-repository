@@ -37,13 +37,18 @@ void change_background(GtkWidget *widget,GtkWindow *parent){
 }
 
 static void gtkmain(GtkApplication *app,gpointer user_data){
-    GtkWidget *window,*fixed,*button;
+    GtkWidget *window,*fixed,*button,*header;
     //Window initalize
     window=gtk_application_window_new(app);
     gtk_window_set_default_size(GTK_WINDOW(window),480,360);
-    gtk_window_set_title(GTK_WINDOW(window),"Gtk4 test");
+    gtk_window_set_title(GTK_WINDOW(window),"gtk4-test2");
     //Window icon
     gtk_window_set_icon_name(GTK_WINDOW(window),"gtk4-icon");
+    //GtkHeaderBar
+    header=gtk_header_bar_new();
+    gtk_header_bar_set_show_title_buttons(GTK_HEADER_BAR(header),TRUE);
+    gtk_header_bar_set_decoration_layout(GTK_HEADER_BAR(header),"close,minimize,maximize:icon");
+    gtk_window_set_titlebar(GTK_WINDOW(window),header);
     //GtkFixed
     fixed=gtk_fixed_new();
     //Image as background
