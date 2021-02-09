@@ -41,7 +41,12 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     //Window initalize
     window=gtk_application_window_new(app);
     gtk_window_set_default_size(GTK_WINDOW(window),540,360);
-    gtk_window_set_title(GTK_WINDOW(window),"gtk40(based on Gtk4 test)");
+    //GtkHeaderBar
+    GtkWidget *header=gtk_header_bar_new();
+    gtk_header_bar_set_title(GTK_HEADER_BAR(header),"gtk40(based on Gtk4 test)");
+    gtk_header_bar_set_show_close_button(GTK_HEADER_BAR(header),TRUE);
+    gtk_header_bar_set_decoration_layout(GTK_HEADER_BAR(header),"close,minimize,maximize:icon");
+    gtk_window_set_titlebar(GTK_WINDOW(window),header);
     //Window icon
     gtk_window_set_icon_name(GTK_WINDOW(window),"gtk4-icon");
     //GtkFixed
