@@ -12,7 +12,7 @@ void dialog_response(GtkWidget *widget,int response){
         file=gtk_file_chooser_get_file(GTK_FILE_CHOOSER(widget));
         filename=g_file_get_path(file);
         GdkPixbuf *pixbuf=gdk_pixbuf_new_from_file(filename,NULL);
-        GdkPixbuf *sized=gdk_pixbuf_scale_simple(pixbuf,540,360,GDK_INTERP_BILINEAR);
+        GdkPixbuf *sized=gdk_pixbuf_scale_simple(pixbuf,640,360,GDK_INTERP_BILINEAR);
         gtk_image_set_from_pixbuf(GTK_IMAGE(background),sized);
     }
     gtk_widget_destroy(widget);
@@ -40,7 +40,7 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     GtkWidget *window,*fixed,*button;
     //Window initalize
     window=gtk_application_window_new(app);
-    gtk_window_set_default_size(GTK_WINDOW(window),540,360);
+    gtk_window_set_default_size(GTK_WINDOW(window),640,360);
     //GtkHeaderBar
     GtkWidget *header=gtk_header_bar_new();
     gtk_header_bar_set_title(GTK_HEADER_BAR(header),"gtk40(based on Gtk4 test)");
@@ -53,14 +53,14 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     fixed=gtk_fixed_new();
     //Image as background
     GdkPixbuf *pixbuf=gdk_pixbuf_new_from_xpm_data(winpe);
-    GdkPixbuf *sized=gdk_pixbuf_scale_simple(pixbuf,540,360,GDK_INTERP_BILINEAR);
+    GdkPixbuf *sized=gdk_pixbuf_scale_simple(pixbuf,640,360,GDK_INTERP_BILINEAR);
     background=gtk_image_new_from_pixbuf(sized);
-    gtk_widget_set_size_request(background,480,360);
+    gtk_widget_set_size_request(background,640,360);
     gtk_fixed_put(GTK_FIXED(fixed),background,0,0);
     //GtkButton
     button=gtk_button_new_with_label("Change Background");
     gtk_widget_set_size_request(button,200,50);
-    gtk_fixed_put(GTK_FIXED(fixed),button,170,240);
+    gtk_fixed_put(GTK_FIXED(fixed),button,220,240);
     g_signal_connect(button,"clicked",G_CALLBACK(change_background),window);
     //Show all widget
     gtk_container_add(GTK_CONTAINER(window),fixed);
