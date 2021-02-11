@@ -1,6 +1,12 @@
 #include <gtk/gtk.h>
 #include "res/winpe.xpm"
 
+void get_winsize(GtkWidget *widget,GtkWindow *window){
+    gint width,height;
+    gtk_window_get_size(window,&width,&height);
+    g_print("%d %d\n",width,height);
+}
+
 gboolean window_resize(GtkWidget *widget,GdkEvent *event,GtkBuilder *builder){
     //Get window size
     gint width,height;
@@ -22,6 +28,9 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     GtkBuilder *builder=gtk_builder_new_from_file("res/window.ui");
     GObject *window=gtk_builder_get_object(builder,"window");
     gtk_application_add_window(app,GTK_WINDOW(window));
+    //Get window size
+    GObject *btnsize=gtk_builder_get_object(builder,"btnsize");
+    g_signal_connect(btnsize,"clicked",G_CALLBACK(get_winsize),window);
     gtk_widget_show_all(GTK_WIDGET(window));
     g_signal_connect(window,"window-state-event",G_CALLBACK(window_resize),builder);
 }

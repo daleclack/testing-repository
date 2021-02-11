@@ -33,7 +33,15 @@
         <property name="show-close-button">True</property>
         <property name="decoration-layout">close,minimize,maximize:icon</property>
         <child>
-          <placeholder/>
+          <object class="GtkButton" id="btnsize">
+            <property name="label" translatable="yes">Win size</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
         </child>
       </object>
     </child>
