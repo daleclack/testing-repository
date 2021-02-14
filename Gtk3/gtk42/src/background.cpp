@@ -1,4 +1,5 @@
 #include "background.h"
+#include "winconf.h"
 #include "winpe.xpm"
 
 void fileopen(GtkWidget *widget,GtkBuilder *builder){
@@ -22,6 +23,8 @@ void fileopen(GtkWidget *widget,GtkBuilder *builder){
 
 void dialog_response(GtkWidget *widget,int response,GtkBuilder *builder){
     //Handle file chooser response and set background
+    int width,height;
+    get_config(&width,&height);
     GObject *background=gtk_builder_get_object(builder,"background");
     const gchar *filename;
     GFile *file;
@@ -30,7 +33,7 @@ void dialog_response(GtkWidget *widget,int response,GtkBuilder *builder){
         file=gtk_file_chooser_get_file(GTK_FILE_CHOOSER(widget));
         filename=g_file_get_path(file);
         GdkPixbuf *pixbuf=gdk_pixbuf_new_from_file(filename,NULL);
-        GdkPixbuf *sized=gdk_pixbuf_scale_simple(pixbuf,640,360,GDK_INTERP_BILINEAR);
+        GdkPixbuf *sized=gdk_pixbuf_scale_simple(pixbuf,width,height,GDK_INTERP_BILINEAR);
         gtk_image_set_from_pixbuf(GTK_IMAGE(background),sized);
         g_object_unref(pixbuf);
         g_object_unref(sized);
@@ -39,8 +42,11 @@ void dialog_response(GtkWidget *widget,int response,GtkBuilder *builder){
 }
 
 void default_background(GtkBuilder *builder){
+    //Set the default background
+    int width,height;
+    get_config(&width,&height);
     GObject *background=gtk_builder_get_object(builder,"background");
     GdkPixbuf *pixbuf=gdk_pixbuf_new_from_xpm_data(winpe);
-    GdkPixbuf *sized=gdk_pixbuf_scale_simple(pixbuf,640,360,GDK_INTERP_BILINEAR);
+    GdkPixbuf *sized=gdk_pixbuf_scale_simple(pixbuf,width,height,GDK_INTERP_BILINEAR);
     gtk_image_set_from_pixbuf(GTK_IMAGE(background),sized);
 }

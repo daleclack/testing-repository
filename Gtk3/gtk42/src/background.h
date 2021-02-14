@@ -1,7 +1,7 @@
-#include <gtk/gtk.h>
 #ifndef __BACK_H_
 #define __BACK_H_
 
+#include <gtk/gtk.h>
 
 void default_background(GtkBuilder *builder);
 

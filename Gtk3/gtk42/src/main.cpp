@@ -1,13 +1,20 @@
 #include <gtk/gtk.h>
 #include "background.h"
+#include "winconf.h"
 
 static void gtkmain(GtkApplication *app,gpointer user_data){
     //Get main window
+    int width,height;
+    get_config(&width,&height);
     GtkBuilder *builder=gtk_builder_new_from_file("res/window.ui");
     GObject *window=gtk_builder_get_object(builder,"window");
+    gtk_window_set_default_size(GTK_WINDOW(window),width,height);
     //Get button for change background
     GObject *btn_back=gtk_builder_get_object(builder,"btnback");
     g_signal_connect(btn_back,"clicked",G_CALLBACK(fileopen),builder);
+    //Config button
+    GObject *btn_conf=gtk_builder_get_object(builder,"btnset");
+    g_signal_connect(btn_conf,"clicked",G_CALLBACK(conf_dialog),builder);
     //default background
     default_background(builder);
     //Add window to the application and show
