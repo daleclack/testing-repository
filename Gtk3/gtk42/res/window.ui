@@ -2,17 +2,14 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">document-properties-symbolic</property>
-  </object>
   <object class="GtkWindow" id="window">
     <property name="can-focus">False</property>
+    <property name="title" translatable="yes">gtk(42)</property>
     <property name="default-width">640</property>
     <property name="default-height">360</property>
+    <property name="hide-titlebar-when-maximized">True</property>
     <child>
-      <object class="GtkFixed">
+      <object class="GtkFixed" id="fixed">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <child>
@@ -23,38 +20,6 @@
             <property name="can-focus">False</property>
             <property name="stock">gtk-missing-image</property>
           </object>
-        </child>
-      </object>
-    </child>
-    <child type="titlebar">
-      <object class="GtkHeaderBar">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="title" translatable="yes">gtk(42)</property>
-        <property name="show-close-button">True</property>
-        <child>
-          <object class="GtkButton" id="btnset">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="image">image2</property>
-          </object>
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btnback">
-            <property name="label" translatable="yes">Change back</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="always-show-image">True</property>
-          </object>
-          <packing>
-            <property name="pack-type">end</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
     </child>

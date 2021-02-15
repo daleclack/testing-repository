@@ -1,0 +1,43 @@
+#include <ctime>
+#include "panel1.h"
+#include "winconf.h"
+#include "background.h"
+
+gboolean change_time(gpointer data){
+    //Get local time
+    time_t t;
+    struct tm *local;
+    t=time(NULL);
+    local=localtime(&t);
+    //Format the time and set the time
+    char current_time[20];
+    sprintf(current_time,"%02d:%02d %04d/%02d/%02d",
+    local->tm_hour,local->tm_min,local->tm_year+1900,local->tm_mon+1,local->tm_mday);
+    //g_print("%s\n",current_time);
+    gtk_label_set_label(GTK_LABEL(data),current_time);
+    return TRUE;
+}
+
+void add_toppanel(GtkBuilder *builder,GtkFixed *fixed){
+    //Get position
+    int width,height;
+    get_config(&width,&height);
+    //Get panel
+    GtkBuilder *panel=gtk_builder_new_from_file("res/toppanel.ui");
+    GObject *panel1=gtk_builder_get_object(panel,"btnbox");
+    gtk_widget_set_size_request(GTK_WIDGET(panel1),width,15);
+    //Get timer label and set time
+    GObject *label_time=gtk_builder_get_object(panel,"label_time");
+    g_timeout_add(100,change_time,label_time);
+    //Get button for change background
+    GObject *btn_back=gtk_builder_get_object(panel,"btnback");
+    g_signal_connect(btn_back,"clicked",G_CALLBACK(fileopen),builder);
+    //Config button
+    GObject *btn_conf=gtk_builder_get_object(panel,"btnset");
+    g_signal_connect(btn_conf,"clicked",G_CALLBACK(conf_dialog),builder);
+    //Get Exit button
+    GObject *btn_exit=gtk_builder_get_object(panel,"PanelExit");
+    GObject *window=gtk_builder_get_object(builder,"window");
+    g_signal_connect_swapped(btn_exit,"clicked",G_CALLBACK(gtk_widget_destroy),window);
+    gtk_fixed_put(fixed,GTK_WIDGET(panel1),0,0);
+}
