@@ -69,7 +69,7 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
 
 int main(int argc,char *argv[]){
     int status;
-    GtkApplication *app=gtk_application_new("com.daleclack.gtk4.test",G_APPLICATION_FLAGS_NONE);
+    GtkApplication *app=gtk_application_new("org.gtk.daleclack",G_APPLICATION_NON_UNIQUE);
     g_signal_connect(app,"activate",G_CALLBACK(gtkmain),NULL);
     status=g_application_run(G_APPLICATION(app),argc,argv);
     g_object_unref(app);
