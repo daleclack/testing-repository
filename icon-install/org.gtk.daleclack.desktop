@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Gtk4-test
+Exec=/mnt/Dell/testing-repository/Gtk4/gtk4-test/bin/gtk4-test
+Comment=
+Terminal=false
+Icon=org.gtk.daleclack
+Type=Application
