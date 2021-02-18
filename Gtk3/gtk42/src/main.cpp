@@ -6,11 +6,12 @@
 
 static void gtkmain(GtkApplication *app,gpointer user_data){
     //Get main window
-    int width,height;
+    int width=640,height=360;
     get_config(&width,&height);
-    GtkBuilder *builder=gtk_builder_new_from_file("res/window.ui");
+    GtkBuilder *builder=gtk_builder_new_from_resource("/gtk42/window.ui");
     GObject *window=gtk_builder_get_object(builder,"window");
     gtk_window_set_default_size(GTK_WINDOW(window),width,height);
+    gtk_window_set_icon_name(GTK_WINDOW(window),"gtk4-icon");
     
     //Get button for change background(moved to panel 1)
     /*GObject *btn_back=gtk_builder_get_object(builder,"btnback");
@@ -34,7 +35,7 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
 int main(int argc,char *argv[]){
     GtkApplication *app;
     int status;
-    app=gtk_application_new("com.github.daleclack.gtk42",G_APPLICATION_FLAGS_NONE);
+    app=gtk_application_new("org.gtk.daleclack",G_APPLICATION_NON_UNIQUE);
     g_signal_connect(app,"activate",G_CALLBACK(gtkmain),NULL);
     status=g_application_run(G_APPLICATION(app),argc,argv);
     return status;
