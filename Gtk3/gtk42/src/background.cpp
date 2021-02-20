@@ -23,7 +23,7 @@ void fileopen(GtkWidget *widget,GtkBuilder *builder){
 
 void dialog_response(GtkWidget *widget,int response,GtkBuilder *builder){
     //Handle file chooser response and set background
-    int width,height;
+    int width=640,height=360;
     get_config(&width,&height);
     GObject *background=gtk_builder_get_object(builder,"background");
     const gchar *filename;
@@ -43,7 +43,7 @@ void dialog_response(GtkWidget *widget,int response,GtkBuilder *builder){
 
 void default_background(GtkBuilder *builder){
     //Set the default background
-    int width,height;
+    int width=640,height=360;
     get_config(&width,&height);
     GObject *background=gtk_builder_get_object(builder,"background");
     GdkPixbuf *pixbuf=gdk_pixbuf_new_from_xpm_data(winpe);

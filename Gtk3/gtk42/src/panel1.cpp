@@ -20,10 +20,10 @@ gboolean change_time(gpointer data){
 
 void add_toppanel(GtkBuilder *builder,GtkFixed *fixed){
     //Get position
-    int width,height;
+    int width=640,height=480;
     get_config(&width,&height);
     //Get panel
-    GtkBuilder *panel=gtk_builder_new_from_file("res/toppanel.ui");
+    GtkBuilder *panel=gtk_builder_new_from_resource("/gtk42/toppanel.ui");
     GObject *panel1=gtk_builder_get_object(panel,"btnbox");
     gtk_widget_set_size_request(GTK_WIDGET(panel1),width,15);
     //Get timer label and set time
@@ -31,12 +31,18 @@ void add_toppanel(GtkBuilder *builder,GtkFixed *fixed){
     g_timeout_add(100,change_time,label_time);
     //Get button for change background
     GObject *btn_back=gtk_builder_get_object(panel,"btnback");
+    GObject *img_back=gtk_builder_get_object(panel,"image3");
+    gtk_image_set_from_resource(GTK_IMAGE(img_back),"/gtk42/graphics.svg");
     g_signal_connect(btn_back,"clicked",G_CALLBACK(fileopen),builder);
     //Config button
     GObject *btn_conf=gtk_builder_get_object(panel,"btnset");
+    GObject *img_set=gtk_builder_get_object(panel,"image5");
+    gtk_image_set_from_resource(GTK_IMAGE(img_set),"/gtk42/system.svg");
     g_signal_connect(btn_conf,"clicked",G_CALLBACK(conf_dialog),builder);
     //Get Exit button
     GObject *btn_exit=gtk_builder_get_object(panel,"PanelExit");
+    GObject *img_exit=gtk_builder_get_object(panel,"image4");
+    gtk_image_set_from_resource(GTK_IMAGE(img_exit),"/gtk42/log-out.svg");
     GObject *window=gtk_builder_get_object(builder,"window");
     g_signal_connect_swapped(btn_exit,"clicked",G_CALLBACK(gtk_widget_destroy),window);
     gtk_fixed_put(fixed,GTK_WIDGET(panel1),0,0);

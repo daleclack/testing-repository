@@ -8,10 +8,15 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     //Get main window
     int width=640,height=360;
     get_config(&width,&height);
+    //GtkBuilder *builder=gtk_builder_new_from_file("res/window.ui");
     GtkBuilder *builder=gtk_builder_new_from_resource("/gtk42/window.ui");
     GObject *window=gtk_builder_get_object(builder,"window");
     gtk_window_set_default_size(GTK_WINDOW(window),width,height);
-    gtk_window_set_icon_name(GTK_WINDOW(window),"gtk4-icon");
+    gtk_window_set_icon_name(GTK_WINDOW(window),"org.gtk.daleclack");
+
+    //Home button
+    GObject *img_home=gtk_builder_get_object(builder,"image1");
+    gtk_image_set_from_resource(GTK_IMAGE(img_home),"/gtk42/user-home.png");
     
     //Get button for change background(moved to panel 1)
     /*GObject *btn_back=gtk_builder_get_object(builder,"btnback");

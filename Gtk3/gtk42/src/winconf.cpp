@@ -3,7 +3,7 @@
 
 void conf_dialog(GtkWidget *widget,GtkBuilder *builder){
     //Window config dialog
-    GtkBuilder *conf_size=gtk_builder_new_from_file("res/win_size.ui");
+    GtkBuilder *conf_size=gtk_builder_new_from_resource("/gtk42/win_size.ui");
     GObject *dialog=gtk_builder_get_object(conf_size,"dialog");
     GObject *window=gtk_builder_get_object(builder,"window");
     gtk_window_set_transient_for(GTK_WINDOW(dialog),GTK_WINDOW(window));
@@ -48,7 +48,7 @@ void set_default(GtkWidget *widget,GtkBuilder *builder_conf){
 
 void get_winsize(GtkWidget *widget,GtkBuilder *builder_conf){
     //Get current window size
-    int width,height;
+    int width=640,height=360;
     char width1[7],height1[7];
     GtkWindow *window;
     //Get dialog window and entry
