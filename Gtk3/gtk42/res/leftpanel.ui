@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.38.2 -->
 <interface>
-  <requires lib="gtk+" version="3.24"/>
+  <requires lib="gtk+" version="3.20"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="icon-name">vlc</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="icon-name">gedit-icon</property>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-about</property>
   </object>
   <object class="GtkPopover" id="popover1">
     <property name="width-request">300</property>
@@ -29,13 +32,13 @@
             <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkButton" id="btnvlc">
-                <property name="label" translatable="yes">VLC Media Player</property>
+              <object class="GtkButton" id="btnaud">
+                <property name="label" translatable="yes">audacious</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="image">image1</property>
                 <property name="relief">none</property>
+                <property name="always-show-image">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -51,6 +54,7 @@
                 <property name="receives-default">True</property>
                 <property name="image">image2</property>
                 <property name="relief">none</property>
+                <property name="always-show-image">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -59,7 +63,20 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkButton" id="btnvlc">
+                <property name="label" translatable="yes">VLC Media Player</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="image">image1</property>
+                <property name="relief">none</property>
+                <property name="always-show-image">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
             </child>
             <child>
               <placeholder/>
@@ -91,6 +108,7 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="relief">none</property>
+                <property name="always-show-image">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -105,6 +123,7 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="relief">none</property>
+                <property name="always-show-image">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -143,7 +162,19 @@
             <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <child>
-              <placeholder/>
+              <object class="GtkButton" id="btnabout">
+                <property name="label" translatable="yes">About</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="image">image3</property>
+                <property name="relief">none</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
               <placeholder/>
