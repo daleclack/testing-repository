@@ -12,6 +12,6 @@ void buttons_init(GtkBuilder *builder);
 
 void btngo_click(GtkWidget *widget,gpointer data);
 
-void gamemain(GtkWidget *widget,gpointer data);
+void gamemain(GtkWidget *widget,GtkWindow *parent);
 
 #endif

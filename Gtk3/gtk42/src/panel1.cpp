@@ -29,6 +29,8 @@ void add_toppanel(GtkBuilder *builder,GtkFixed *fixed){
     //Get timer label and set time
     GObject *label_time=gtk_builder_get_object(panel,"label_time");
     g_timeout_add(100,change_time,label_time);
+    //Get popover window
+    GObject *popover=gtk_builder_get_object(panel,"popover1");
     //Get button for change background
     GObject *btn_back=gtk_builder_get_object(panel,"btnback");
     GObject *img_back=gtk_builder_get_object(panel,"image3");
@@ -36,6 +38,7 @@ void add_toppanel(GtkBuilder *builder,GtkFixed *fixed){
     //gtk_button_set_image(GTK_BUTTON(btn_back),GTK_WIDGET(img_back));
     gtk_button_set_always_show_image(GTK_BUTTON(btn_back),TRUE);
     g_signal_connect(btn_back,"clicked",G_CALLBACK(fileopen),builder);
+    g_signal_connect_swapped(btn_back,"clicked",G_CALLBACK(gtk_widget_hide),popover);
     //Config button
     GObject *btn_conf=gtk_builder_get_object(panel,"btnset");
     GObject *img_set=gtk_builder_get_object(panel,"image5");
@@ -43,6 +46,7 @@ void add_toppanel(GtkBuilder *builder,GtkFixed *fixed){
     //gtk_button_set_image(GTK_BUTTON(btn_conf),GTK_WIDGET(img_set));
     gtk_button_set_always_show_image(GTK_BUTTON(btn_conf),TRUE);
     g_signal_connect(btn_conf,"clicked",G_CALLBACK(conf_dialog),builder);
+    g_signal_connect_swapped(btn_conf,"clicked",G_CALLBACK(gtk_widget_hide),popover);
     //Get Exit button
     GObject *btn_exit=gtk_builder_get_object(panel,"PanelExit");
     GObject *img_exit=gtk_builder_get_object(panel,"image4");

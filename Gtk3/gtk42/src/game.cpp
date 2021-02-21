@@ -48,7 +48,7 @@ void btngo_click(GtkWidget *widget,gpointer data){
     flag=x%4;
 }
 
-void gamemain(GtkWidget *widget,gpointer data){
+void gamemain(GtkWidget *widget,GtkWindow *parent){
     //Get objects from the Gtkbuilder and initalize the application
     GtkBuilder *builder=gtk_builder_new();
     GObject *window;
@@ -67,7 +67,7 @@ void gamemain(GtkWidget *widget,gpointer data){
     srand((unsigned)time(NULL));
     int x=rand();
     flag=x%4;
-
+    gtk_window_set_transient_for(GTK_WINDOW(window),parent);
     gtk_widget_show_all(GTK_WIDGET(window));
     g_object_unref(pixbuf);
 }
