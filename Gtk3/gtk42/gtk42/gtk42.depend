@@ -1,0 +1,67 @@
+# depslib dependency file v1.0
+1613552905 source:d:\gtk3\gtk42\src\background.cpp
+	"background.h"
+	"winconf.h"
+	"winpe.xpm"
+
+1613195745 d:\gtk3\gtk42\src\background.h
+	<gtk/gtk.h>
+
+1613270288 d:\gtk3\gtk42\src\winconf.h
+	<gtk/gtk.h>
+
+1613125939 d:\gtk3\gtk42\\winpe.xpm
+
+1613801394 source:d:\gtk3\gtk42\src\main.cpp
+	<gtk/gtk.h>
+	"background.h"
+	"winconf.h"
+	"panel1.h"
+	"panel2.h"
+
+1613357404 d:\gtk3\gtk42\src\panel1.h
+	<gtk/gtk.h>
+
+1613650403 d:\gtk3\gtk42\src\panel2.h
+	<gtk/gtk.h>
+
+1613868143 source:d:\gtk3\gtk42\src\panel1.cpp
+	<ctime>
+	"panel1.h"
+	"winconf.h"
+	"background.h"
+
+1613549116 source:d:\gtk3\gtk42\src\win1.cpp
+	"win1.h"
+
+1613543414 d:\gtk3\gtk42\src\win1.h
+	<gtk/gtk.h>
+
+1613552872 source:d:\gtk3\gtk42\src\winconf.cpp
+	<cstdio>
+	"winconf.h"
+
+1613125939 d:\gtk3\gtk42\src\winpe.xpm
+
+1613802511 source:d:\gtk3\gtk42\src\panel2.cpp
+	<cstdlib>
+	<thread>
+	"panel2.h"
+	"win1.h"
+	"game.h"
+
+1613868120 source:d:\gtk3\gtk42\src\resources.cpp
+	<gio/gio.h>
+	<stdlib.h>
+
+1613650621 source:d:\gtk3\gtk42\gtk42\icon.rc
+
+1613802549 d:\gtk3\gtk42\src\game.h
+	<gtk/gtk.h>
+	<ctime>
+	<cstdlib>
+	<cstring>
+
+1613802556 source:d:\gtk3\gtk42\src\game.cpp
+	"game.h"
+

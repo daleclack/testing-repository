@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="gtk42" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/gtk42" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="../" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/gtk42" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="../" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="../src/background.cpp" />
+		<Unit filename="../src/background.h" />
+		<Unit filename="../src/game.cpp" />
+		<Unit filename="../src/game.h" />
+		<Unit filename="../src/main.cpp" />
+		<Unit filename="../src/panel1.cpp" />
+		<Unit filename="../src/panel1.h" />
+		<Unit filename="../src/panel2.cpp" />
+		<Unit filename="../src/panel2.h" />
+		<Unit filename="../src/resources.cpp" />
+		<Unit filename="../src/win1.cpp" />
+		<Unit filename="../src/win1.h" />
+		<Unit filename="../src/winconf.cpp" />
+		<Unit filename="../src/winconf.h" />
+		<Unit filename="icon.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
