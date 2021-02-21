@@ -7,9 +7,9 @@
     <file>vlc.png</file>
     <file>user-home.png</file>
     <file>icon.jpg</file>
-    <file>graphics.svg</file>
-    <file>system.svg</file>
-    <file>log-out.svg</file>
+    <file>graphics.png</file>
+    <file>system.png</file>
+    <file>log-out.png</file>
     <file preprocess="xml-stripblanks">window.ui</file>
     <file preprocess="xml-stripblanks">leftpanel.ui</file>
     <file preprocess="xml-stripblanks">toppanel.ui</file>

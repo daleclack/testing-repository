@@ -32,17 +32,23 @@ void add_toppanel(GtkBuilder *builder,GtkFixed *fixed){
     //Get button for change background
     GObject *btn_back=gtk_builder_get_object(panel,"btnback");
     GObject *img_back=gtk_builder_get_object(panel,"image3");
-    gtk_image_set_from_resource(GTK_IMAGE(img_back),"/gtk42/graphics.svg");
+    gtk_image_set_from_resource(GTK_IMAGE(img_back),"/gtk42/graphics.png");
+    //gtk_button_set_image(GTK_BUTTON(btn_back),GTK_WIDGET(img_back));
+    gtk_button_set_always_show_image(GTK_BUTTON(btn_back),TRUE);
     g_signal_connect(btn_back,"clicked",G_CALLBACK(fileopen),builder);
     //Config button
     GObject *btn_conf=gtk_builder_get_object(panel,"btnset");
     GObject *img_set=gtk_builder_get_object(panel,"image5");
-    gtk_image_set_from_resource(GTK_IMAGE(img_set),"/gtk42/system.svg");
+    gtk_image_set_from_resource(GTK_IMAGE(img_set),"/gtk42/system.png");
+    //gtk_button_set_image(GTK_BUTTON(btn_conf),GTK_WIDGET(img_set));
+    gtk_button_set_always_show_image(GTK_BUTTON(btn_conf),TRUE);
     g_signal_connect(btn_conf,"clicked",G_CALLBACK(conf_dialog),builder);
     //Get Exit button
     GObject *btn_exit=gtk_builder_get_object(panel,"PanelExit");
     GObject *img_exit=gtk_builder_get_object(panel,"image4");
-    gtk_image_set_from_resource(GTK_IMAGE(img_exit),"/gtk42/log-out.svg");
+    gtk_image_set_from_resource(GTK_IMAGE(img_exit),"/gtk42/log-out.png");
+    //gtk_button_set_image(GTK_BUTTON(btn_exit),GTK_WIDGET(img_exit));
+    gtk_button_set_always_show_image(GTK_BUTTON(btn_exit),TRUE);
     GObject *window=gtk_builder_get_object(builder,"window");
     g_signal_connect_swapped(btn_exit,"clicked",G_CALLBACK(gtk_widget_destroy),window);
     gtk_fixed_put(fixed,GTK_WIDGET(panel1),0,0);

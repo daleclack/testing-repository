@@ -42,7 +42,7 @@
           </object>
           <packing>
             <property name="x">70</property>
-            <property name="y">25</property>
+            <property name="y">30</property>
           </packing>
         </child>
       </object>
