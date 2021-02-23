@@ -43,7 +43,7 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     gtk_window_set_default_size(GTK_WINDOW(window),640,360);
     gtk_window_set_title(GTK_WINDOW(window),"gtk4-test2");
     //Window icon
-    gtk_window_set_icon_name(GTK_WINDOW(window),"gtk4-icon");
+    gtk_window_set_icon_name(GTK_WINDOW(window),"org.gtk.daleclack");
     //GtkHeaderBar
     header=gtk_header_bar_new();
     gtk_header_bar_set_show_title_buttons(GTK_HEADER_BAR(header),TRUE);
