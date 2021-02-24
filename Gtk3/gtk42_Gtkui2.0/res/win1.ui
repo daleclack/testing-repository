@@ -1,11 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.38.2 -->
 <interface>
-  <object class="GtkWindow" id="window1">
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkAboutDialog" id="window1">
     <property name="can-focus">False</property>
-    <property name="title" translatable="yes">About gtk(42)</property>
-    <child>
-      <placeholder/>
+    <property name="type-hint">dialog</property>
+    <property name="program-name">Gtk Ui</property>
+    <property name="version">2.0</property>
+    <property name="copyright" translatable="yes">2020-2021 Xe Corporation</property>
+    <property name="website">github.com/daleclack</property>
+    <property name="authors">Dale </property>
+    <property name="logo-icon-name">org.gtk.daleclack</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="window">
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox">
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
     </child>
   </object>
 </interface>
