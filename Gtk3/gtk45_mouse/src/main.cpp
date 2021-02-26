@@ -1,29 +1,38 @@
 #include <gtk/gtk.h>
+#include <cstdio>
 
-static double start_x,start_y;
+typedef struct {
+    double x;
+    double y;
+}MousePos;
 
-void drag_begin(GtkGesture *gesture,double x,double y,gpointer data){
-    start_x=x;
-    start_y=y;
+//static double start_x,start_y;
+
+void drag_begin(GtkGesture *gesture,double x,double y,MousePos *pos){
+    pos->x=x;
+    pos->y=y;
     freopen("drag.txt","a",stdout);
     g_print("%lf %lf\n",x,y);
     fclose(stdout);
 }
 
-void drag_update(GtkGesture *gesture,double x,double y,gpointer data){
+void drag_update(GtkGesture *gesture,double x,double y,MousePos *pos){
     freopen("drag.txt","a",stdout);
-    g_print("%lf %lf\n",x+start_x,y+start_y);
+    g_print("%lf %lf\n",x+pos->x,y+pos->y);
     fclose(stdout);
 }
 
-void drag_end(GtkGesture *gesture,double x,double y,gpointer data){
+void drag_end(GtkGesture *gesture,double x,double y,MousePos *pos){
     freopen("drag.txt","a",stdout);
-    g_print("%lf %lf\n",x+start_x,y+start_y);
+    g_print("%lf %lf\n",x+pos->x,y+pos->y);
     fclose(stdout);
 }
 
 void pressed(GtkGestureMultiPress *gesture,int n_press,double x,double y,gpointer user_data){
-    
+    g_print("%d\n",n_press);
+    freopen("drag.txt","w",stdout);
+    printf("\0");
+    fclose(stdout);
 }
 
 static void gtkmain(GtkApplication *app,gpointer user_data){
@@ -36,13 +45,14 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     gtk_window_set_icon_name(GTK_WINDOW(window),"org.gtk.daleclack");
     //Create gestures
 
+    static MousePos pos;
     //"Drag" gesture
     drag=gtk_gesture_drag_new(window);
     
     gtk_gesture_single_set_button(GTK_GESTURE_SINGLE(drag),GDK_BUTTON_PRIMARY);
-    g_signal_connect(drag,"drag-begin",G_CALLBACK(drag_begin),NULL);
-    g_signal_connect(drag,"drag-update",G_CALLBACK(drag_update),NULL);
-    g_signal_connect(drag,"drag-end",G_CALLBACK(drag_end),NULL);
+    g_signal_connect(drag,"drag-begin",G_CALLBACK(drag_begin),&pos);
+    g_signal_connect(drag,"drag-update",G_CALLBACK(drag_update),&pos);
+    g_signal_connect(drag,"drag-end",G_CALLBACK(drag_end),&pos);
 
     //"Press" gesture
 
