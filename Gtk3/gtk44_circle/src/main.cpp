@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 
 gboolean draw_color(GtkWidget *widget,cairo_t *cr,gpointer data){
+    //Draw a circle and fill in specfic color
     guint width,height;
     GdkRGBA color;
     GtkStyleContext *context;
@@ -13,8 +14,8 @@ gboolean draw_color(GtkWidget *widget,cairo_t *cr,gpointer data){
     gtk_render_background (context, cr, 0, 0, width, height);
 
     cairo_arc (cr,
-             width / 2.0, height / 2.0,
-             MIN (width, height) / 2.0,
+             width / 4.0, height / 4.0,
+             MIN (width, height) / 4.0,
              0, 2 * G_PI);
     //gtk_style_context_get_color (context, gtk_style_context_get_state (context),&color);
     gdk_rgba_parse(&color,"#66CCFF");
@@ -27,8 +28,10 @@ gboolean draw_color(GtkWidget *widget,cairo_t *cr,gpointer data){
 
 static void gtkmain(GtkApplication *app,gpointer user_data){
     GtkWidget *window,*drawing_area;
+    //Create a window
     window=gtk_application_window_new(app);
     gtk_window_set_icon_name(GTK_WINDOW(window),"org.gtk.daleclack");
+    //Create a draw area
     drawing_area=gtk_drawing_area_new();
     gtk_widget_set_size_request(drawing_area,400,300);
     g_signal_connect(drawing_area,"draw",G_CALLBACK(draw_color),NULL);
