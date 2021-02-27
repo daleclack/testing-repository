@@ -43,12 +43,12 @@ static void draw_brush(GtkWidget *widget,double x,double y){
     cairo_t *cr;
     //Draw on the surface
     cr=cairo_create(surface);
-
+    //Some bugs in color set
     GdkRGBA color;
-    //gdk_rgba_parse(&color,"66CCFF");
-    
     //Draw and fill in color
-    cairo_rectangle(cr,x-3,y-3,6,6);
+    cairo_arc(cr,x,y,3,0,2*G_PI);
+
+    //gdk_rgba_parse(&color,"66CCFF");
     //gdk_cairo_set_source_rgba(cr,&color);
     cairo_fill(cr);
 
@@ -109,7 +109,7 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     GtkGesture *press,*drag;
     //Create a window
     window=gtk_application_window_new(app);
-    gtk_window_set_title(GTK_WINDOW(window),"Mouse Event Test");
+    gtk_window_set_title(GTK_WINDOW(window),"Drawing Test");
     gtk_window_set_default_size(GTK_WINDOW(window),640,360);
     gtk_window_set_icon_name(GTK_WINDOW(window),"org.gtk.daleclack");
 
