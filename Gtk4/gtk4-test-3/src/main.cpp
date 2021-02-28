@@ -3,19 +3,25 @@
 
 GtkWidget *background;
 
+void set_background(GFile *file,int width,int height){
+    const gchar *filename;
+    filename=g_file_get_path(file);
+    g_print("%s",filename);
+    GdkPixbuf *pixbuf=gdk_pixbuf_new_from_file(filename,NULL);
+    GdkPixbuf *sized=gdk_pixbuf_scale_simple(pixbuf,width,height,GDK_INTERP_BILINEAR);
+    gtk_picture_set_pixbuf(GTK_PICTURE(background),sized);
+}
+
 void dialog_response(GtkWidget *widget,int response){
     //Handle file chooser response and set background
-    const gchar *filename;
     GFile *file;
+    const gchar *filename;
     //g_print("%s\n",filename);
     if(response==GTK_RESPONSE_OK){
         file=gtk_file_chooser_get_file(GTK_FILE_CHOOSER(widget));
-        gtk_picture_set_file(GTK_PICTURE(background),file);
-        /*
-        filename=g_file_get_path(file);
-        GdkPixbuf *pixbuf=gdk_pixbuf_new_from_file(filename,NULL);
-        GdkPixbuf *sized=gdk_pixbuf_scale_simple(pixbuf,640,360,GDK_INTERP_BILINEAR);
-        gtk_picture_set_pixbuf(GTK_PICTURE(background),sized);*/
+        //gtk_picture_set_file(GTK_PICTURE(background),file);
+        //filename=g_file_get_path(file);
+        set_background(file,640,360);
     }
     gtk_window_destroy(GTK_WINDOW(widget));
 }
@@ -45,19 +51,27 @@ void default_background(int width,int height){
     background=gtk_picture_new_for_pixbuf(sized);
 }
 
+/*
 void image_resize(GtkWidget *widget,gpointer data){
     //Get resized width and height
     int width,height;
     width=gtk_widget_get_allocated_width(widget);
     height=gtk_widget_get_allocated_height(widget);
-    default_background(width,height);
+    GFile *file=gtk_picture_get_file(GTK_PICTURE(background));
+    if(file==NULL){
+        //g_print("No File Selected");
+        default_background(width,height);
+    }else{
+        set_background(file,width,height);
+    }
 }
+*/
 
 static void gtkmain(GtkApplication *app,gpointer user_data){
-    GtkWidget *window,*overlay,*button,*header;
+    GtkWidget *window,*overlay,*button,*header,*draw_area;
     //Window initalize
     window=gtk_application_window_new(app);
-    gtk_window_set_default_size(GTK_WINDOW(window),640,360);
+    //gtk_window_set_default_size(GTK_WINDOW(window),640,360);
     gtk_window_set_title(GTK_WINDOW(window),"gtk4-test2");
     //Window icon
     gtk_window_set_icon_name(GTK_WINDOW(window),"org.gtk.daleclack");
@@ -71,7 +85,6 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     default_background(640,360);
     gtk_widget_set_size_request(background,640,360);
     gtk_overlay_set_child(GTK_OVERLAY(overlay),background);
-    //g_signal_connect_after(background,"resized",G_CALLBACK(image_resize),NULL);
     //GtkButton
     button=gtk_button_new_with_label("Change Background");
     //gtk_widget_set_size_request(button,200,50);
