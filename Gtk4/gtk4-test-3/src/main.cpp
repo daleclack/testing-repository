@@ -55,22 +55,6 @@ void default_background(int width,int height){
     g_object_unref(sized);
 }
 
-void image_resize(GtkWidget *widget,gpointer data){
-    //Get resized width and height
-    int width,height;
-    width=gtk_widget_get_allocated_width(widget);
-    height=gtk_widget_get_allocated_height(widget);
-    //GFile *file=gtk_picture_get_file(GTK_PICTURE(background));
-    if(file==NULL){
-        g_print("No File Selected\n");
-        default_background(width,height);
-    }else{
-        g_print("File Selected\n");
-        set_background(file,width,height);
-    }
-}
-
-
 static void gtkmain(GtkApplication *app,gpointer user_data){
     GtkWidget *window,*overlay,*button,*header,*draw_area;
     //Window initalize
@@ -89,12 +73,6 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     default_background(640,360);
     gtk_widget_set_size_request(background,640,360);
     gtk_overlay_set_child(GTK_OVERLAY(overlay),background);
-    //GtkDrawingArea to handle resize event
-    /*
-    draw_area=gtk_drawing_area_new();
-    gtk_overlay_add_overlay(GTK_OVERLAY(overlay),draw_area);*/
-    //g_signal_connect(draw_area,"resize",G_CALLBACK(image_resize),NULL);
-    //g_signal_connect(background,"draw",G_CALLBACK(image_resize),NULL);
     //GtkButton
     button=gtk_button_new_with_label("Change Background");
     //gtk_widget_set_size_request(button,200,50);
