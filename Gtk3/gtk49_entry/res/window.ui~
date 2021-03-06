@@ -4,6 +4,7 @@
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkWindow" id="window">
     <property name="can-focus">False</property>
+    <property name="default-width">270</property>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -50,8 +51,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkCheckButton" id="btnvisi">
-                <property name="label" translatable="yes">Visible</property>
+              <object class="GtkCheckButton" id="btnvisible">
+                <property name="label">Visible</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
