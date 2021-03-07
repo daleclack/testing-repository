@@ -2,11 +2,11 @@
 
 static GtkWidget *mediacontrol;
 
-void dialog_response(GtkWidget *widget,int response,GtkWindow *window){
+static void dialog_response(GtkWidget *widget,int response,GtkWindow *window){
     //Get File and set the file to the mediacontrols
     if(response==GTK_RESPONSE_OK){
         //Get media File and filename
-        char *filename;
+        char *filename=NULL;
         char title[100];
         GFile *file=gtk_file_chooser_get_file(GTK_FILE_CHOOSER(widget));
         GtkMediaStream *media=gtk_media_file_new_for_file(file);
@@ -16,13 +16,14 @@ void dialog_response(GtkWidget *widget,int response,GtkWindow *window){
         gtk_window_set_title(GTK_WINDOW(window),title);
         //Free the memory
         g_object_unref(file);
-        g_object_unref(media);
-        g_free(filename);
+        gtk_media_file_clear(GTK_MEDIA_FILE(media));
+        free(filename);
     }
     gtk_window_destroy(GTK_WINDOW(widget));
+    //g_object_unref(widget);
 }
 
-void dialog_open(GtkWidget *widget,GtkWindow *parent){
+static void dialog_open(GtkWidget *widget,GtkWindow *parent){
     //Set a dialog and choose the file
     GtkWidget *dialog;
     GtkFileChooserAction action=GTK_FILE_CHOOSER_ACTION_OPEN;
@@ -68,7 +69,9 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
 
 int main(int argc,char *argv[]){
     GtkApplication *app;
+    int status;
     app=gtk_application_new("org.gtk.daleclack",G_APPLICATION_NON_UNIQUE);
     g_signal_connect(app,"activate",G_CALLBACK(gtkmain),NULL);
-    return g_application_run(G_APPLICATION(app),argc,argv);
+    status=g_application_run(G_APPLICATION(app),argc,argv);
+    return status;
 }
