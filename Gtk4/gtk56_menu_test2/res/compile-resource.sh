@@ -1,0 +1,1 @@
+glib-compile-resources gtk56.resources.xml --target=../src/resources.cpp --generate-source

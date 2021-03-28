@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <menu id='app-menu'>
+        <section>
+            <submenu>
+                <attribute name='label'>File</attribute>
+                <item>
+                    <attribute name='label'>Exit</attribute>
+                    <attribute name='action'>app.quit</attribute>
+                </item>
+            </submenu>
+            <submenu>
+                <attribute name='label'>Edit</attribute>
+                <item>
+                    <attribute name='label'>Copy</attribute>
+                </item>
+                <item>
+                    <attribute name='label'>Paste</attribute>
+                </item>
+            </submenu>
+            <submenu>
+                <attribute name='label'>Help</attribute>
+                <item>
+                    <attribute name='label'>About</attribute>
+                    <attribute name='action'>app.about</attribute>
+                </item>
+            </submenu>
+        </section>
+    </menu>
+</interface>
