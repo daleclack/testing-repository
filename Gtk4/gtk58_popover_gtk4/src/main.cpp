@@ -74,7 +74,7 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     window=gtk_application_window_new(app);
     gtk_window_set_icon_name(GTK_WINDOW(window),"org.gtk.daleclack");
     gtk_window_set_default_size(GTK_WINDOW(window),400,240);
-    gtk_window_set_title(GTK_WINDOW(window),"gtk (57)");
+    gtk_window_set_title(GTK_WINDOW(window),"gtk (58)");
     g_action_map_add_action_entries(G_ACTION_MAP(app),app_entry,
                                     G_N_ELEMENTS (app_entry),app);
     //Header bar
