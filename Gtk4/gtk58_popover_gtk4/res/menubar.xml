@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <menu id='app-menu'>
+        <section>
+            <submenu>
+                <attribute name='label'>Config</attribute>
+                <item>
+                    <attribute name='label'>Change Config1</attribute>
+                    <attribute name='action'>app.config1</attribute>
+                </item>
+                <item>
+                    <attribute name='label'>Change Config2</attribute>
+                    <attribute name='action'>app.config2</attribute>
+                </item>
+                <item>
+                    <attribute name='label'>Change Config3</attribute>
+                    <attribute name='action'>app.config3</attribute>
+                </item>
+            </submenu>
+            <item>
+                <attribute name='label'>About</attribute>
+                <attribute name='action'>app.about</attribute>
+            </item>
+            <item>
+                <attribute name='label'>Exit</attribute>
+                <attribute name='action'>app.quit</attribute>
+            </item>
+        </section>
+    </menu>
+</interface>

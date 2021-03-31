@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="gtk57">
+        <file preprocess="xml-stripblanks">menubar.xml</file>
+    </gresource>
+</gresources>
