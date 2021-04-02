@@ -71,6 +71,7 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     GtkWidget *window,*header,*menubtn,*popover,*overlay,*background;
     GtkBuilder *builder=gtk_builder_new_from_resource("/gtk57/menubar.xml");
     GMenuModel *model;
+
     //Initalize window
     window=gtk_application_window_new(app);
     gtk_window_set_icon_name(GTK_WINDOW(window),"org.gtk.daleclack");
@@ -78,18 +79,24 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     gtk_window_set_title(GTK_WINDOW(window),"gtk (58)");
     g_action_map_add_action_entries(G_ACTION_MAP(app),app_entry,
                                     G_N_ELEMENTS (app_entry),app);
+
     //Header bar
     header=gtk_header_bar_new();
     gtk_header_bar_set_show_title_buttons(GTK_HEADER_BAR(header),TRUE);
+
+    //These code is for gtk3 support
     //gtk_header_bar_set_show_close_button(GTK_HEADER_BAR(header),TRUE);
     //gtk_header_bar_set_title(GTK_HEADER_BAR(header),"gtk (57)");
+
     //A application menu
     menubtn=gtk_menu_button_new();
     model=G_MENU_MODEL(gtk_builder_get_object(builder,"app-menu"));
     popover=gtk_popover_menu_new_from_model(model);
+    gtk_widget_set_halign(popover,GTK_ALIGN_END);
     //popover=gtk_popover_new_from_model(menubtn,model);
     gtk_header_bar_pack_end(GTK_HEADER_BAR(header),menubtn);
     gtk_menu_button_set_popover(GTK_MENU_BUTTON(menubtn),popover);
+
     //background for window
     overlay=gtk_overlay_new();
     GdkPixbuf *pixbuf=gdk_pixbuf_new_from_xpm_data(img7);
@@ -97,6 +104,7 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     background=gtk_picture_new_for_pixbuf(sized);
     gtk_overlay_set_child(GTK_OVERLAY(overlay),background);
     gtk_overlay_set_measure_overlay(GTK_OVERLAY(overlay),background,TRUE);
+
     gtk_window_set_titlebar(GTK_WINDOW(window),header);
     gtk_window_set_child(GTK_WINDOW(window),overlay);
     gtk_widget_show(window);
