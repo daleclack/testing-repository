@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include "src/img7.xpm"
 
 static void MsgBox(const gchar *msg,gpointer app){
     GtkWidget *dialog,*vbox,*label2;
@@ -64,13 +65,13 @@ static GActionEntry app_entry[] =
 };
 
 static void gtkmain(GtkApplication *app,gpointer user_data){
-    GtkWidget *window,*header,*menubtn,*popover;
+    GtkWidget *window,*header,*menubtn,*popover,*overlay,*background;
     GtkBuilder *builder=gtk_builder_new_from_resource("/gtk57/menubar.xml");
     GMenuModel *model;
     //Initalize window
     window=gtk_application_window_new(app);
     gtk_window_set_icon_name(GTK_WINDOW(window),"org.gtk.daleclack");
-    gtk_window_set_default_size(GTK_WINDOW(window),400,240);
+    gtk_window_set_default_size(GTK_WINDOW(window),400,225);
     //gtk_window_set_title(GTK_WINDOW(window),"gtk (57)");
     g_action_map_add_action_entries(G_ACTION_MAP(app),app_entry,
                                     G_N_ELEMENTS (app_entry),app);
@@ -82,10 +83,24 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     menubtn=gtk_menu_button_new();
     model=G_MENU_MODEL(gtk_builder_get_object(builder,"app-menu"));
     popover=gtk_popover_new_from_model(menubtn,model);
+    gtk_widget_set_halign(popover,GTK_ALIGN_END);
     gtk_header_bar_pack_end(GTK_HEADER_BAR(header),menubtn);
     gtk_menu_button_set_popover(GTK_MENU_BUTTON(menubtn),popover);
+
+    //background for window
+    overlay=gtk_overlay_new();
+    GdkPixbuf *pixbuf=gdk_pixbuf_new_from_xpm_data(img7);
+    GdkPixbuf *sized=gdk_pixbuf_scale_simple(pixbuf,400,225,GDK_INTERP_BILINEAR);
+    background=gtk_image_new_from_pixbuf(sized);
+    gtk_container_add(GTK_CONTAINER(overlay),background);
+    //gtk_overlay_set_child(GTK_OVERLAY(overlay),background);
+    //gtk_overlay_set_measure_overlay(GTK_OVERLAY(overlay),background,TRUE);
+
     gtk_window_set_titlebar(GTK_WINDOW(window),header);
+    gtk_container_add(GTK_CONTAINER(window),overlay);
     gtk_widget_show_all(window);
+    g_object_unref(pixbuf);
+    g_object_unref(sized);
 }
 
 int main(int argc,char **argv){
