@@ -75,7 +75,7 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     //Initalize window
     window=gtk_application_window_new(app);
     gtk_window_set_icon_name(GTK_WINDOW(window),"org.gtk.daleclack");
-    gtk_window_set_default_size(GTK_WINDOW(window),400,225);
+    gtk_window_set_default_size(GTK_WINDOW(window),448,252);
     gtk_window_set_title(GTK_WINDOW(window),"gtk (58)");
     g_action_map_add_action_entries(G_ACTION_MAP(app),app_entry,
                                     G_N_ELEMENTS (app_entry),app);
@@ -83,6 +83,7 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     //Header bar
     header=gtk_header_bar_new();
     gtk_header_bar_set_show_title_buttons(GTK_HEADER_BAR(header),TRUE);
+    gtk_header_bar_set_decoration_layout(GTK_HEADER_BAR(header),"close,minimize:menu");
 
     //These code is for gtk3 support
     //gtk_header_bar_set_show_close_button(GTK_HEADER_BAR(header),TRUE);
@@ -100,7 +101,7 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     //background for window
     overlay=gtk_overlay_new();
     GdkPixbuf *pixbuf=gdk_pixbuf_new_from_xpm_data(img7);
-    GdkPixbuf *sized=gdk_pixbuf_scale_simple(pixbuf,400,225,GDK_INTERP_BILINEAR);
+    GdkPixbuf *sized=gdk_pixbuf_scale_simple(pixbuf,448,252,GDK_INTERP_BILINEAR);
     background=gtk_picture_new_for_pixbuf(sized);
     gtk_overlay_set_child(GTK_OVERLAY(overlay),background);
     gtk_overlay_set_measure_overlay(GTK_OVERLAY(overlay),background,TRUE);
