@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="gtk64">
+        <file preprocess="xml-stripblanks">appmenu.xml</file>
+    </gresource>
+    <gresource prefix="org/gtk/daleclack">
+        <file>icons/48x48/actions/gtk64.png</file>
+    </gresource>
+</gresources>
