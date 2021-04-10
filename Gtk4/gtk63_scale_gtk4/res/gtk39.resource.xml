@@ -4,4 +4,8 @@
     <file>icon.jpg</file>
     <file preprocess="xml-stripblanks">window.ui</file>
   </gresource>
+  <gresource prefix="org/gtk/daleclack">
+    <file>icons/16x16/actions/icon.png</file>
+    <file>icons/48x48/actions/icon1.png</file>
+  </gresource>
 </gresources>

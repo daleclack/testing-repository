@@ -65,9 +65,9 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     //Main window
     GtkBuilder *builder=gtk_builder_new_from_resource("/gtk39/window.ui");
     GObject *window=gtk_builder_get_object(builder,"window");
-    GdkPixbuf *pixbuf=gdk_pixbuf_new_from_resource("/gtk39/icon.jpg",NULL);
+    //GdkPixbuf *pixbuf=gdk_pixbuf_new_from_resource("/gtk39/icon.jpg",NULL);
     //gtk_window_set_icon(GTK_WINDOW(window),pixbuf);
-    gtk_window_set_icon_name(GTK_WINDOW(window),"org.gtk.daleclack");
+    gtk_window_set_icon_name(GTK_WINDOW(window),"icon1");
     gtk_application_add_window(app,GTK_WINDOW(window));
     //Show value setting
     GObject *btn_show=gtk_builder_get_object(builder,"btnshow");
