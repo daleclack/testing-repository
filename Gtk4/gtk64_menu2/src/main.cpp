@@ -4,11 +4,18 @@
 #define WIN_WIDTH 640
 #define WIN_HEIGHT 360
 
-static GtkWidget *background;
+//static GtkWidget *background;
 
-static void default_background(int width,int height){
+static GtkWidget *get_background(gpointer app){
+    GtkWindow *win=gtk_application_get_active_window((GtkApplication*)app);
+    GtkWidget *overlay=gtk_window_get_child(win); 
+    return gtk_overlay_get_child((GtkOverlay*)overlay);;
+}
+
+static void default_background(int width,int height,gpointer app){
+    //Get background widget
+    GtkWidget *background=get_background(app);
     //Change background to default
-    //GtkWidget *background;
     GdkPixbuf *pixbuf=gdk_pixbuf_new_from_xpm_data(img7);
     GdkPixbuf *sized=gdk_pixbuf_scale_simple(pixbuf,width,height,GDK_INTERP_BILINEAR);
     gtk_picture_set_pixbuf(GTK_PICTURE(background),sized);
@@ -16,7 +23,9 @@ static void default_background(int width,int height){
     g_object_unref(sized);
 }
 
-void set_background(GFile *file1,int width,int height){
+void set_background(GFile *file1,int width,int height,gpointer app){
+    //Get background widget
+    GtkWidget *background=get_background(app);
     //Set a background by a file
     char *filename;
     filename=g_file_get_path(file1);
@@ -33,7 +42,7 @@ void set_background(GFile *file1,int width,int height){
 static void fileopen(GtkWidget *widget,int response,gpointer app){
     if(response==GTK_RESPONSE_OK){
         GFile *file=gtk_file_chooser_get_file(GTK_FILE_CHOOSER(widget));
-        set_background(file,WIN_WIDTH,WIN_HEIGHT);
+        set_background(file,WIN_WIDTH,WIN_HEIGHT,app);
     }
     gtk_window_destroy(GTK_WINDOW(widget));
 }
@@ -42,7 +51,7 @@ static void default_activated(GSimpleAction *action,
                               GVariant      *parmeter,
                               gpointer       app)
 {
-    default_background(WIN_WIDTH,WIN_HEIGHT);
+    default_background(WIN_WIDTH,WIN_HEIGHT,app);
 }
 
 static void dialog_activated(GSimpleAction *action,
@@ -122,7 +131,7 @@ static void button_press(GtkGesture *gesture,guint n_press,
 }
 
 static void gtkmain(GtkApplication *app,gpointer user_data){
-    GtkWidget *window,*overlay,*popover;
+    GtkWidget *window,*overlay,*popover,*background;
     //Initalize main window
     window=gtk_application_window_new(app);
     gtk_window_set_default_size(GTK_WINDOW(window),WIN_WIDTH,WIN_HEIGHT);
@@ -140,7 +149,6 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     overlay=gtk_overlay_new();
     //Background
     background=gtk_picture_new();
-    default_background(WIN_WIDTH,WIN_HEIGHT);
     gtk_overlay_set_child(GTK_OVERLAY(overlay),background);
     //Drawing area
 
@@ -162,6 +170,7 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     gtk_widget_add_controller(overlay,GTK_EVENT_CONTROLLER(press));
 
     gtk_window_set_child(GTK_WINDOW(window),overlay);
+    default_background(WIN_WIDTH,WIN_HEIGHT,app);
     gtk_widget_show(window);
 }
 
