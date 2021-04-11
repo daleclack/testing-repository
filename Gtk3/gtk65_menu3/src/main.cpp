@@ -85,8 +85,8 @@ static void about_activated(GSimpleAction *action,
     char *version;
     version=g_strdup_printf("1.0\nRunning Against GTK %d.%d.%d",
                             gtk_get_major_version(),
-                            gtk_get_micro_version(),
-                            gtk_get_minor_version());
+                            gtk_get_minor_version(),
+                            gtk_get_micro_version());
     GtkWidget *dialog;
     dialog=gtk_about_dialog_new();
     gtk_show_about_dialog(win,
@@ -117,7 +117,7 @@ static void button_press(GtkGesture *gesture,guint n_press,
     rectangle.y=y;
     rectangle.width=1;
     rectangle.height=1;
-    g_print("%f %f\n",x,y);
+    //g_print("%f %f\n",x,y);
     gtk_popover_set_pointing_to(GTK_POPOVER(popover),&rectangle);
     //gtk_popover_present(GTK_POPOVER(popover));
     gtk_popover_popup(GTK_POPOVER(popover));
