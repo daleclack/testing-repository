@@ -8,8 +8,8 @@
 
 static GtkWidget *get_background(gpointer app){
     GtkWindow *win=gtk_application_get_active_window((GtkApplication*)app);
-    GtkWidget *overlay=gtk_window_get_child(win); 
-    return gtk_overlay_get_child((GtkOverlay*)overlay);;
+    GtkWidget *overlay=gtk_window_get_child(win);
+    return gtk_overlay_get_child((GtkOverlay*)overlay);
 }
 
 static void default_background(int width,int height,gpointer app){
