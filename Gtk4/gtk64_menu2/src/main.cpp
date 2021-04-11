@@ -39,8 +39,8 @@ static void fileopen(GtkWidget *widget,int response,gpointer app){
 }
 
 static void default_activated(GSimpleAction *action,
-                               GVariant      *parmeter,
-                               gpointer       app)
+                              GVariant      *parmeter,
+                              gpointer       app)
 {
     default_background(WIN_WIDTH,WIN_HEIGHT);
 }
@@ -82,8 +82,8 @@ static void about_activated(GSimpleAction *action,
     char *version;
     version=g_strdup_printf("1.0\nRunning Against GTK %d.%d.%d",
                             gtk_get_major_version(),
-                            gtk_get_micro_version(),
-                            gtk_get_minor_version());
+                            gtk_get_minor_version(),
+                            gtk_get_micro_version());
     GtkWidget *dialog;
     dialog=gtk_about_dialog_new();
     gtk_show_about_dialog(win,
@@ -142,6 +142,8 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     background=gtk_picture_new();
     default_background(WIN_WIDTH,WIN_HEIGHT);
     gtk_overlay_set_child(GTK_OVERLAY(overlay),background);
+    //Drawing area
+
     //Initalize menu
     GtkBuilder *builder;
     builder=gtk_builder_new_from_resource("/gtk64/appmenu.xml");
