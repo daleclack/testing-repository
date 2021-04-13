@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="gtk67">
+        <file preprocess="xml-stripblanks">gtkmain.ui</file>
+        <file preprocess="xml-stripblanks">win1.ui</file>
+    </gresource>
+    <gresource prefix="org/gtk/daleclack">
+        <file>icons/48x48/actions/gtk67.png</file>
+    </gresource>
+</gresources>
