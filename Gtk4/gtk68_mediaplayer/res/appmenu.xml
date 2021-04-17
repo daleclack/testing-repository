@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <menu id='app-menu'>
+        <section>
+            <item>
+                <attribute name='label'>Open Media File</attribute>
+                <attribute name='action'>app.open</attribute>
+            </item>
+            <item>
+                <attribute name='label'>Pause Media</attribute>
+                <attribute name='action'>app.pause</attribute>
+            </item>
+            <item>
+                <attribute name='label'>Play Media</attribute>
+                <attribute name='action'>app.play</attribute>
+            </item>
+            <item>
+                <attribute name='label'>Clear Media</attribute>
+                <attribute name='action'>app.clear</attribute>
+            </item>
+            <item>
+                <attribute name='label'>About</attribute>
+                <attribute name='action'>app.about</attribute>
+            </item>
+            <item>
+                <attribute name='label'>Exit</attribute>
+                <attribute name='action'>app.quit</attribute>
+            </item>
+        </section>
+    </menu>
+</interface>
