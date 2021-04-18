@@ -1,6 +1,10 @@
 # testing-repository
 A testing repository
 
+Note:To minimize the repeated files,I put the same files as public resource
+
+The file name is above:public\_res<filename>\_<file extension> or public\_res<filename>\_<file extension>
+
 Please compile with g++ or gcc
 (Visual Studio may have issues)
 
