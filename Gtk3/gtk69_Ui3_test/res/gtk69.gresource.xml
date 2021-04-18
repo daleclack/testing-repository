@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="gtk69">
+        <file preprocess="xml-stripblanks">win1.ui</file>
+        <file preprocess="xml-stripblanks">window.ui</file>
+        <file preprocess="xml-stripblanks">winsize.ui</file>
+    </gresource>
+    <gresource prefix="org/gtk/daleclack">
+        <file>icons/16x16/actions/window-minimize.png</file>
+        <file>icons/16x16/actions/window-close.png</file>
+        <file>icons/48x48/actions/gtk69.png</file>
+        <file>icons/48x48/actions/win1.png</file>
+        <file>icons/48x48/actions/win1_running.png</file>
+        <file>icons/128x128/actions/gtk69.png</file>
+    </gresource>
+</gresources>
