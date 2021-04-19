@@ -6,6 +6,8 @@ void conf_dialog(GtkWidget *widget,GtkWindow *win){
     GtkBuilder *conf_size=gtk_builder_new_from_resource("/gtk69/winsize.ui");
     GObject *dialog=gtk_builder_get_object(conf_size,"dialog");
     gtk_window_set_transient_for(GTK_WINDOW(dialog),win);
+    gtk_window_set_icon_name((GtkWindow*)dialog,"gtk69");
+    gtk_window_set_title((GtkWindow*)dialog,"Size Config");
     g_signal_connect(dialog,"response",G_CALLBACK(conf_response),conf_size);
     //Set default config
     GtkWidget *btn_width,*btn_height;

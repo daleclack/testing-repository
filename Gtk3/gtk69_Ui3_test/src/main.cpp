@@ -17,6 +17,7 @@ static GtkWidget *win1_init(GtkWindow *parent){
     GtkBuilder *builder=gtk_builder_new_from_resource("/gtk69/win1.ui");
     win1=(GtkWidget*)gtk_builder_get_object(builder,"win1");
     gtk_window_set_transient_for((GtkWindow*)win1,parent);
+    gtk_window_set_icon_name((GtkWindow*)win1,"win1");
     img_mini=(GtkWidget*)gtk_builder_get_object(builder,"image1");
     gtk_image_set_from_icon_name(GTK_IMAGE(img_mini),"window-minimize",GTK_ICON_SIZE_BUTTON);
     btn_mini=(GtkWidget*)gtk_builder_get_object(builder,"btn_mini");
