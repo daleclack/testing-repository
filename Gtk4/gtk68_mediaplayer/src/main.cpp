@@ -149,6 +149,7 @@ static void gtkmain(GtkApplication *app,gpointer user_data){
     gtk_header_bar_set_decoration_layout(GTK_HEADER_BAR(header),"close,minimize,maximize:menu");
     //Menu to control files
     menubtn=gtk_menu_button_new();
+    gtk_menu_button_set_icon_name((GtkMenuButton*)menubtn,"open-menu");
     popover=gtk_popover_menu_new_from_model(model);
     gtk_widget_set_halign(popover,GTK_ALIGN_END);
     gtk_menu_button_set_popover((GtkMenuButton*)menubtn,popover);

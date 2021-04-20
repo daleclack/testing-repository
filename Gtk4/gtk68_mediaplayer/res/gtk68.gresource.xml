@@ -4,6 +4,7 @@
         <file preprocess="xml-stripblanks">appmenu.xml</file>
     </gresource>
     <gresource prefix="org/gtk/daleclack">
+        <file>icons/16x16/actions/open-menu.png</file>
         <file>icons/48x48/actions/gtk68.png</file>
         <file>icons/128x128/actions/gtk68.png</file>
     </gresource>
