@@ -16,7 +16,6 @@ static GtkWidget *win1_init(GtkWindow *parent){
     GtkWidget *win1,*btn_mini,*btn_close,*img_mini,*img_close;
     GtkBuilder *builder=gtk_builder_new_from_resource("/gtk69/win1.ui");
     win1=(GtkWidget*)gtk_builder_get_object(builder,"win1");
-    gtk_window_set_transient_for((GtkWindow*)win1,parent);
     gtk_window_set_icon_name((GtkWindow*)win1,"win1");
     img_mini=(GtkWidget*)gtk_builder_get_object(builder,"image1");
     gtk_image_set_from_icon_name(GTK_IMAGE(img_mini),"window-minimize",GTK_ICON_SIZE_BUTTON);
@@ -70,10 +69,11 @@ static void set_background(GtkWidget *back,int width,int height){
 
 static void add_panel(GtkWidget *overlay,GtkBuilder *builder){
     GtkWindow *win=(GtkWindow*)gtk_builder_get_object(builder,"window");
-    GtkWidget *panel1,*img_panel,*img_win1,*btn_win1,*panel_win1,*btn_size,*btn_exit;
+    GtkWidget *panel1,*img_panel,*img_win1,*btn_win1,*panel_win1,*btn_size,*btn_exit,*popover;
     //Get Panel1 and add the panel to window
     panel1=(GtkWidget*)gtk_builder_get_object(builder,"panelbox");
     //Main panel button
+    popover=(GtkWidget*)gtk_builder_get_object(builder,"popover1");
     img_panel=(GtkWidget*)gtk_builder_get_object(builder,"image1");
     gtk_image_set_from_icon_name(GTK_IMAGE(img_panel),"gtk69",GTK_ICON_SIZE_BUTTON);
     //Window1 button on menu and panel
@@ -83,9 +83,11 @@ static void add_panel(GtkWidget *overlay,GtkBuilder *builder){
     btn_win1=(GtkWidget*)gtk_builder_get_object(builder,"btn_win1");
     g_signal_connect(panel_win1,"clicked",G_CALLBACK(win1_ctrl),builder);
     g_signal_connect(btn_win1,"clicked",G_CALLBACK(win1_activate),builder);
+    g_signal_connect_swapped(btn_win1,"clicked",G_CALLBACK(gtk_popover_popdown),popover);
     //Window Size config
     btn_size=(GtkWidget*)gtk_builder_get_object(builder,"btnsize");
     g_signal_connect(btn_size,"clicked",G_CALLBACK(conf_dialog),win);
+    g_signal_connect_swapped(btn_size,"clicked",G_CALLBACK(gtk_popover_popdown),popover);
     //Exit
     btn_exit=(GtkWidget*)gtk_builder_get_object(builder,"btnExit");
     g_signal_connect_swapped(btn_exit,"clicked",G_CALLBACK(gtk_widget_destroy),win);
