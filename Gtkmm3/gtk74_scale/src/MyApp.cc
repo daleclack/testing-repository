@@ -10,6 +10,7 @@ void MyApp::on_activate() {
 	//Main window
 	m_builder->get_widget("window", window);
 	window->set_title("Gtk (74)");
+	window->set_icon_name("org.gtk.daleclack");
 	add_window(*window);
 	//Show Value Button
 	m_builder->get_widget("btnshow", btn_check);
