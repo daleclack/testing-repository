@@ -1,0 +1,3 @@
+From gtk78,the build system switched to cmake,and the .vscode folder is for code editing only
+
+To lower the repeated .vscode folder,I moved the folder to the main folder(Gtkmm3)
