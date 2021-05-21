@@ -12,7 +12,10 @@ include(CPack)
 find_package (PkgConfig REQUIRED)
 pkg_check_modules (GTKMM3 REQUIRED gtkmm-3.0)
 include_directories (${GTKMM3_INCLUDE_DIRS})
+
+#This Project depends winpe.xpm in the parent dir
 include_directories (..)
+
 link_directories (${GTKMM3_LIBRARY_DIRS})
 
 #names of source files
