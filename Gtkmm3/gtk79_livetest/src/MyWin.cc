@@ -48,7 +48,7 @@ void MyWin::btnback_clicked(){
     //Show the dialog and wait for a user response:
     int result = dialog1.run();
 
-    if(result=Gtk::RESPONSE_OK){
+    if(result==Gtk::RESPONSE_OK){
         //Get the image file and set the image from the file
         std::string filename;
         filename=dialog1.get_filename();
