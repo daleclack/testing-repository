@@ -1,0 +1,68 @@
+# Temporary Files for Tesing
+*_testing*
+
+# Cmake Build Directory
+*/build/*
+*/build_mingw/*
+
+#Visual Studio Build Directory
+*/Debug/*
+*/Release/*
+*/Testing/*
+
+#cmake files for mingw
+*.cmake
+*.dir
+*.tcl
+*.ninja
+*.ninja_deps
+*.ninja_log
+*/CMakeFiles/*
+CMakeCache.txt
+Makefile
+
+#backup files 
+*.*~
+
+#Gresource prebuild file
+*/src/resources.cpp
+
+#backend source
+backend/*
+
+#The binary
+FiveRow
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
