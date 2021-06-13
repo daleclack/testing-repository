@@ -1,7 +1,9 @@
 #include "MyWin.hh"
 #include "winpe.xpm"
 
-MyWin::MyWin(){
+MyWin::MyWin():
+main_box(Gtk::ORIENTATION_VERTICAL)
+{
     //Initalize Window
     set_icon_name("org.gtk.daleclack");
     set_default_size(800,450);
@@ -29,8 +31,13 @@ MyWin::MyWin(){
     gesture->set_button(GDK_BUTTON_SECONDARY);
     gesture->signal_pressed().connect(sigc::mem_fun(*this,&MyWin::btn_pressed));
 
+    //Add Toppanel
+    
     //Add Stack
-    overlay.add_overlay(*(main_stack.stack));
+    main_box.pack_start(*(main_stack.stack));
+    overlay.add_overlay(main_box);
+
+    //Add Overlay to window and show everything
     add(overlay);
     show_all();
 }
@@ -97,7 +104,7 @@ void MyWin::change_background(int response,Gtk::FileChooserDialog *dialog){
 
 void MyWin::about_dialog(){
     char *version;
-    Gtk::AboutDialog about_dialog;
+    Gtk::AboutDialog about_dialog(true);
     about_dialog.set_transient_for(*this);
     //Create Comments
     version=g_strdup_printf("1.0\nRunning against Gtkmm %d.%d.%d",

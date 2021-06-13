@@ -12,6 +12,7 @@ private:
     Glib::RefPtr<Gtk::Builder> menu_builder;
     Gtk::Overlay overlay;
     Gtk::DrawingArea draw_area;
+    Gtk::Box main_box;
     Gtk::PopoverMenu popover;
     Gtk::Image background;
 
