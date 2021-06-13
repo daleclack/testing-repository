@@ -9,11 +9,12 @@ set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 
 include(CPack)
+include_directories(..)
 
 find_package (PkgConfig REQUIRED)
 pkg_check_modules (GTKMM3 REQUIRED gtkmm-3.0)
 include_directories (${GTKMM3_INCLUDE_DIRS})
 link_directories (${GTKMM3_LIBRARY_DIRS})
-add_executable(gtk85 src/main.cc src/MyWin.cc)
+add_executable(gtk85 src/main.cc src/MyWin.cc src/MyStack.cc)
 add_definitions (${GTKMM3_CFLAGS_OTHER})
 target_link_libraries (${PROJECT_NAME} ${GTKMM3_LIBRARIES})
