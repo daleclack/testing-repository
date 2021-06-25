@@ -1,7 +1,7 @@
 #include <gtkmm.h>
 #include "winpe.xpm"
 
-class MyWindow : public Gtk::Window
+class MyWindow : public Gtk::ApplicationWindow
 {
 public:
     MyWindow()
@@ -10,15 +10,18 @@ public:
         //Initalize Window
         set_default_size(640,360);
         set_icon_name("org.gtk.daleclack");
+
         //Add Button
         btn_test.set_halign(Gtk::Align::CENTER);
         btn_test.set_valign(Gtk::Align::CENTER);
         btn_test.signal_clicked().connect(sigc::mem_fun(*this,&MyWindow::change_background));
         overlay.add_overlay(btn_test);
+
         //Add Background
         back.set_can_shrink(true);
         back.set_size_request(640,360);
         back.set_keep_aspect_ratio(false);
+
         //Set Default Background
         auto pixbuf=Gdk::Pixbuf::create_from_xpm_data(winpe);
         back.set_pixbuf(pixbuf);
@@ -42,6 +45,7 @@ private:
         dialog->add_button("OK",Gtk::ResponseType::OK);
         dialog->add_button("Cancel",Gtk::ResponseType::CANCEL);
         dialog->signal_response().connect(sigc::mem_fun(*this,&MyWindow::dialog_response));
+
         //Add File Filters
         auto filter_image=Gtk::FileFilter::create();
         filter_image->set_name("Image Files");
