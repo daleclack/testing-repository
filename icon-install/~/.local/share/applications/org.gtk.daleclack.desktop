@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=Gtk4-test
-Exec=/bin/sh
-Comment=
-Terminal=false
-Icon=org.gtk.daleclack
-Type=Application
-X-Desktop-File-Install-Version=0.26
