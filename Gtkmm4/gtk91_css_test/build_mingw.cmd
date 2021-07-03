@@ -1,3 +1,3 @@
 cd build_mingw
 mingw32-make
-gtk90
+gtk91

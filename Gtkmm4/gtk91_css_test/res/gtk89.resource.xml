@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="/css_accordion">
+    <file>css_accordion.css</file>
+    <file>reset.css</file>
+  </gresource>
+</gresources>
