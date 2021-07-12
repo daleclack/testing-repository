@@ -57,7 +57,12 @@ void MyWin::buffer1_changed(){
 void MyWin::btncopy_clicked(){
     //Get Text
     Glib::ustring text;
-    text=buffer1->get_text();
+    Gtk::TextBuffer::iterator start,end;
+    if(buffer1->get_selection_bounds(start,end)){
+        text=buffer1->get_text(start,end);
+    }else{
+        text=buffer1->get_text();
+    }
 
     //Get Clipboard and set text
     auto refClipboard=Gtk::Clipboard::get();
