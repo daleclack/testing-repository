@@ -1,3 +1,4 @@
+//Thanks to the gedit(gitlab.gnome.org/GNOME/gedit)
 static const char *const supported_globs[] =
 {
     "*.abw",
