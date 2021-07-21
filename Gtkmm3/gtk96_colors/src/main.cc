@@ -44,6 +44,7 @@ public:
         color.set_blue(1);
         color.set_red(0);
         color.set_green(0);
+        color_btn.set_rgba(color);
 
         //Show Everything
         add(main_box);
