@@ -4,9 +4,10 @@ class MyWin : public Gtk::Window{
     //Child Widgets
     Gtk::DrawingArea draw_area;
     Gtk::ColorButton color_btn;
-    Gtk::Label main_label;
+    Gtk::Label main_label,size_label;
     Gtk::Box main_box,btn_box;
-    Gtk::Button btn_clear;
+    Gtk::Button btn_clear,btn_exit;
+    Gtk::Scale scale;
 
     //Color Setting
     Gdk::RGBA m_color;
@@ -14,6 +15,7 @@ class MyWin : public Gtk::Window{
 
     //Gesture to draw
     Glib::RefPtr<Gtk::GestureDrag> drag;
+    Glib::RefPtr<Gtk::Adjustment> size_adj;
     double start_x,start_y;
 
     //Signal Handlers
@@ -25,9 +27,10 @@ class MyWin : public Gtk::Window{
     }
 
     void draw_brush(double x,double y){
-        //Create Draw Brush
+        //Create Draw Brush with specificed size
+        double size=scale.get_value();
         auto cr=Cairo::Context::create(surface);
-        cr->arc(x, y, 3, 0, 2 * G_PI);
+        cr->arc(x, y, size, 0, 2 * G_PI);
 
         //Set Color
         cr->set_source_rgba(m_color.get_red(),m_color.get_green(),
@@ -66,26 +69,37 @@ class MyWin : public Gtk::Window{
     void color_set(){
         m_color=color_btn.get_rgba();
     }
+    
 public:
     MyWin()
     :main_label("Select a color"),
+    size_label("Pen Size"),
     main_box(Gtk::ORIENTATION_HORIZONTAL,5),
     btn_box(Gtk::ORIENTATION_VERTICAL,5),
-    btn_clear("Clear Board")
+    btn_clear("Clear Board"),
+    btn_exit("Exit")
     {
         //Ininalize window
         set_icon_name("org.gtk.daleclack");
+        set_title("Drawing");
         set_default_size(640,480);
 
         //Color set panel
+        size_adj=Gtk::Adjustment::create(3.0,1.0,20.0);
+        scale.set_adjustment(size_adj);
+        scale.set_value_pos(Gtk::POS_BOTTOM);
         btn_box.pack_start(main_label,Gtk::PACK_SHRINK);
         btn_box.pack_start(color_btn,Gtk::PACK_SHRINK);
+        btn_box.pack_start(size_label,Gtk::PACK_SHRINK);
+        btn_box.pack_start(scale,Gtk::PACK_SHRINK);
         btn_box.pack_start(btn_clear,Gtk::PACK_SHRINK);
+        btn_box.pack_start(btn_exit,Gtk::PACK_SHRINK);
         btn_box.set_halign(Gtk::ALIGN_CENTER);
         btn_box.set_valign(Gtk::ALIGN_CENTER);
 
         //Add Gesture
         btn_clear.signal_clicked().connect(sigc::mem_fun(*this,&MyWin::button_press));
+        btn_exit.signal_clicked().connect(sigc::mem_fun(*this,&MyWin::hide));
 
         drag=Gtk::GestureDrag::create(draw_area);
         drag->set_button(GDK_BUTTON_PRIMARY);
