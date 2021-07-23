@@ -6,13 +6,13 @@ class MyWin : public Gtk::Window{
     Gtk::ColorButton color_btn;
     Gtk::Label main_label;
     Gtk::Box main_box,btn_box;
+    Gtk::Button btn_clear;
 
     //Color Setting
     Gdk::RGBA m_color;
     Cairo::RefPtr<Cairo::ImageSurface> surface;
 
     //Gesture to draw
-    Glib::RefPtr<Gtk::GestureMultiPress> gesture;
     Glib::RefPtr<Gtk::GestureDrag> drag;
     double start_x,start_y;
 
@@ -40,7 +40,7 @@ class MyWin : public Gtk::Window{
         draw_area.queue_draw();
     }
 
-    void button_press(int n_press, double x, double y){
+    void button_press(){
         if(surface){
            //Clear the content in draw area
             auto cr=Cairo::Context::create(surface);
@@ -70,7 +70,8 @@ public:
     MyWin()
     :main_label("Select a color"),
     main_box(Gtk::ORIENTATION_HORIZONTAL,5),
-    btn_box(Gtk::ORIENTATION_VERTICAL,5)
+    btn_box(Gtk::ORIENTATION_VERTICAL,5),
+    btn_clear("Clear Board")
     {
         //Ininalize window
         set_icon_name("org.gtk.daleclack");
@@ -79,13 +80,12 @@ public:
         //Color set panel
         btn_box.pack_start(main_label,Gtk::PACK_SHRINK);
         btn_box.pack_start(color_btn,Gtk::PACK_SHRINK);
+        btn_box.pack_start(btn_clear,Gtk::PACK_SHRINK);
         btn_box.set_halign(Gtk::ALIGN_CENTER);
         btn_box.set_valign(Gtk::ALIGN_CENTER);
 
         //Add Gesture
-        gesture=Gtk::GestureMultiPress::create(draw_area);
-        gesture->set_button(GDK_BUTTON_SECONDARY);
-        gesture->signal_pressed().connect(sigc::mem_fun(*this,&MyWin::button_press));
+        btn_clear.signal_clicked().connect(sigc::mem_fun(*this,&MyWin::button_press));
 
         drag=Gtk::GestureDrag::create(draw_area);
         drag->set_button(GDK_BUTTON_PRIMARY);
@@ -104,6 +104,12 @@ public:
         color_btn.set_rgba(m_color);
         color_btn.signal_color_set().connect(sigc::mem_fun(*this,&MyWin::color_set));
 
+        //Initalial draw
+        auto cr=Cairo::Context::create(surface);
+        cr->set_source_rgb(1,1,1);
+        cr->paint();
+        cr.clear();
+        draw_area.queue_draw();    
 
         //Initalize main widget    
         draw_area.set_size_request(600,480);
