@@ -1,3 +1,8 @@
+//A Test to read Config files
+// The Config File Should be a text file 
+// and the content as follows
+// key=value
+
 #include <iostream>
 #include <fstream>
 #include <string>

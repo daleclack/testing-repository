@@ -1,3 +1,6 @@
+//This tool is to automatically execute ffmpeg
+//Use audio.m4s and video.m4s file to generate a .mp4 file.
+
 #include <iostream>
 #include <cstdio>
 #include <thread>
