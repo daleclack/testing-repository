@@ -48,7 +48,7 @@ static void readcfg(){
     std::string cfgkey,cfgvalue;
 
     std::cout<<"Input Config File Name"<<std::endl;//Config File Name
-    std::cin.clear();//Clear the cin to read line
+    std::cin.get();//Clear the cin to read line
     std::cin.getline(filename,1000);
 
     std::cout<<"Input Config Key"<<std::endl;//Config Key
@@ -68,7 +68,7 @@ static void appendcfg(){
     std::string cfgkey,cfgvalue;
 
     std::cout<<"Input Config File Name"<<std::endl;
-    std::cin.clear();//Clear the cin to read line
+    std::cin.get();//Clear the cin to read line
     std::cin.getline(filename,1000);
 
     //Append Config
