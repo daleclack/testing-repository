@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.38.2 -->
+<interface>
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">find</property>
+  </object>
+  <template class="MyWindow" parent="GtkApplicationWindow">
+    <property name="can-focus">False</property>
+    <property name="default-width">600</property>
+    <property name="default-height">400</property>
+    <child>
+      <object class="GtkBox" id="win_vbox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkSearchBar" id="searchbar">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <child>
+              <object class="GtkSearchEntry" id="searchentry">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="primary-icon-name">edit-find-symbolic</property>
+                <property name="primary-icon-activatable">False</property>
+                <property name="primary-icon-sensitive">False</property>
+                <signal name="search-changed" handler="search_text_changed" swapped="no"/>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkStack" id="stack">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <signal name="notify::visible-child" handler="visible_child_changed" swapped="no"/>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="header">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="show-close-button">True</property>
+        <child type="title">
+          <object class="GtkStackSwitcher" id="tabs">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="stack">stack</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuButton" id="gears">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
+            <property name="receives-default">True</property>
+            <child>
+              <object class="GtkImage" id="gears_image">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">open-menu-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btn_open">
+            <property name="label" translatable="yes">Open</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="action-name">win.open</property>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSeparator" id="separator">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+          </object>
+          <packing>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToggleButton" id="search">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="image">image1</property>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSeparator">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+            <property name="position">4</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
