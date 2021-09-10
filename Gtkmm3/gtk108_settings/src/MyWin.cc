@@ -12,7 +12,7 @@ ref_builder(builder)
 
 MyWin * MyWin::create(){
     // Load the Builder file and instantiate its widgets.
-    auto refBuilder = Gtk::Builder::create_from_resource("/gtk107/window.ui");
+    auto refBuilder = Gtk::Builder::create_from_resource("/gtk108/window.ui");
 
     MyWin * window = nullptr;
     refBuilder->get_widget_derived("window", window);
