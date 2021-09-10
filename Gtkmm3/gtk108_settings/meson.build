@@ -1,5 +1,5 @@
 #A Simple Project Test
-project('gtk107', 'cpp',
+project('gtk108', 'cpp',
         default_options : ['c_std=c17', 'cpp_std=c++17'])
 
 #Initalize variants
@@ -7,7 +7,7 @@ gnome=import('gnome')
 
 #Compile Resource 
 gresources = gnome.compile_resources(
-    'resources', 'res/gtk107.resource.xml',
+    'resources', 'res/gtk108.resource.xml',
     source_dir: 'res',
     c_name: 'resources'
 )
@@ -28,8 +28,8 @@ src=['src/main.cc', 'src/MyWin.cc']
 if host_machine.system() == 'windows'
     win=import('windows')
     icon_res=win.compile_resources('../icon.rc')
-    executable('gtk107', icon_res, src, gresources, dependencies : gtkdep, app_schemas, 
+    executable('gtk108', icon_res, src, gresources, dependencies : gtkdep, app_schemas, 
                 win_subsystem : 'windows', include_directories : dir_include)
 else
-    executable('gtk107', src, gresources, app_schemas, dependencies : gtkdep, include_directories : dir_include)
+    executable('gtk108', src, gresources, app_schemas, dependencies : gtkdep, include_directories : dir_include)
 endif
