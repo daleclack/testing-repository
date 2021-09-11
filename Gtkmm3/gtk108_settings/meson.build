@@ -22,7 +22,7 @@ gtkdep = dependency('gtkmm-3.0')
 dir_include = include_directories('..')
 
 #source files
-src=['src/main.cc', 'src/MyWin.cc']
+src=['src/main.cc', 'src/MyWin.cc', 'src/MyPrefs.cc']
 
 #Use Different Build Opinions in windows and Linux
 if host_machine.system() == 'windows'

@@ -2,5 +2,6 @@
 <gresources>
     <gresource prefix="gtk108">
         <file preprocess="xml-stripblanks">window.ui</file>
+        <file preprocess="xml-stripblanks">prefs.ui</file>
     </gresource>
 </gresources>
