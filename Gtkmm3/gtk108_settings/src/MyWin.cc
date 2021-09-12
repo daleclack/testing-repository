@@ -1,6 +1,8 @@
 #include "MyWin.hh"
 #include "MyPrefs.hh"
 #include "winpe.xpm"
+#include <iostream>
+#include <stdexcept>
 
 MyWin::MyWin(BaseObjectType *cobject,const Glib::RefPtr<Gtk::Builder>& builder)
 :Gtk::Window(cobject),
@@ -8,6 +10,8 @@ ref_builder(builder),
 btnback("BackGround")
 {
     int width,height;
+    Glib::ustring back_filename;
+    Glib::RefPtr<Gdk::Pixbuf> pixbuf,sized;
 
     //Create Settings
     m_settings=Gio::Settings::create("org.gtk.daleclack");
@@ -15,6 +19,7 @@ btnback("BackGround")
     m_settings->bind("height",property_default_height());
     width=m_settings->get_int("width");
     height=m_settings->get_int("height");
+    back_filename=m_settings->get_string("background");
 
     //Ininalize Window
     set_icon_name("org.gtk.daleclack");
@@ -24,9 +29,18 @@ btnback("BackGround")
 
     //Add Background
     overlay->add(background);
-    auto pixbuf=Gdk::Pixbuf::create_from_xpm_data(winpe);
-    auto sized=pixbuf->scale_simple(width,height,Gdk::INTERP_BILINEAR);
-    gtk_image_set_from_pixbuf(background.gobj(),sized->gobj());
+    try{
+        if(back_filename == "none"){
+            pixbuf=Gdk::Pixbuf::create_from_xpm_data(winpe);
+        }else{
+            pixbuf=Gdk::Pixbuf::create_from_file(back_filename);
+        }
+        sized=pixbuf->scale_simple(width,height,Gdk::INTERP_BILINEAR);
+        gtk_image_set_from_pixbuf(background.gobj(),sized->gobj());
+    }
+    catch(const Glib::Error& ex){
+        std::cout << ex.what() << std::endl;
+    }
 
     //Add a button
     btnback.set_halign(Gtk::ALIGN_CENTER);
@@ -35,6 +49,8 @@ btnback("BackGround")
 
     //Gtkmm3 only,no need for Gtkmm4 Apps
     show_all_children();
+    pixbuf.reset();
+    sized.reset();
 }
 
 MyWin * MyWin::create(){

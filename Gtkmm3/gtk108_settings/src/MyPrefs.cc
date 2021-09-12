@@ -7,6 +7,11 @@ m_builder(builder)
     //Get Widgets
     m_builder->get_widget("width_spin",m_width);
     m_builder->get_widget("height_spin",m_height);
+    m_builder->get_widget("back_entry",back_entry);
+    m_builder->get_widget("btnopen",btnopen);
+    m_builder->get_widget("btnget",btnget);
+    m_builder->get_widget("btndefback",btndefback);
+    m_builder->get_widget("btndefsize",btndefsize);
 
     //Initalize Dialog
     set_icon_name("org.gtk.daleclack");
@@ -16,6 +21,7 @@ m_builder(builder)
     m_settings=Gio::Settings::create("org.gtk.daleclack");
     m_settings->bind("width",m_width->property_value());
     m_settings->bind("height",m_height->property_value());
+    m_settings->bind("background",back_entry->property_text());
 }
 
 MyPrefs * MyPrefs::create(Gtk::Window& parent){

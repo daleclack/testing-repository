@@ -10,4 +10,6 @@ class MyPrefs : public Gtk::Dialog{
         Glib::RefPtr<Gtk::Builder> m_builder;
         Glib::RefPtr<Gio::Settings> m_settings;
         Gtk::SpinButton * m_width,* m_height;
+        Gtk::Entry * back_entry;
+        Gtk::Button * btnopen,* btnget,* btndefback,* btndefsize;
 };

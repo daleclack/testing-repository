@@ -7,11 +7,8 @@
     <key name="height" type="i">
         <default>480</default>
     </key>
-    <key name="is-maximized" type="b">
-        <default>false</default>
-    </key>
-    <key name="is-fullscreen" type="b">
-        <default>false</default>
+    <key name="background" type="s">
+        <default>'none'</default>
     </key>
   </schema>
 </schemalist>
