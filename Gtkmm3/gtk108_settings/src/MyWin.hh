@@ -11,6 +11,9 @@ class MyWin : public Gtk::Window{
         Glib::RefPtr<Gtk::Builder> ref_builder;
         Glib::RefPtr<Gio::Settings> m_settings;
         Gtk::Button* btnprefs;
+        Gtk::Overlay* overlay;
+        Gtk::Image background;
+        Gtk::Button btnback;
 
         //Signal Handlers
         void btnprefs_clicked();

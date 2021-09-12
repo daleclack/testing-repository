@@ -8,6 +8,10 @@ m_builder(builder)
     m_builder->get_widget("width_spin",m_width);
     m_builder->get_widget("height_spin",m_height);
 
+    //Initalize Dialog
+    set_icon_name("org.gtk.daleclack");
+    set_title("Preferences");
+
     //Create Settings
     m_settings=Gio::Settings::create("org.gtk.daleclack");
     m_settings->bind("width",m_width->property_value());

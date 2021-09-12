@@ -12,13 +12,20 @@
     <property name="default-width">640</property>
     <property name="default-height">480</property>
     <child>
-      <placeholder/>
+      <object class="GtkOverlay" id="overlay">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
     </child>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="show-close-button">True</property>
+        <property name="decoration-layout">close,minimize,maximize:menu</property>
         <child>
           <object class="GtkButton" id="btnprefs">
             <property name="visible">True</property>
@@ -26,6 +33,9 @@
             <property name="receives-default">True</property>
             <property name="image">image1</property>
           </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
         </child>
       </object>
     </child>
