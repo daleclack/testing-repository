@@ -5,7 +5,7 @@
         <default>640</default>
     </key>
     <key name="height" type="i">
-        <default>480</default>
+        <default>360</default>
     </key>
     <key name="background" type="s">
         <default>'none'</default>

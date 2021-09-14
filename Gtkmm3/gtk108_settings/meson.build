@@ -28,7 +28,7 @@ src=['src/main.cc', 'src/MyWin.cc', 'src/MyPrefs.cc']
 if host_machine.system() == 'windows'
     win=import('windows')
     icon_res=win.compile_resources('../icon.rc')
-    executable('gtk108', icon_res, src, gresources, dependencies : gtkdep, app_schemas, 
+    executable('gtk108', icon_res, src, gresources, app_schemas, dependencies : gtkdep, 
                 win_subsystem : 'windows', include_directories : dir_include)
 else
     executable('gtk108', src, gresources, app_schemas, dependencies : gtkdep, include_directories : dir_include)
