@@ -17,5 +17,8 @@ class MyWin : public Gtk::Window{
 
         //Signal Handlers
         void btnprefs_clicked();
-        void on_hide_window(Gtk::Window* window);
 };
+
+static inline void on_hide_window(Gtk::Window* window){
+    delete window;
+}

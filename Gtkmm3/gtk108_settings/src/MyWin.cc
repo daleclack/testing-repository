@@ -66,9 +66,5 @@ MyWin * MyWin::create(){
 void MyWin::btnprefs_clicked(){
     auto prefs=MyPrefs::create(*this);
     prefs->present();
-    prefs->signal_hide().connect(sigc::bind(sigc::mem_fun(*this,&MyWin::on_hide_window),prefs));
-}
-
-void MyWin::on_hide_window(Gtk::Window* window){
-    delete window;
+    prefs->signal_hide().connect(sigc::bind(sigc::ptr_fun(on_hide_window),prefs));
 }
