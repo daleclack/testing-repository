@@ -13,8 +13,11 @@ int main(int argc,char **argv){
     strncpy(tmp,src,len-bin_str);
     tmp[len-bin_str]='\0';
 #endif
+
     //Initalize env
     Glib::setenv("GSETTINGS_SCHEMA_DIR",tmp,false);
+
+    free(tmp);
 
     //Create a application and run
     auto app=Gtk::Application::create(argc,argv,"org.gtk.daleclack");
