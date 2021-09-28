@@ -1,0 +1,3 @@
+cd builddir
+ninja
+*.exe
