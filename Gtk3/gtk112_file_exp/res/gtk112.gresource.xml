@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="gtk112">
+        <file>gnome-fs-directory.png</file>
+        <file>gnome-fs-regular.png</file>
+    </gresource>
+</gresources>
