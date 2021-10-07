@@ -324,15 +324,19 @@ static void btndel_clicked(GtkToolItem *item,FileWindow *win){
     int view_mode=gtk_combo_box_get_active(GTK_COMBO_BOX(win->view_combo));
     switch(view_mode){
         case 0:    //Iconfied Mode
-            GList *list;
+            GList *list,*header;
             list = gtk_icon_view_get_selected_items(GTK_ICON_VIEW(win->icon_view));
-            while(list->next!=NULL){
+            header=list;
+            while(list!=NULL){
                 GtkTreePath *path = (GtkTreePath*)(list->data);
                 if(gtk_tree_model_get_iter(GTK_TREE_MODEL(win->store),&iter,path)){
                     gtk_tree_model_get(GTK_TREE_MODEL(win->store),&iter,COL_DISPLAY_NAME,&select_name,-1);
+                    g_print("%s\n",select_name);
+                    g_free(select_name);
                 }
+                list=list->next;
             }
-            g_list_free_full(list, (GDestroyNotify) gtk_tree_path_free);
+            g_list_free_full(header, (GDestroyNotify) gtk_tree_path_free);
             break;
         case 1:    //Listed Mode
             GtkTreeSelection *selection;
@@ -342,11 +346,11 @@ static void btndel_clicked(GtkToolItem *item,FileWindow *win){
                 gtk_tree_model_get(model,&iter,COL_DISPLAY_NAME,&select_name,-1);
             }
             //g_object_unref(model);
+            g_print("%s\n",select_name);
+            g_free(select_name);
             g_object_unref(selection);
             break;
     }
-    g_print("%s\n",select_name);
-    g_free(select_name);
 }
 
 static void file_window_destroy(GtkWidget *widget){
