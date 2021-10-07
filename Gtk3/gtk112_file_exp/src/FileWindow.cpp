@@ -23,7 +23,7 @@ struct _FileWindow{
     GdkPixbuf *file_pixbuf, *folder_pixbuf;
     char *parent_dir;
     GtkToolItem *up_button;
-    GtkWidget *stack, *show_hidden, *view_combo;
+    GtkWidget *stack, *show_hidden, *view_combo, *tree_view, *icon_view;
     GtkListStore *store;
     GList *selected_items;
 };
@@ -319,13 +319,34 @@ static GtkWidget * create_view_combo(void){
 }
 
 static void btndel_clicked(GtkToolItem *item,FileWindow *win){
+    GtkTreeIter iter;
+    char * select_name = NULL;
     int view_mode=gtk_combo_box_get_active(GTK_COMBO_BOX(win->view_combo));
     switch(view_mode){
         case 0:    //Iconfied Mode
+            GList *list;
+            list = gtk_icon_view_get_selected_items(GTK_ICON_VIEW(win->icon_view));
+            while(list->next!=NULL){
+                GtkTreePath *path = (GtkTreePath*)(list->data);
+                if(gtk_tree_model_get_iter(GTK_TREE_MODEL(win->store),&iter,path)){
+                    gtk_tree_model_get(GTK_TREE_MODEL(win->store),&iter,COL_DISPLAY_NAME,&select_name,-1);
+                }
+            }
+            g_list_free_full(list, (GDestroyNotify) gtk_tree_path_free);
             break;
         case 1:    //Listed Mode
+            GtkTreeSelection *selection;
+            selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(win->tree_view));
+            GtkTreeModel * model = gtk_tree_view_get_model(GTK_TREE_VIEW(win->tree_view));
+            if(gtk_tree_selection_get_selected(selection,&model,&iter)){
+                gtk_tree_model_get(model,&iter,COL_DISPLAY_NAME,&select_name,-1);
+            }
+            //g_object_unref(model);
+            g_object_unref(selection);
             break;
     }
+    g_print("%s\n",select_name);
+    g_free(select_name);
 }
 
 static void file_window_destroy(GtkWidget *widget){
@@ -340,7 +361,7 @@ static void file_window_destroy(GtkWidget *widget){
 }
 
 static void file_window_init(FileWindow *window){
-    GtkWidget *sw,*tree_view,*icon_view,*vbox,*tool_bar,*btnbox;
+    GtkWidget *sw,*vbox,*tool_bar,*btnbox;
     GtkToolItem *home_button,*new_button,*delete_button;
 
     //Initalize window
@@ -409,11 +430,11 @@ static void file_window_init(FileWindow *window){
     window->store=create_store();
     file_window_fill_store(window);
 
-    tree_view=create_list_view(window);
-    icon_view=create_icon_view(window);
+    window->tree_view=create_list_view(window);
+    window->icon_view=create_icon_view(window);
 
-    gtk_stack_add_named(GTK_STACK(window->stack),icon_view,"Icon_view");
-    gtk_stack_add_named(GTK_STACK(window->stack),tree_view,"List_view");
+    gtk_stack_add_named(GTK_STACK(window->stack),window->icon_view,"Icon_view");
+    gtk_stack_add_named(GTK_STACK(window->stack),window->tree_view,"List_view");
 
     g_object_unref(window->store);
 
