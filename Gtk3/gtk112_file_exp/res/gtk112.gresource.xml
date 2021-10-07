@@ -3,5 +3,7 @@
     <gresource prefix="gtk112">
         <file>gnome-fs-directory.png</file>
         <file>gnome-fs-regular.png</file>
+        <file>view-grid-symbolic.png</file>
+        <file>view-list-symbolic.png</file>
     </gresource>
 </gresources>
