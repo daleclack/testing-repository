@@ -318,10 +318,49 @@ static GtkWidget * create_view_combo(void){
     return combo_box;
 }
 
+GtkWidget * create_delete_dialog(FileWindow *win,const char *msg){
+    //Message Dialog
+    GtkWidget *dialog, *hbox, *content_area, *label, *error_image, *label1, *vbox;
+    char * msg_str=g_strdup_printf("Delete Failed:%s",msg);
+
+    if(!msg){
+        return NULL;
+    }
+
+    dialog = gtk_dialog_new_with_buttons("File",GTK_WINDOW(win),GTK_DIALOG_DESTROY_WITH_PARENT,
+             "OK",GTK_RESPONSE_OK,NULL);
+    gtk_window_set_default_size(GTK_WINDOW(dialog),300,150);
+    gtk_window_set_icon_name(GTK_WINDOW(dialog),"org.gtk.daleclack");
+
+    //Child Widgets
+    vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL,5);
+    hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL,5);
+    content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+
+    label1 = gtk_label_new("    ");
+    gtk_box_pack_start(GTK_BOX(vbox),label1,FALSE,FALSE,0);
+
+    error_image = gtk_image_new_from_resource("/gtk112/dialog-error.png");
+    gtk_box_pack_start(GTK_BOX(hbox),error_image,FALSE,FALSE,0);
+
+    label = gtk_label_new(msg_str);
+    gtk_box_pack_end(GTK_BOX(hbox),label,FALSE,FALSE,0);
+
+    gtk_widget_set_valign(hbox,GTK_ALIGN_CENTER);
+    gtk_widget_set_halign(hbox,GTK_ALIGN_CENTER);
+    gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,0);
+    gtk_container_add(GTK_CONTAINER(content_area),vbox);
+    g_signal_connect_swapped(dialog,"response",G_CALLBACK(gtk_widget_destroy),dialog);
+
+    g_free(msg_str);
+    return dialog;
+}
+
 static void btndel_clicked(GtkToolItem *item,FileWindow *win){
     GtkTreeIter iter;
     char * select_name = NULL;
     int view_mode=gtk_combo_box_get_active(GTK_COMBO_BOX(win->view_combo));
+    GtkWidget *dialog=NULL;
     switch(view_mode){
         case 0:    //Iconfied Mode
             GList *list,*header;
@@ -331,8 +370,7 @@ static void btndel_clicked(GtkToolItem *item,FileWindow *win){
                 GtkTreePath *path = (GtkTreePath*)(list->data);
                 if(gtk_tree_model_get_iter(GTK_TREE_MODEL(win->store),&iter,path)){
                     gtk_tree_model_get(GTK_TREE_MODEL(win->store),&iter,COL_DISPLAY_NAME,&select_name,-1);
-                    g_print("%s\n",select_name);
-                    g_free(select_name);
+                    dialog = create_delete_dialog(win,select_name);
                 }
                 list=list->next;
             }
@@ -346,11 +384,14 @@ static void btndel_clicked(GtkToolItem *item,FileWindow *win){
                 gtk_tree_model_get(model,&iter,COL_DISPLAY_NAME,&select_name,-1);
             }
             //g_object_unref(model);
-            g_print("%s\n",select_name);
-            g_free(select_name);
+            dialog = create_delete_dialog(win,select_name);
             g_object_unref(selection);
             break;
     }
+    if(dialog){
+        gtk_widget_show_all(dialog);
+    }
+    g_free(select_name);
 }
 
 static void file_window_destroy(GtkWidget *widget){
