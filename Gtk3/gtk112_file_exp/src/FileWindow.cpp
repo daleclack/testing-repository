@@ -2,6 +2,9 @@
 
 #define FOLDER_NAME "/gtk112/gnome-fs-directory.png"
 #define FILE_NAME "/gtk112/gnome-fs-regular.png"
+#define ERROR_IMAGE "/gtk112/dialog-error.png"
+#define ICON_IMAGE "/gtk112/view-grid-symbolic.png"
+#define LIST_IMAGE "/gtk112/view-list-symbolic.png"
 
 //IconView and TreeView Model
 enum{
@@ -12,20 +15,21 @@ enum{
    NUM_COLS
 };
 
-//ComboBox model
-enum{
-    COMBO_PIXBUF,
-    COMBO_COLS
-};
+typedef enum _ViewMode{
+    MODE_ICON,
+    MODE_LIST
+}ViewMode;
 
 struct _FileWindow{
     GtkApplicationWindow parent;
     GdkPixbuf *file_pixbuf, *folder_pixbuf;
     char *parent_dir;
     GtkToolItem *up_button;
-    GtkWidget *stack, *show_hidden, *view_combo, *tree_view, *icon_view;
+    GtkWidget *stack, *show_hidden, *view_button, *tree_view, *icon_view, *btn_image;
     GtkListStore *store;
+    GtkTreeSelection *selection;
     GList *selected_items;
+    ViewMode view_mode;
 };
 
 G_DEFINE_TYPE(FileWindow,file_window,GTK_TYPE_APPLICATION_WINDOW)
@@ -214,12 +218,15 @@ static void home_clicked(GtkToolItem *item,FileWindow *win){
     gtk_widget_set_sensitive(GTK_WIDGET(win->up_button),TRUE);    
 }
 
-static void view_changed(GtkComboBox * combo,FileWindow *win){
-    int view_mode=gtk_combo_box_get_active(combo);
-    if(view_mode){
+static void btnview_clicked(GtkButton *widget,FileWindow *win){
+    if(win->view_mode == MODE_ICON){
+        gtk_image_set_from_resource(GTK_IMAGE(win->btn_image),LIST_IMAGE);
         gtk_stack_set_visible_child_name(GTK_STACK(win->stack),"List_view");
+        win->view_mode = MODE_LIST;
     }else{
+        gtk_image_set_from_resource(GTK_IMAGE(win->btn_image),ICON_IMAGE);
         gtk_stack_set_visible_child_name(GTK_STACK(win->stack),"Icon_view");
+        win->view_mode = MODE_ICON;
     }
 }
 
@@ -308,17 +315,14 @@ static GtkWidget * create_icon_view(FileWindow *win){
     return icon_view;
 }
 
-static GtkWidget * create_view_combo(void){
-    GtkWidget * combo_box;
-
-    combo_box=gtk_combo_box_text_new();
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_box),"Icon");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_box),"List");
-
-    return combo_box;
+static void create_view_button(FileWindow * win){
+    win->view_button=gtk_button_new();
+    win->btn_image=gtk_image_new_from_resource(ICON_IMAGE);
+    gtk_button_set_relief(GTK_BUTTON(win->view_button),GTK_RELIEF_NONE);
+    gtk_button_set_image(GTK_BUTTON(win->view_button),win->btn_image);
 }
 
-GtkWidget * create_delete_dialog(FileWindow *win,const char *msg){
+static GtkWidget * create_delete_dialog(FileWindow *win,const char *msg){
     //Message Dialog
     GtkWidget *dialog, *hbox, *content_area, *label, *error_image, *label1, *vbox;
     char * msg_str=g_strdup_printf("Delete Failed:%s",msg);
@@ -331,6 +335,7 @@ GtkWidget * create_delete_dialog(FileWindow *win,const char *msg){
              "OK",GTK_RESPONSE_OK,NULL);
     gtk_window_set_default_size(GTK_WINDOW(dialog),300,150);
     gtk_window_set_icon_name(GTK_WINDOW(dialog),"org.gtk.daleclack");
+    gtk_window_set_title(GTK_WINDOW(dialog),"Error");
 
     //Child Widgets
     vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL,5);
@@ -340,7 +345,7 @@ GtkWidget * create_delete_dialog(FileWindow *win,const char *msg){
     label1 = gtk_label_new("    ");
     gtk_box_pack_start(GTK_BOX(vbox),label1,FALSE,FALSE,0);
 
-    error_image = gtk_image_new_from_resource("/gtk112/dialog-error.png");
+    error_image = gtk_image_new_from_resource(ERROR_IMAGE);
     gtk_box_pack_start(GTK_BOX(hbox),error_image,FALSE,FALSE,0);
 
     label = gtk_label_new(msg_str);
@@ -356,13 +361,48 @@ GtkWidget * create_delete_dialog(FileWindow *win,const char *msg){
     return dialog;
 }
 
+static GtkToolItem * create_menubtn(FileWindow *win){
+    //Create Button and item for toolbar
+    GtkToolItem *menuitem;
+    GtkWidget *menubtn, *popover, *vbox, *btnexit, *label_exit;
+    menuitem = gtk_tool_item_new();
+    menubtn = gtk_menu_button_new();
+    gtk_button_set_relief(GTK_BUTTON(menubtn),GTK_RELIEF_NONE);
+    gtk_container_add(GTK_CONTAINER(menuitem),menubtn);
+
+    //Create Menu
+    popover = gtk_popover_new(menubtn);
+    gtk_popover_set_modal(GTK_POPOVER(popover),TRUE);
+    gtk_menu_button_set_popover(GTK_MENU_BUTTON(menubtn),popover);
+
+    //CheckButton for show hidden dir and files
+    win->show_hidden = gtk_check_button_new_with_label("Show Hidden Files");
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(win->show_hidden),FALSE);
+
+    //"Exit" Button
+    btnexit = gtk_button_new();
+    label_exit = gtk_label_new("Exit");
+    gtk_button_set_relief(GTK_BUTTON(btnexit),GTK_RELIEF_NONE);
+    gtk_widget_set_halign(label_exit,GTK_ALIGN_START);
+    gtk_container_add(GTK_CONTAINER(btnexit),label_exit);
+    g_signal_connect_swapped(btnexit,"clicked",G_CALLBACK(gtk_widget_destroy),win);
+
+    //Add Widgets to popover
+    vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL,5);
+    gtk_box_pack_start(GTK_BOX(vbox),win->show_hidden,TRUE,TRUE,0);
+    gtk_box_pack_start(GTK_BOX(vbox),btnexit,TRUE,TRUE,0);
+    gtk_container_add(GTK_CONTAINER(popover),vbox);
+    gtk_widget_show_all(vbox);
+
+    return menuitem;
+}
+
 static void btndel_clicked(GtkToolItem *item,FileWindow *win){
     GtkTreeIter iter;
     char * select_name = NULL;
-    int view_mode=gtk_combo_box_get_active(GTK_COMBO_BOX(win->view_combo));
     GtkWidget *dialog=NULL;
-    switch(view_mode){
-        case 0:    //Iconfied Mode
+    switch(win->view_mode){
+        case MODE_ICON:    //Iconfied Mode
             GList *list,*header;
             list = gtk_icon_view_get_selected_items(GTK_ICON_VIEW(win->icon_view));
             header=list;
@@ -376,16 +416,13 @@ static void btndel_clicked(GtkToolItem *item,FileWindow *win){
             }
             g_list_free_full(header, (GDestroyNotify) gtk_tree_path_free);
             break;
-        case 1:    //Listed Mode
-            GtkTreeSelection *selection;
-            selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(win->tree_view));
+        case MODE_LIST:    //Listed Mode
             GtkTreeModel * model = gtk_tree_view_get_model(GTK_TREE_VIEW(win->tree_view));
-            if(gtk_tree_selection_get_selected(selection,&model,&iter)){
+            if(gtk_tree_selection_get_selected(win->selection,&model,&iter)){
                 gtk_tree_model_get(model,&iter,COL_DISPLAY_NAME,&select_name,-1);
             }
             //g_object_unref(model);
             dialog = create_delete_dialog(win,select_name);
-            g_object_unref(selection);
             break;
     }
     if(dialog){
@@ -406,13 +443,13 @@ static void file_window_destroy(GtkWidget *widget){
 }
 
 static void file_window_init(FileWindow *window){
-    GtkWidget *sw,*vbox,*tool_bar,*btnbox;
-    GtkToolItem *home_button,*new_button,*delete_button;
+    GtkWidget *sw,*vbox,*tool_bar,*btnbox,*view_bar;
+    GtkToolItem *home_button,*new_button,*delete_button,*view_item;
 
     //Initalize window
     gtk_window_set_default_size(GTK_WINDOW(window),650,400);
-    gtk_window_set_title(GTK_WINDOW(window),"File Manager");
     gtk_window_set_icon_name(GTK_WINDOW(window),"org.gtk.daleclack");
+    gtk_window_set_title(GTK_WINDOW(window),"File Manager");
 
     file_window_load_pixbufs(48,window);
 
@@ -423,7 +460,8 @@ static void file_window_init(FileWindow *window){
     gtk_container_add(GTK_CONTAINER(window),vbox);
 
     tool_bar=gtk_toolbar_new();
-    gtk_box_pack_start(GTK_BOX(btnbox),tool_bar,FALSE,TRUE,0);
+    gtk_toolbar_set_style(GTK_TOOLBAR(tool_bar),GTK_TOOLBAR_ICONS);
+    gtk_box_pack_start(GTK_BOX(btnbox),tool_bar,FALSE,FALSE,0);
 
     //"Up" Button
     window->up_button=gtk_tool_button_new(NULL,NULL);
@@ -450,17 +488,19 @@ static void file_window_init(FileWindow *window){
     gtk_tool_item_set_is_important(delete_button,TRUE);
     gtk_toolbar_insert(GTK_TOOLBAR(tool_bar),delete_button,-1);
 
-    //"View Mode" Combo
-    window->view_combo=create_view_combo();
-    gtk_combo_box_set_active(GTK_COMBO_BOX(window->view_combo),0);
-    gtk_widget_set_valign(window->view_combo,GTK_ALIGN_END);
-    gtk_box_pack_end(GTK_BOX(btnbox),window->view_combo,FALSE,FALSE,0);
-
-    //CheckButton for show hidden dir and files
-    window->show_hidden=gtk_check_button_new_with_label("Show Hidden Files");
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(window->show_hidden),FALSE);
-    gtk_widget_set_valign(window->show_hidden,GTK_ALIGN_END);
-    gtk_box_pack_end(GTK_BOX(btnbox),window->show_hidden,FALSE,FALSE,0);
+    //"View Mode" Button
+    view_bar = gtk_toolbar_new();
+    view_item = gtk_tool_item_new();
+    window->view_mode = MODE_ICON;
+    create_view_button(window);
+    gtk_container_add(GTK_CONTAINER(view_item),window->view_button);
+    gtk_toolbar_insert(GTK_TOOLBAR(view_bar),view_item,-1);
+    
+    //Menu Button
+    GtkToolItem *menubtn = create_menubtn(window);
+    gtk_toolbar_insert(GTK_TOOLBAR(view_bar),menubtn,-1);
+    gtk_toolbar_set_style(GTK_TOOLBAR(view_bar),GTK_TOOLBAR_ICONS);
+    gtk_box_pack_end(GTK_BOX(btnbox),view_bar,FALSE,FALSE,0);
 
     //Folder Container
     sw = gtk_scrolled_window_new(NULL,NULL);
@@ -483,6 +523,8 @@ static void file_window_init(FileWindow *window){
 
     g_object_unref(window->store);
 
+    window->selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(window->tree_view));
+
     /* Connect to the "clicked" signal of the "Up" tool button */
     g_signal_connect(window->up_button, "clicked",
                      G_CALLBACK (up_clicked), window);
@@ -491,13 +533,13 @@ static void file_window_init(FileWindow *window){
     g_signal_connect(home_button, "clicked",
                      G_CALLBACK (home_clicked), window);
 
+    /* Connect to the "changed" signal of the "View Mode" Button */
+    g_signal_connect(window->view_button, "clicked",
+                     G_CALLBACK (btnview_clicked), window);
+
     /* Connect to the "clicked" signal of the "Show hidden files" tool button */
     g_signal_connect_swapped(window->show_hidden, "clicked",
                              G_CALLBACK (file_window_fill_store), window);
-
-    /* Connect to the "changed" signal of the "View Mode" combo box */
-    g_signal_connect(window->view_combo, "changed",
-                     G_CALLBACK (view_changed), window);
 
     /* Connect to the "clicked" signal of the "New Directory" tool button */
     g_signal_connect(new_button, "clicked",
