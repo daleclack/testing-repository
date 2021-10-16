@@ -2,7 +2,7 @@
     "tasks": [
         {
             "type": "meson",
-            "target": "gtk91",
+            //"target": "gtk91",
             "mode": "build",
             "group": "build",
             "problemMatcher": [],
