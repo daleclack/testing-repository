@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="org/gtk/daleclack">
+        <file>gnome-fs-directory.png</file>
+        <file>gnome-fs-regular.png</file>
+        <file>icons/24x24/actions/view-grid-symbolic.png</file>
+        <file>icons/24x24/actions/view-list-symbolic.png</file>
+        <file>icons/48x48/actions/dialog-error.png</file>
+    </gresource>
+</gresources>

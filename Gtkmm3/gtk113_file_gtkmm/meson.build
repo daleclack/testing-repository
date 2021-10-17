@@ -6,11 +6,11 @@ project('gtk113', 'cpp',
 gnome=import('gnome')
 
 #Compile Resource 
-# gresources = gnome.compile_resources(
-#     'resources', 'res/gtk112.gresource.xml',
-#     source_dir: 'res',
-#     c_name: 'resources'
-# )
+gresources = gnome.compile_resources(
+    'resources', '../default_res/default.gresource.xml',
+    source_dir: '../default_res',
+    c_name: 'resources'
+)
 
 #compile schemas
 # app_schemas = gnome.compile_schemas(depend_files: 'org.gtk.daleclack.gschema.xml')
@@ -28,8 +28,8 @@ src = ['src/main.cc', 'src/FileWindow.cc']
 if host_machine.system() == 'windows'
     win=import('windows')
     icon_res=win.compile_resources('../icon.rc')
-    executable('gtk113', icon_res, src, dependencies : gtkdep, 
+    executable('gtk113', icon_res, src, dependencies : gtkdep, gresources, 
                 win_subsystem : 'windows', include_directories : dir_include)
 else
-    executable('gtk113', src, dependencies : gtkdep, include_directories : dir_include)
+    executable('gtk113', src, gresources, dependencies : gtkdep, include_directories : dir_include)
 endif
