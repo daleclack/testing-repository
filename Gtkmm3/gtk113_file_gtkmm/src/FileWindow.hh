@@ -23,6 +23,7 @@ private:
         Gtk::TreeModelColumn<bool> m_col_is_dir;
     };
 
+    ModelColumns columns;
     Gtk::TreeView m_treeview;
     Gtk::IconView m_iconview;
     Glib::RefPtr<Gtk::TreeSelection> m_selection;
@@ -42,6 +43,13 @@ private:
     Gtk::ScrolledWindow m_sw;
     Gtk::Button view_button;
     Gtk::MenuButton menubtn;
+    Gtk::Stack stack;
+
+    //Initalize Functions
+    void fill_store();
+    void create_views();
+    int sort_func(const Gtk::TreeModel::iterator &a,const Gtk::TreeModel::iterator &b);
 
     //Signal Handlers
+    void item_activated(const Gtk::TreePath &path);
 };
