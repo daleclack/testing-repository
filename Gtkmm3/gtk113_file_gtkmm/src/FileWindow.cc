@@ -4,7 +4,9 @@
 FileWindow::FileWindow()
 :parent_str("/"),
 vbox(Gtk::ORIENTATION_VERTICAL,5),
-btnbox(Gtk::ORIENTATION_HORIZONTAL,5)
+btnbox(Gtk::ORIENTATION_HORIZONTAL,5),
+menubox(Gtk::ORIENTATION_VERTICAL,5),
+show_hidden("Show hidden files")
 {
     //Initalize Window
     set_default_size(650,400);
@@ -27,21 +29,25 @@ btnbox(Gtk::ORIENTATION_HORIZONTAL,5)
     up_button.set_icon_name("go-up");
     up_button.set_is_important();
     up_button.set_sensitive(false);
+    up_button.signal_clicked().connect(sigc::mem_fun(*this,&FileWindow::btnup_clicked));
     m_toolbar.insert(up_button,-1);
 
     //"Home" Button
     home_button.set_icon_name("go-home");
     home_button.set_is_important();
+    home_button.signal_clicked().connect(sigc::mem_fun(*this,&FileWindow::btnhome_clicked));
     m_toolbar.insert(home_button,-1);
 
     //"New Folder" Button
     new_button.set_icon_name("folder-new");
     new_button.set_is_important();
+    new_button.signal_clicked().connect(sigc::mem_fun(*this,&FileWindow::btnnew_clicked));
     m_toolbar.insert(new_button,-1);
 
     //"Delete" Button
     delete_button.set_icon_name("edit-delete");
     delete_button.set_is_important();
+    delete_button.signal_clicked().connect(sigc::mem_fun(*this,&FileWindow::btndel_clicked));
     m_toolbar.insert(delete_button,-1);
 
     //"View Mode" Button
@@ -49,6 +55,7 @@ btnbox(Gtk::ORIENTATION_HORIZONTAL,5)
     view_mode=ViewMode::MODE_ICON;
     view_button.set_relief(Gtk::RELIEF_NONE);
     view_button.set_image_from_icon_name("view-grid-symbolic",Gtk::ICON_SIZE_LARGE_TOOLBAR);
+    view_button.signal_clicked().connect(sigc::mem_fun(*this,&FileWindow::btnview_clicked));
     m_viewbar.insert(view_item,-1);
 
     //Menu Button
@@ -56,6 +63,10 @@ btnbox(Gtk::ORIENTATION_HORIZONTAL,5)
     menubtn.set_relief(Gtk::RELIEF_NONE);
     m_viewbar.insert(menu_item,-1);
     m_viewbar.set_toolbar_style(Gtk::TOOLBAR_ICONS);
+    menubox.pack_start(show_hidden,Gtk::PACK_SHRINK);
+    popover.add(menubox);
+    menubtn.set_popover(popover);
+    popover.show_all_children();
 
     //Create Store
     m_liststore = Gtk::ListStore::create(columns);
@@ -63,11 +74,11 @@ btnbox(Gtk::ORIENTATION_HORIZONTAL,5)
     m_liststore->set_sort_column(-1,Gtk::SORT_ASCENDING);
     fill_store();
 
-    create_views();
-    vbox.pack_start(m_sw);
-    m_sw.set_policy(Gtk::POLICY_AUTOMATIC,Gtk::POLICY_AUTOMATIC);
+    initalize_views();
     m_sw.add(stack);
-
+    vbox.pack_start(m_sw);
+    //stack.set_visible_child(m_treeview);
+    
     show_all_children();
 }
 
@@ -75,7 +86,7 @@ int FileWindow::sort_func(const Gtk::TreeModel::iterator &a,const Gtk::TreeModel
     bool is_dir_a,is_dir_b;
     Glib::ustring name_a,name_b;
 
-    auto row_a=*a,row_b=*b;
+    auto row_a= *a,row_b= *b;
     is_dir_a = row_a[columns.m_col_is_dir];
     is_dir_b = row_b[columns.m_col_is_dir];
     name_a = row_a[columns.m_col_display_name];
@@ -122,25 +133,34 @@ void FileWindow::fill_store(){
                 auto row=*(m_liststore->append());
                 row[columns.m_col_display_name] = display_name;
                 row[columns.m_col_is_dir] = is_dir;
-                row[columns.m_col_path] = std::string(path);
+                row[columns.m_col_path] = Glib::ustring(path);
                 row[columns.m_col_pixbuf] = is_dir ? folder_pixbuf : file_pixbuf;
             }
-
             g_free(path);
 
         }while(dir_name != "");
     }
     catch(const Glib::Error &ex){
         std::cout << ex.what() << std::endl;
+        parent_str = tmp_str;
+        fill_store();
     } 
 }
 
-void FileWindow::create_views(){
+void FileWindow::initalize_views(){
     //Initalize IconView
     m_iconview.set_model(m_liststore);
     m_iconview.set_text_column(columns.m_col_display_name);
     m_iconview.set_pixbuf_column(columns.m_col_pixbuf);
+    m_iconview.set_selection_mode(Gtk::SELECTION_MULTIPLE);
     m_iconview.signal_item_activated().connect(sigc::mem_fun(*this,&FileWindow::item_activated));
+    m_iconview.set_row_spacing(0);
+
+    //Initalize TreeView
+    m_treeview.set_model(m_liststore);
+    m_treeview.append_column("",columns.m_col_pixbuf);
+    m_treeview.append_column("Name",columns.m_col_display_name);
+    m_treeview.signal_row_activated().connect(sigc::mem_fun(*this,&FileWindow::row_activated));
 
     stack.add(m_iconview);
     stack.add(m_treeview);
@@ -151,6 +171,10 @@ void FileWindow::item_activated(const Gtk::TreePath &path){
     bool is_dir;
     Glib::ustring path_name;
 
+    //Backup current parent dir
+    tmp_str = parent_str;
+
+    //Get Path Name and read
     path_name = row[columns.m_col_path];
     is_dir = row[columns.m_col_is_dir];
 
@@ -159,4 +183,67 @@ void FileWindow::item_activated(const Gtk::TreePath &path){
     parent_str = path_name;
 
     fill_store();
+    up_button.set_sensitive();
+}
+
+void FileWindow::row_activated(const Gtk::TreePath &path,Gtk::TreeViewColumn * sel_column){
+    auto row = *(m_liststore->get_iter(path));
+    bool is_dir;
+    Glib::ustring path_name;
+
+    //Backup current parent dir
+    tmp_str = parent_str;
+
+    //Get Path Name and read
+    path_name = row[columns.m_col_path];
+    is_dir = row[columns.m_col_is_dir];
+
+    if(!is_dir){return ;}
+
+    parent_str = path_name;
+
+    fill_store();
+    up_button.set_sensitive();
+}
+
+void FileWindow::btnup_clicked(){
+    //Go to upper dir
+    Glib::ustring dir_name;
+    dir_name = Glib::path_get_dirname(parent_str);
+    parent_str = dir_name;
+    fill_store();
+}
+
+void FileWindow::btnhome_clicked(){
+    //Go to home dir
+    parent_str = Glib::ustring(Glib::get_home_dir());
+    fill_store();
+}
+
+void FileWindow::btnnew_clicked(){}
+
+void FileWindow::btndel_clicked(){}
+
+void FileWindow::btnview_clicked(){
+    switch(view_mode){
+        case ViewMode::MODE_ICON:
+            stack.set_visible_child(m_treeview);
+            view_button.set_image_from_icon_name("view-list-symbolic",Gtk::ICON_SIZE_LARGE_TOOLBAR);
+            view_mode = ViewMode::MODE_LIST;
+            break;
+        case ViewMode::MODE_LIST:
+            stack.set_visible_child(m_iconview);
+            view_button.set_image_from_icon_name("view-grid-symbolic",Gtk::ICON_SIZE_LARGE_TOOLBAR);
+            view_mode = ViewMode::MODE_ICON;
+            break;
+    }
+}
+
+void FileWindow::infobar_response(int response_id){
+    m_infobar.hide();
+}
+
+FileWindow::~FileWindow(){
+    folder_pixbuf.reset();
+    file_pixbuf.reset();
 }

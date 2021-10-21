@@ -4,12 +4,13 @@
 
 enum class ViewMode{
     MODE_ICON,
-    MODE_GRID
+    MODE_LIST
 };
 
 class FileWindow : public Gtk::Window{
 public:
     FileWindow();
+    ~FileWindow();
 private:
     //List Model
     class ModelColumns : public Gtk::TreeModelColumnRecord{
@@ -32,11 +33,11 @@ private:
     //File Proprties
     Glib::RefPtr<Gdk::Pixbuf> file_pixbuf;
     Glib::RefPtr<Gdk::Pixbuf> folder_pixbuf;
-    Glib::ustring parent_str;
+    Glib::ustring parent_str,tmp_str;
     ViewMode view_mode;
 
     //Child Widgets
-    Gtk::Box vbox,btnbox;
+    Gtk::Box vbox,btnbox,menubox;
     Gtk::Toolbar m_toolbar,m_viewbar;
     Gtk::ToolButton up_button,home_button,new_button,delete_button;
     Gtk::ToolItem view_item,menu_item;
@@ -44,12 +45,23 @@ private:
     Gtk::Button view_button;
     Gtk::MenuButton menubtn;
     Gtk::Stack stack;
+    Gtk::Popover popover;
+    Gtk::CheckButton show_hidden;
+    Gtk::InfoBar m_infobar;
+    Gtk::Label info_label;
 
     //Initalize Functions
     void fill_store();
-    void create_views();
+    void initalize_views();
     int sort_func(const Gtk::TreeModel::iterator &a,const Gtk::TreeModel::iterator &b);
 
     //Signal Handlers
     void item_activated(const Gtk::TreePath &path);
+    void row_activated(const Gtk::TreePath &path,Gtk::TreeViewColumn * sel_column);
+    void btnup_clicked();
+    void btnhome_clicked();
+    void btnnew_clicked();
+    void btndel_clicked();
+    void btnview_clicked();
+    void infobar_response(int response_id);
 };
