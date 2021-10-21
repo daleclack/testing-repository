@@ -63,10 +63,19 @@ show_hidden("Show hidden files")
     menubtn.set_relief(Gtk::RELIEF_NONE);
     m_viewbar.insert(menu_item,-1);
     m_viewbar.set_toolbar_style(Gtk::TOOLBAR_ICONS);
+    show_hidden.set_active(false);
+    show_hidden.signal_clicked().connect(sigc::mem_fun(*this,&FileWindow::btnhide_clicked));
     menubox.pack_start(show_hidden,Gtk::PACK_SHRINK);
     popover.add(menubox);
     menubtn.set_popover(popover);
     popover.show_all_children();
+
+    //Info Bar
+    m_infobar.add_button("OK",Gtk::RESPONSE_OK);
+    auto pbox = dynamic_cast<Gtk::Container*>(m_infobar.get_content_area());
+    pbox->add(info_label);
+    vbox.pack_start(m_infobar,Gtk::PACK_SHRINK);
+    m_infobar.signal_response().connect(sigc::mem_fun(*this,&FileWindow::infobar_response));
 
     //Create Store
     m_liststore = Gtk::ListStore::create(columns);
@@ -77,9 +86,9 @@ show_hidden("Show hidden files")
     initalize_views();
     m_sw.add(stack);
     vbox.pack_start(m_sw);
-    //stack.set_visible_child(m_treeview);
     
     show_all_children();
+    m_infobar.hide();
 }
 
 int FileWindow::sort_func(const Gtk::TreeModel::iterator &a,const Gtk::TreeModel::iterator &b){
@@ -129,6 +138,10 @@ void FileWindow::fill_store(){
             is_dir = Glib::file_test(path,Glib::FILE_TEST_IS_DIR);
             display_name = Glib::filename_to_utf8(dir_name);
 
+            if(dir_name[0] == '.' && !show_hidden.get_active()){
+                continue;
+            }
+
             if(dir_name != ""){
                 auto row=*(m_liststore->append());
                 row[columns.m_col_display_name] = display_name;
@@ -136,6 +149,7 @@ void FileWindow::fill_store(){
                 row[columns.m_col_path] = Glib::ustring(path);
                 row[columns.m_col_pixbuf] = is_dir ? folder_pixbuf : file_pixbuf;
             }
+
             g_free(path);
 
         }while(dir_name != "");
@@ -220,9 +234,48 @@ void FileWindow::btnhome_clicked(){
     fill_store();
 }
 
-void FileWindow::btnnew_clicked(){}
+void FileWindow::btnnew_clicked(){
+    //Create Dialog
+    Gtk::Dialog * dialog = new Gtk::Dialog("Create a folder",*this,Gtk::DIALOG_USE_HEADER_BAR);
+    dialog->add_button("OK",Gtk::RESPONSE_OK);
+    dialog->set_default_response(Gtk::RESPONSE_OK);
 
-void FileWindow::btndel_clicked(){}
+    //Add Entry
+    Gtk::Box * pbox = dialog->get_content_area();
+    pbox->add(entry_file);
+    entry_file.set_activates_default();
+
+    dialog->signal_response().connect(sigc::bind(sigc::mem_fun(*this,&FileWindow::dialog_response),dialog));
+    dialog->show_all();
+}
+
+void FileWindow::btndel_clicked(){
+    Glib::ustring tmp;
+    switch(view_mode){
+        case ViewMode::MODE_ICON:
+            {   
+            auto selected_items = m_iconview.get_selected_items();
+                for(auto it = selected_items.begin();it != selected_items.end(); it++){
+                    auto row = *(m_liststore->get_iter(*it));
+                    tmp = row[columns.m_col_path] + " delete failed!";
+                    info_label.set_text(tmp);
+                    m_infobar.show();
+                }
+                selected_items.clear();
+            }
+            break;
+        case ViewMode::MODE_LIST:
+            {
+                auto selected_item = m_treeview.get_selection();
+                auto row = *(selected_item->get_selected());
+                tmp = row[columns.m_col_path] + " delete failed!";
+                info_label.set_text(tmp);
+                m_infobar.show();
+                selected_item.reset();
+            }
+            break;
+    }
+}
 
 void FileWindow::btnview_clicked(){
     switch(view_mode){
@@ -241,6 +294,27 @@ void FileWindow::btnview_clicked(){
 
 void FileWindow::infobar_response(int response_id){
     m_infobar.hide();
+}
+
+void FileWindow::dialog_response(int response_id,Gtk::Dialog * dialog){
+    if(response_id == Gtk::RESPONSE_OK){
+        Glib::ustring folder_name = entry_file.get_text();
+        if(parent_str.length() == 1 && parent_str[0] == '/'){
+            folder_name = parent_str + folder_name;
+        }else{
+            folder_name = parent_str + "/" + folder_name;
+        }
+        if(g_mkdir_with_parents(folder_name.c_str(),0755) == -1){
+            std::cout<<"Error Occured"<<std::endl;
+        }else{
+            fill_store();
+        }
+    }
+    delete dialog;
+}
+
+void FileWindow::btnhide_clicked(){
+    fill_store();
 }
 
 FileWindow::~FileWindow(){

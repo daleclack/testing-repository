@@ -49,6 +49,7 @@ private:
     Gtk::CheckButton show_hidden;
     Gtk::InfoBar m_infobar;
     Gtk::Label info_label;
+    Gtk::Entry entry_file;
 
     //Initalize Functions
     void fill_store();
@@ -64,4 +65,6 @@ private:
     void btndel_clicked();
     void btnview_clicked();
     void infobar_response(int response_id);
+    void dialog_response(int response_id,Gtk::Dialog * dialog);
+    void btnhide_clicked();
 };
