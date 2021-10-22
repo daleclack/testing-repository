@@ -1,11 +1,17 @@
 # testing-repository
 A testing repository
 
-Note:To minimize the repeated files,I put the same files as public resource
+[Experimental]: After gtk112 and gtk113, the submodule GCR_CMake is imported
 
-The file name is above:public\_res\<filename\>\_\<file extension\> or public\_res\<filename\>\_\<file extension\>
+The Project is here https://github.com/Makman2/GCR_CMake
 
-Please compile with g++ or gcc
+(Actually, I forked the project for convince)
+
+Note: To minimize the repeated files,I put the same files as public resource
+
+The file name is above: public\_res\<filename\>\_\<file extension\> or public\_res\<filename\>\_\<file extension\>
+
+Please compile with g++ or gcc (Clang is also supported)
 (Visual Studio may have issues)
 
 Ege dircitory need ege 19.01 and above to complie
