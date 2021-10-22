@@ -3,7 +3,7 @@ A testing repository
 
 [Experimental]: After gtk112 and gtk113, the submodule GCR_CMake is imported
 
-The Project is here https://github.com/Makman2/GCR_CMake
+Thanks for the project author https://github.com/Makman2/GCR_CMake
 
 (Actually, I forked the project for convenience)
 
