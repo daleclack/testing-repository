@@ -5,7 +5,7 @@ A testing repository
 
 The Project is here https://github.com/Makman2/GCR_CMake
 
-(Actually, I forked the project for convince)
+(Actually, I forked the project for convenience)
 
 Note: To minimize the repeated files,I put the same files as public resource
 
