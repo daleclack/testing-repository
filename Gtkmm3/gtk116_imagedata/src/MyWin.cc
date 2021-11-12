@@ -6,7 +6,10 @@
 MyWin::MyWin()
 :btn_back("Open Image"),
 hbox(Gtk::ORIENTATION_HORIZONTAL,5),
-btnbox(Gtk::ORIENTATION_VERTICAL,5)
+btnbox(Gtk::ORIENTATION_VERTICAL,5),
+label_pos("(640,480)"),
+label_rgba("rgba(255,255,255,255)"),
+label_test("Color Settings And Position info")
 {
     set_icon_name("org.gtk.daleclack");
     background.set_size_request(640,480);
@@ -35,6 +38,7 @@ btnbox(Gtk::ORIENTATION_VERTICAL,5)
 
     //Add Color and Image Button
     color_btn.set_use_alpha();
+    btnbox.pack_start(label_test,Gtk::PACK_SHRINK);
     btnbox.pack_start(label_pos,Gtk::PACK_SHRINK);
     btnbox.pack_start(label_rgba,Gtk::PACK_SHRINK);
     btnbox.pack_start(color_btn,Gtk::PACK_SHRINK);
@@ -44,7 +48,7 @@ btnbox(Gtk::ORIENTATION_VERTICAL,5)
     //Add Widgets and show all
     m_overlay.add(background);
     hbox.pack_start(m_overlay);
-    hbox.pack_start(btnbox,Gtk::PACK_SHRINK);
+    hbox.pack_start(btnbox);
     add(hbox);
     show_all_children();
     pixbuf.reset();
