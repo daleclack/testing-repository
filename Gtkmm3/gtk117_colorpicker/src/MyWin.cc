@@ -14,7 +14,9 @@ frame_rgba_str("RGBA Code"),
 label_pos("(640,480)"),
 label_css_rgba("rgba(255,255,255,255)"),
 label_test("Color Settings And Position info"),
-label_color_str("#00000000")
+label_color_str("#00000000"),
+btn_css_code("Copy Css3 Code"),
+btn_color_str("Copy RGB(A) String")
 {
     set_title("Color Picker");
     set_icon_name("org.gtk.daleclack");
@@ -27,8 +29,12 @@ label_color_str("#00000000")
     //Add Button
     btn_back.set_halign(Gtk::ALIGN_CENTER);
     btn_back.set_valign(Gtk::ALIGN_CENTER);
-    btn_back.set_relief(Gtk::RELIEF_NONE);
     btn_back.signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnback_clicked));
+
+    btn_css_code.set_halign(Gtk::ALIGN_CENTER);
+    btn_css_code.signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btncss_clicked));
+    btn_color_str.set_halign(Gtk::ALIGN_CENTER);
+    btn_color_str.signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btncolor_clicked));
 
     //Add Gesture
     gesture = Gtk::GestureMultiPress::create(draw_area);
@@ -55,8 +61,11 @@ label_color_str("#00000000")
 
     frame_rgba_str.add(label_color_str);
     btnbox.pack_start(frame_rgba_str,Gtk::PACK_SHRINK);
+
     btnbox.pack_start(color_btn);
     btnbox.pack_start(btn_back);
+    btnbox.pack_start(btn_css_code);
+    btnbox.pack_start(btn_color_str);
     btnbox.set_valign(Gtk::ALIGN_CENTER);
 
     //Add Widgets and show all
@@ -166,4 +175,18 @@ void MyWin::set_background(int response_id){
         get_pixel_color(320,180);
     }
     dialog.reset();
+}
+
+void MyWin::btncss_clicked(){
+    //Copy contents of label for css3 code
+    auto clipboard = Gtk::Clipboard::get();
+    Glib::ustring str = label_css_rgba.get_label();
+    clipboard->set_text(str);
+}
+
+void MyWin::btncolor_clicked(){
+    //Copy contents of label for rgba code
+    auto clipboard = Gtk::Clipboard::get();
+    Glib::ustring str = label_color_str.get_label();
+    clipboard->set_text(str);
 }
