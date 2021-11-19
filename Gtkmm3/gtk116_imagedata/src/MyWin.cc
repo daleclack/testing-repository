@@ -1,5 +1,6 @@
 #include "MyWin.hh"
 #include <cstdio>
+#include <iostream>
 #include "image_types.hh"
 #include "winpe.xpm"
 
@@ -9,7 +10,8 @@ hbox(Gtk::ORIENTATION_HORIZONTAL,5),
 btnbox(Gtk::ORIENTATION_VERTICAL,5),
 label_pos("(640,480)"),
 label_rgba("rgba(255,255,255,255)"),
-label_test("Color Settings And Position info")
+label_test("Color Settings And Position info"),
+label_color_str("#00000000")
 {
     set_icon_name("org.gtk.daleclack");
     background.set_size_request(640,480);
@@ -38,11 +40,13 @@ label_test("Color Settings And Position info")
 
     //Add Color and Image Button
     color_btn.set_use_alpha();
+    color_btn.set_halign(Gtk::ALIGN_CENTER);
     btnbox.pack_start(label_test,Gtk::PACK_SHRINK);
     btnbox.pack_start(label_pos,Gtk::PACK_SHRINK);
     btnbox.pack_start(label_rgba,Gtk::PACK_SHRINK);
-    btnbox.pack_start(color_btn,Gtk::PACK_SHRINK);
-    btnbox.pack_start(btn_back,Gtk::PACK_SHRINK);
+    btnbox.pack_start(label_color_str,Gtk::PACK_SHRINK);
+    btnbox.pack_start(color_btn);
+    btnbox.pack_start(btn_back);
     btnbox.set_valign(Gtk::ALIGN_CENTER);
 
     //Add Widgets and show all
@@ -60,6 +64,7 @@ void MyWin::get_pixel_color(int x,int y){
     int red=0,green=0,blue=0,alpha=0;
     int n_channels = sized->get_n_channels();
     int rowstride = sized->get_rowstride();         //Rows
+    Glib::ustring color_str;
 
     //Get Pixel data
     guint8 * pixels = sized->get_pixels();
@@ -80,16 +85,26 @@ void MyWin::get_pixel_color(int x,int y){
     }
 
     //Set Color to rgba
-    color_set.set_red(red/25.0/255.0);
-    color_set.set_blue(blue/25.0/255.0);
-    color_set.set_green(green/25.0/255.0);
-    color_set.set_alpha(alpha/25.0/255.0);
+    red/=25;blue/=25;green/=25;alpha/=25;
+    color_set.set_red(red/255.0);
+    color_set.set_blue(blue/255.0);
+    color_set.set_green(green/255.0);
+    color_set.set_alpha(alpha/255.0);
 
     //Get Color set as a string
     label_rgba.set_label(color_set.to_string());
 
     //OutPut the color rgba set
     color_btn.set_rgba(color_set);
+
+    //OutPut color Set as a Color Code
+    //If the image has a alpha value, use RGBA Code, else use RGB Code
+    if(sized->get_has_alpha()){
+        color_str = Glib::ustring(g_strdup_printf("#%02X%02X%02X%02X",red,blue,green,alpha));
+    }else{
+        color_str = Glib::ustring(g_strdup_printf("#%02X%02X%02X",red,blue,green));
+    }
+    label_color_str.set_label(color_str);
 }
 
 void MyWin::gesture_pressed(int n_press,double x,double y){

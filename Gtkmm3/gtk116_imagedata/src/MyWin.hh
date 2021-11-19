@@ -11,7 +11,7 @@ class MyWin : public Gtk::Window{
         Gtk::Button btn_back;
         Gtk::Image background;
         Gtk::Box hbox,btnbox;
-        Gtk::Label label_pos,label_rgba,label_test;
+        Gtk::Label label_pos,label_rgba,label_test,label_color_str;
         Gtk::ColorButton color_btn;
         Gtk::DrawingArea draw_area;
         Glib::RefPtr<Gdk::Pixbuf> pixbuf;
