@@ -15,6 +15,7 @@ class MyWin : public Gtk::Window{
         Gtk::Label label_pos,label_css_rgba,label_test,label_color_str;
         Gtk::ColorButton color_btn;
         Gtk::Button btn_css_code,btn_color_str;
+        Gtk::ToggleButton btn_select;
         Gtk::DrawingArea draw_area;
         Glib::RefPtr<Gdk::Pixbuf> pixbuf;
         Glib::RefPtr<Gdk::Pixbuf> sized;
@@ -30,4 +31,5 @@ class MyWin : public Gtk::Window{
         void gesture_pressed(int n_press,double x,double y);
         void btncss_clicked();
         void btncolor_clicked();
+        void btnselect_clicked();
 };

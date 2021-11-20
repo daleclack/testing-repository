@@ -9,14 +9,15 @@ MyWin::MyWin()
 hbox(Gtk::ORIENTATION_HORIZONTAL,5),
 btnbox(Gtk::ORIENTATION_VERTICAL,5),
 frame_pos("Position"),
-frame_css_rgba("rgba() for css3"),
-frame_rgba_str("RGBA Code"),
+frame_css_rgba("rgb()/rgba() for css3"),
+frame_rgba_str("RGB(A) Code"),
 label_pos("(640,480)"),
 label_css_rgba("rgba(255,255,255,255)"),
 label_test("Color Settings And Position info"),
 label_color_str("#00000000"),
 btn_css_code("Copy Css3 Code"),
-btn_color_str("Copy RGB(A) String")
+btn_color_str("Copy RGB(A) String"),
+btn_select("Pick Color")
 {
     set_title("Color Picker");
     set_icon_name("org.gtk.daleclack");
@@ -36,6 +37,10 @@ btn_color_str("Copy RGB(A) String")
     btn_color_str.set_halign(Gtk::ALIGN_CENTER);
     btn_color_str.signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btncolor_clicked));
 
+    btn_select.set_active(false);
+    btn_select.set_halign(Gtk::ALIGN_CENTER);
+    btn_select.signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnselect_clicked));
+
     //Add Gesture
     gesture = Gtk::GestureMultiPress::create(draw_area);
     gesture->set_button(1);
@@ -46,7 +51,7 @@ btn_color_str("Copy RGB(A) String")
 
     //Set image
     gtk_image_set_from_pixbuf(background.gobj(),sized->gobj());
-    //get_pixel_color(320,180);
+    get_pixel_color(320,180);
 
     //Add Color and Image Button
     color_btn.set_use_alpha();
@@ -64,6 +69,7 @@ btn_color_str("Copy RGB(A) String")
 
     btnbox.pack_start(color_btn);
     btnbox.pack_start(btn_back);
+    btnbox.pack_start(btn_select);
     btnbox.pack_start(btn_css_code);
     btnbox.pack_start(btn_color_str);
     btnbox.set_valign(Gtk::ALIGN_CENTER);
@@ -105,10 +111,10 @@ void MyWin::get_pixel_color(int x,int y){
 
     //Set Color to rgba
     red/=25;blue/=25;green/=25;alpha/=25;
-    color_set.set_red(red/255.0);
-    color_set.set_blue(blue/255.0);
-    color_set.set_green(green/255.0);
-    color_set.set_alpha(alpha/255.0);
+    color_set.set_red_u(red*257);
+    color_set.set_blue_u(blue*257);
+    color_set.set_green_u(green*257);
+    color_set.set_alpha_u(alpha*257);
 
     //Get Color set as a string
     label_css_rgba.set_label(color_set.to_string());
@@ -127,10 +133,18 @@ void MyWin::get_pixel_color(int x,int y){
 }
 
 void MyWin::gesture_pressed(int n_press,double x,double y){
-    char pos[57];
-    sprintf(pos,"(%.2f,%.2f)",x,y);
-    label_pos.set_label(pos);
-    get_pixel_color((int)x, (int)y);
+    if(btn_select.get_active()){
+        //Get Color at the position
+        char pos[57];
+        sprintf(pos,"(%.2f,%.2f)",x,y);
+        label_pos.set_label(pos);
+        get_pixel_color((int)x, (int)y);
+        btn_select.set_active(false);
+
+        //Unset custom cursor
+        auto gdkwin = background.get_window();
+        gdkwin->set_cursor();
+    }
 }
 
 void MyWin::btnback_clicked(){
@@ -189,4 +203,12 @@ void MyWin::btncolor_clicked(){
     auto clipboard = Gtk::Clipboard::get();
     Glib::ustring str = label_color_str.get_label();
     clipboard->set_text(str);
+}
+
+void MyWin::btnselect_clicked(){
+    //Set a cursor for selection on image
+    auto display = background.get_display();
+    auto gdkwin = background.get_window();
+    auto cursor = Gdk::Cursor::create(display,"crosshair");
+    gdkwin->set_cursor(cursor);
 }
