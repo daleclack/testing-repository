@@ -43,6 +43,37 @@ static void my_image_dispose(GObject * object){
     G_OBJECT_CLASS(my_image_parent_class)->dispose(object);
 }
 
+static void my_image_measure(GtkWidget      *widget,
+                             GtkOrientation  orientation,
+                             int             for_size,
+                             int            *minimum,
+                             int            *natural,
+                             int            *minimum_baseline,
+                             int            *natural_baseline)
+{
+    MyImage * self = MY_IMAGE(widget);
+    int size;
+
+    //Measure size
+    if(orientation == GTK_ORIENTATION_HORIZONTAL){
+        size = gdk_paintable_get_intrinsic_width(GDK_PAINTABLE(self->paintable));
+    }else{
+        size = gdk_paintable_get_intrinsic_height(GDK_PAINTABLE(self->paintable));
+    }
+
+    *minimum = *natural = self->scale * size;
+}
+
+static void my_image_size_allocate(GtkWidget * widget,int width,int height,int baseline){
+
+    MyImage * self = MY_IMAGE(widget);
+    /* Since we are not using a layout manager (who would do this
+     * for us), we need to allocate a size for our menu by calling
+     * gtk_popover_present().
+     */
+    gtk_popover_present(GTK_POPOVER(self->menu));
+}
+
 static void my_image_set_property(GObject * object,guint property_id,
                                   const GValue * value,GParamSpec * spec)
 {
@@ -79,7 +110,7 @@ static void my_image_get_property(GObject * object,guint property_id,
             break;
 
         case PROP_SCALE:
-            g_value_set_object(value,&self->scale);
+            g_value_set_float(value,self->scale);
             break;
 
         default:
@@ -93,12 +124,19 @@ static void my_image_snapshot(GtkWidget * widget,GtkSnapshot * snapshot){
     int x,y,width,height;
     double w,h;
 
+    //Get size for window
     width = gtk_widget_get_width(widget);
     height = gtk_widget_get_height(widget);
 
+    //Get size for paintable
     w = self->scale * gdk_paintable_get_intrinsic_width(GDK_PAINTABLE(self->paintable));
     h = self->scale * gdk_paintable_get_intrinsic_height(GDK_PAINTABLE(self->paintable));
 
+    //Get position
+    x=MAX(0,(width - ceil(w)) / 2);
+    y=MAX(0,(height - ceil(h)) / 2);
+
+    //Make a snapshot
     graphene_rect_t rect = {0,0,(float)width,(float)height};
     graphene_point_t point = {(float)x,(float)y};
     gtk_snapshot_push_clip(snapshot,&rect);
@@ -109,21 +147,43 @@ static void my_image_snapshot(GtkWidget * widget,GtkSnapshot * snapshot){
     gtk_snapshot_pop(snapshot);
 }
 
+static void zoom_cb(GtkWidget * widget,const char * action_name,GVariant * parmeter){
+    MyImage * self = MY_IMAGE(widget);
+    float scale = self->scale;
+
+    //Zoom in or zoom out the image
+    if(g_str_equal(action_name,"zoom.in")){
+        scale = MIN(10 , self->scale * M_SQRT2);
+    }else if(g_str_equal(action_name,"zoom.out")){
+        scale = MAX(0, self->scale / M_SQRT2);
+    }else{
+        scale = 1.0;
+    }
+
+    gtk_widget_action_set_enabled (widget, "zoom.in", scale < 10);
+    gtk_widget_action_set_enabled (widget, "zoom.out", scale > 0.01);
+    gtk_widget_action_set_enabled (widget, "zoom.reset", scale != 1);
+
+    g_object_set (widget, "scale", scale, NULL);
+}
+
 static void my_image_init(MyImage * self){
     self->scale = 1.f;
     gtk_widget_init_template(GTK_WIDGET(self));
-    //self->paintable = gdk_paintable_new_empty(800,450);
 }
 
 static void my_image_class_init(MyImageClass * self_class){
     GObjectClass * object_class = G_OBJECT_CLASS(self_class);
     GtkWidgetClass * widget_class = GTK_WIDGET_CLASS(self_class);
 
+    //Link Function pointers
     object_class->dispose = my_image_dispose;
     object_class->set_property = my_image_set_property;
     object_class->get_property = my_image_get_property;
 
     widget_class->snapshot = my_image_snapshot;
+    widget_class->size_allocate = my_image_size_allocate;
+    widget_class->measure = my_image_measure;
 
     //Add a property for paintable widget
     g_object_class_install_property(object_class,PROP_PAINTABLE,
@@ -138,6 +198,11 @@ static void my_image_class_init(MyImageClass * self_class){
     //Initalize Template
     gtk_widget_class_set_template_from_resource(GTK_WIDGET_CLASS(self_class),
                                                 "/org/gtk/daleclack/MyImage.ui");
+
+    /* These are the actions that we are using in the menu */
+    gtk_widget_class_install_action (widget_class, "zoom.in", NULL, zoom_cb);
+    gtk_widget_class_install_action (widget_class, "zoom.out", NULL, zoom_cb);
+    gtk_widget_class_install_action (widget_class, "zoom.reset", NULL, zoom_cb);
 
     //Bind Childs
     gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(self_class),MyImage,menu);
