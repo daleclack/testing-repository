@@ -20,7 +20,7 @@ static void gtkmain(GtkApplication * app,gpointer user_data){
     gtk_box_append(GTK_BOX(vbox),sw);
 
     //Add a scale
-    scale = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL,0.0,10.0,0.1);
+    scale = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL,0.01,10.0,0.1);
     gtk_range_set_value(GTK_RANGE(scale),1.0);
     gtk_box_append(GTK_BOX(vbox),scale);
 

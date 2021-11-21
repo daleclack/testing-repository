@@ -21,6 +21,7 @@ struct _MyImageClass{
 G_DEFINE_TYPE(MyImage,my_image,GTK_TYPE_WIDGET)
 
 void my_image_set_pixbuf(MyImage * self, GdkPixbuf * pixbuf){
+    //g_clear_object(&self->paintable);
     self->paintable = (GdkPaintable*)gdk_texture_new_for_pixbuf(pixbuf);
 }
 
@@ -88,12 +89,30 @@ static void my_image_get_property(GObject * object,guint property_id,
 }
 
 static void my_image_snapshot(GtkWidget * widget,GtkSnapshot * snapshot){
-    g_print("Widget Snapshoted");
+    MyImage * self = MY_IMAGE(widget);
+    int x,y,width,height;
+    double w,h;
+
+    width = gtk_widget_get_width(widget);
+    height = gtk_widget_get_height(widget);
+
+    w = self->scale * gdk_paintable_get_intrinsic_width(GDK_PAINTABLE(self->paintable));
+    h = self->scale * gdk_paintable_get_intrinsic_height(GDK_PAINTABLE(self->paintable));
+
+    graphene_rect_t rect = {0,0,(float)width,(float)height};
+    graphene_point_t point = {(float)x,(float)y};
+    gtk_snapshot_push_clip(snapshot,&rect);
+    gtk_snapshot_save(snapshot);
+    gtk_snapshot_translate(snapshot,&point);
+    gdk_paintable_snapshot(GDK_PAINTABLE(self->paintable),snapshot,w,h);
+    gtk_snapshot_restore(snapshot);
+    gtk_snapshot_pop(snapshot);
 }
 
 static void my_image_init(MyImage * self){
     self->scale = 1.f;
     gtk_widget_init_template(GTK_WIDGET(self));
+    //self->paintable = gdk_paintable_new_empty(800,450);
 }
 
 static void my_image_class_init(MyImageClass * self_class){
