@@ -1,6 +1,7 @@
 #include "MyWindow.h"
 
 static void gtkmain(GtkApplication * app,gpointer user_data){
+    //Create a window and show
     MyWindow * window = my_window_new(app);
     gtk_widget_show(GTK_WIDGET(window));
 }
