@@ -12,6 +12,10 @@ struct _MyImage{
     float scale;
 
     GtkWidget * menu;
+
+    GtkAdjustment * hadjustment, * vadjustment;
+    double start_x,start_y;
+    double hmax_value,vmax_value;
 };
 
 struct _MyImageClass{
@@ -31,6 +35,38 @@ static void pressed_cb(GtkGestureClick * gesture,int n_press,double x,double y,M
     gtk_popover_set_pointing_to(GTK_POPOVER(self->menu),&pos);
 
     gtk_popover_popup(GTK_POPOVER(self->menu));
+}
+
+static void drag_start(GtkGestureDrag * self,double x,double y,MyImage * image){
+    //Get Properties
+    image->start_x = x;
+    image->start_y = y;
+    image->hmax_value = gtk_adjustment_get_upper(image->hadjustment);
+    image->vmax_value = gtk_adjustment_get_upper(image->vadjustment);
+}
+
+static void drag_update(GtkGestureDrag * self,double x,double y,MyImage * image){
+    //Move Image
+    int hadj_value = gtk_adjustment_get_value(image->hadjustment);
+    int vadj_value = gtk_adjustment_get_value(image->vadjustment);
+    if(hadj_value - x >= 0 &&  - x <= image->hmax_value){
+        gtk_adjustment_set_value(image->hadjustment,-x);
+    }
+    if(vadj_value - y >= 0 &&  - y <= image->vmax_value){
+        gtk_adjustment_set_value(image->vadjustment,-y);
+    }
+}
+
+static void drag_end(GtkGestureDrag * self,double x,double y,MyImage * image){
+    //g_print("%f %f\n",x+image->start_x,y+image->start_y);
+    int hadj_value = gtk_adjustment_get_value(image->hadjustment);
+    int vadj_value = gtk_adjustment_get_value(image->vadjustment);
+    if(hadj_value - x >= 0 &&  - x <= image->hmax_value){
+        gtk_adjustment_set_value(image->hadjustment,-x);
+    }
+    if(vadj_value - y >= 0 &&  - y <= image->vmax_value){
+        gtk_adjustment_set_value(image->vadjustment,-y);
+    }
 }
 
 static void my_image_dispose(GObject * object){
@@ -207,6 +243,17 @@ static void my_image_class_init(MyImageClass * self_class){
     //Bind Childs
     gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS(self_class),MyImage,menu);
     gtk_widget_class_bind_template_callback(self_class,pressed_cb);
+    gtk_widget_class_bind_template_callback(self_class,drag_start);
+    gtk_widget_class_bind_template_callback(self_class,drag_update);
+    gtk_widget_class_bind_template_callback(self_class,drag_end);
+}
+
+void my_image_bind_adjustments(MyImage       * self, 
+                               GtkAdjustment * hadjustment1, 
+                               GtkAdjustment * vadjustment1)
+{
+    self->hadjustment = hadjustment1;
+    self->vadjustment = vadjustment1;
 }
 
 GtkWidget * my_image_new(){

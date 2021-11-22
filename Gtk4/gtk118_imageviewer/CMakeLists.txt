@@ -37,7 +37,7 @@ compile_gresources(RESOURCE_FILE
 add_custom_target(resource ALL DEPENDS ${RESOURCE_FILE})
 
 #SOURCE FILES LIST
-set(SOURCES src/main.cpp src/MyImage.cpp)
+set(SOURCES src/main.cpp src/MyImage.cpp src/MyWindow.cpp)
 
 #For win32 platform,use rc resource and .ico icon
 if(WIN32)
