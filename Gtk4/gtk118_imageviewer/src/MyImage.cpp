@@ -16,6 +16,7 @@ struct _MyImage{
     GtkAdjustment * hadjustment, * vadjustment;
     double start_x,start_y;
     double hmax_value,vmax_value;
+    int move_count;
 };
 
 struct _MyImageClass{
@@ -40,24 +41,29 @@ static void pressed_cb(GtkGestureClick * gesture,int n_press,double x,double y,M
 
 static void drag_start(GtkGestureDrag * self,double x,double y,MyImage * image){
     //Get Properties
-    //sleep(1);
     image->start_x = x;
     image->start_y = y;
-    image->hmax_value = gtk_adjustment_get_upper(image->hadjustment);
-    image->vmax_value = gtk_adjustment_get_upper(image->vadjustment);
+    image->hmax_value = my_adjustment_get_max_value(image->hadjustment);
+    image->vmax_value = my_adjustment_get_max_value(image->vadjustment);
+    g_print("%f %f\n",image->hmax_value,image->vmax_value);
 }
 
 static void drag_update(GtkGestureDrag * self,double x,double y,MyImage * image){
     //Move Image
-    //sleep(1);
-    int hadj_value = gtk_adjustment_get_value(image->hadjustment);
-    int vadj_value = gtk_adjustment_get_value(image->vadjustment);
-    if(hadj_value - x >= 0 &&  - x <= image->hmax_value){
-        gtk_adjustment_set_value(image->hadjustment,-x);
+    if(image->move_count == 10){
+        int hadj_value = gtk_adjustment_get_value(image->hadjustment);
+        int vadj_value = gtk_adjustment_get_value(image->vadjustment);
+        if(hadj_value - x >= 0 &&  - x <= image->hmax_value){
+            gtk_adjustment_set_value(image->hadjustment,-x);
+        }
+        if(vadj_value - y >= 0 &&  - y <= image->vmax_value){
+            gtk_adjustment_set_value(image->vadjustment,-y);
+        }
+        image->move_count = 0;
+    }else{
+        image->move_count++;
     }
-    if(vadj_value - y >= 0 &&  - y <= image->vmax_value){
-        gtk_adjustment_set_value(image->vadjustment,-y);
-    }
+    
 }
 
 static void drag_end(GtkGestureDrag * self,double x,double y,MyImage * image){
