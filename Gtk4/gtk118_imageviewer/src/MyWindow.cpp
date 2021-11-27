@@ -9,9 +9,37 @@ struct _MyWindow{
 
 G_DEFINE_TYPE(MyWindow,my_window,GTK_TYPE_APPLICATION_WINDOW)
 
-static void dialog_respone(GtkNativeDialog * dialog,int respone,MyWindow * window){}
+static void dialog_respone(GtkNativeDialog * dialog,int response,MyWindow * window){
+    if(response == GTK_RESPONSE_ACCEPT){
+        //Get Filename
+        GFile * file = gtk_file_chooser_get_file(GTK_FILE_CHOOSER(dialog));
+        char * filename = g_file_get_path(file);
 
-static void openfile_dialog(GtkWidget * widget,MyWindow * window){}
+        GError * err = NULL;
+        GdkPixbuf * pixbuf = gdk_pixbuf_new_from_file(filename,&err);
+        if(err!=NULL){
+            fprintf(stderr, "Unable to read file: %s\n", err->message);
+            g_error_free(err);
+        }else{
+            my_image_set_pixbuf(MY_IMAGE(window->img_view),pixbuf);
+        }
+
+        g_object_unref(file);
+        g_free(filename);
+    }
+    gtk_native_dialog_destroy(dialog);
+}
+
+static void openfile_dialog(GtkWidget * widget,MyWindow * window){
+    //Create a dialog
+    GtkFileChooserNative * dialog = gtk_file_chooser_native_new("Open Image File",GTK_WINDOW(window),
+                                    GTK_FILE_CHOOSER_ACTION_OPEN,"OK","Cancel");
+
+    //Link the "response" signal of dialog
+    g_signal_connect(dialog,"response",G_CALLBACK(dialog_respone),window);
+
+    gtk_native_dialog_show(GTK_NATIVE_DIALOG(dialog));
+}
 
 static void my_window_init(MyWindow * window){
     GtkWidget * vbox, * sw, * scale, * btnbox, * btnopen;
@@ -42,6 +70,7 @@ static void my_window_init(MyWindow * window){
 
     //Add a button
     btnopen = gtk_button_new_with_label("Open Image");
+    g_signal_connect(btnopen,"clicked",G_CALLBACK(openfile_dialog),window);
     gtk_box_append(GTK_BOX(btnbox),btnopen);
     gtk_box_append(GTK_BOX(vbox),btnbox);
 

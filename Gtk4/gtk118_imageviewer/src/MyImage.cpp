@@ -25,8 +25,9 @@ struct _MyImageClass{
 G_DEFINE_TYPE(MyImage,my_image,GTK_TYPE_WIDGET)
 
 void my_image_set_pixbuf(MyImage * self, GdkPixbuf * pixbuf){
-    //g_clear_object(&self->paintable);
+    g_clear_object(&self->paintable);
     self->paintable = (GdkPaintable*)gdk_texture_new_for_pixbuf(pixbuf);
+    gtk_widget_queue_draw(GTK_WIDGET(self));
 }
 
 static void pressed_cb(GtkGestureClick * gesture,int n_press,double x,double y,MyImage * self){
@@ -39,6 +40,7 @@ static void pressed_cb(GtkGestureClick * gesture,int n_press,double x,double y,M
 
 static void drag_start(GtkGestureDrag * self,double x,double y,MyImage * image){
     //Get Properties
+    //sleep(1);
     image->start_x = x;
     image->start_y = y;
     image->hmax_value = gtk_adjustment_get_upper(image->hadjustment);
@@ -47,6 +49,7 @@ static void drag_start(GtkGestureDrag * self,double x,double y,MyImage * image){
 
 static void drag_update(GtkGestureDrag * self,double x,double y,MyImage * image){
     //Move Image
+    //sleep(1);
     int hadj_value = gtk_adjustment_get_value(image->hadjustment);
     int vadj_value = gtk_adjustment_get_value(image->vadjustment);
     if(hadj_value - x >= 0 &&  - x <= image->hmax_value){
@@ -59,6 +62,7 @@ static void drag_update(GtkGestureDrag * self,double x,double y,MyImage * image)
 
 static void drag_end(GtkGestureDrag * self,double x,double y,MyImage * image){
     //g_print("%f %f\n",x+image->start_x,y+image->start_y);
+    //sleep(1);
     int hadj_value = gtk_adjustment_get_value(image->hadjustment);
     int vadj_value = gtk_adjustment_get_value(image->vadjustment);
     if(hadj_value - x >= 0 &&  - x <= image->hmax_value){
