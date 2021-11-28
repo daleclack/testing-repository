@@ -127,7 +127,7 @@ void MyWin::get_pixel_color(int x,int y){
     if(sized->get_has_alpha()){
         color_str = Glib::ustring(g_strdup_printf("#%02X%02X%02X%02X",red,blue,green,alpha));
     }else{
-        color_str = Glib::ustring(g_strdup_printf("#%02X%02X%02X",red,blue,green));
+        color_str = Glib::ustring(g_strdup_printf("#%02X%02X%02X",red,green,blue));
     }
     label_color_str.set_label(color_str);
 }
