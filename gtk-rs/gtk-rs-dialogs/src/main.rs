@@ -1,12 +1,12 @@
-use gtk::prelude::*;
-use gtk::{self,Application, ApplicationWindow, Button};
-use gtk::glib::clone;
+use gtk::{self,
+    prelude::*,glib::clone,
+    gdk_pixbuf};
 
 use std::rc::Rc;
 
 fn main() {
     //Create a new application
-    let app = Application::builder()
+    let app = gtk::Application::builder()
               .application_id("org.gtk.daleclack")
               .build();
     
@@ -17,17 +17,18 @@ fn main() {
     app.run();
 }
 
-fn build_ui(app: &Application){
+fn build_ui(app: &gtk::Application){
     let window = Rc::new(
-                 ApplicationWindow::builder()
+                 gtk::ApplicationWindow::builder()
                  .application(app)
-                 .title("gtk-rs dialogs")
+                 .title("gtk-rs background test")
+                 .icon_name("org.gtk.daleclack")
                  .build()
     );
     
     window.set_default_size(800,450);
 
-    let button = Button::builder()
+    let button = gtk::Button::builder()
                  .label("Dialog")
                  .halign(gtk::Align::Center)
                  .valign(gtk::Align::Center)
@@ -54,14 +55,28 @@ fn build_ui(app: &Application){
 }
 
 async fn dialog<W: IsA<gtk::Window>>(window: Rc<W>){
+    //Create a file dialog
     let file_dialog = gtk::FileChooserDialog::builder()
                       .transient_for(&*window)
                       .use_header_bar(1)
                       .build();
 
+    //Add Buttons
     file_dialog.add_button("OK",gtk::ResponseType::Ok);
     file_dialog.add_button("Cancel",gtk::ResponseType::Cancel);
 
+    //Add Filters
+    let file_filter = gtk::FileFilter::new();
+    file_filter.set_name(Some(&"Image Files"));
+    file_filter.add_mime_type("image/*");
+    file_dialog.add_filter(&file_filter);
+
+    let filter_any = gtk::FileFilter::new();
+    filter_any.set_name(Some(&"Any Files"));
+    filter_any.add_pattern("*");
+    file_dialog.add_filter(&filter_any);
+
+    //Link Signal
     file_dialog.connect_response(dialog_responsed);
     
     file_dialog.show();
@@ -77,9 +92,12 @@ fn dialog_responsed(dialog : &gtk::FileChooserDialog,response_id: gtk::ResponseT
         let win = dialog.transient_for().unwrap();
         let overlay = win.child().unwrap().dynamic_cast::<gtk::Overlay>().unwrap();
         let background = overlay.child().unwrap().dynamic_cast::<gtk::Picture>().unwrap();
-        background.set_filename(filename);
 
-        //println!("{:?}",filename);
+        //Create pixbuf
+        let pixbuf = gdk_pixbuf::Pixbuf::from_file(filename).unwrap();
+        let sized_pixbuf = pixbuf.scale_simple(800,450,gdk_pixbuf::InterpType::Bilinear).unwrap();
+
+        background.set_pixbuf(Some(&sized_pixbuf));
     }
     dialog.destroy();
 }

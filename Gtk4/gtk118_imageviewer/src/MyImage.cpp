@@ -50,14 +50,14 @@ static void drag_start(GtkGestureDrag * self,double x,double y,MyImage * image){
 
 static void drag_update(GtkGestureDrag * self,double x,double y,MyImage * image){
     //Move Image
-    if(image->move_count == 10){
+    if(image->move_count == 5){
         int hadj_value = gtk_adjustment_get_value(image->hadjustment);
         int vadj_value = gtk_adjustment_get_value(image->vadjustment);
         if(hadj_value - x >= 0 &&  - x <= image->hmax_value){
-            gtk_adjustment_set_value(image->hadjustment,-x);
+            gtk_adjustment_set_value(image->hadjustment,-x/2.0);
         }
         if(vadj_value - y >= 0 &&  - y <= image->vmax_value){
-            gtk_adjustment_set_value(image->vadjustment,-y);
+            gtk_adjustment_set_value(image->vadjustment,-y/2.0);
         }
         image->move_count = 0;
     }else{
