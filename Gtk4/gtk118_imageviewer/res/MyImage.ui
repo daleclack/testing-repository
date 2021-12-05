@@ -32,7 +32,6 @@
         <property name="button">1</property>
         <signal name="drag-begin" handler="drag_start"/>
         <signal name="drag-update" handler="drag_update"/>
-        <signal name="drag-end" handler="drag_end"/>
       </object>
     </child>
   </template>

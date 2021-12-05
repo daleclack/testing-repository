@@ -50,33 +50,25 @@ static void drag_start(GtkGestureDrag * self,double x,double y,MyImage * image){
 
 static void drag_update(GtkGestureDrag * self,double x,double y,MyImage * image){
     //Move Image
-    if(image->move_count == 5){
         int hadj_value = gtk_adjustment_get_value(image->hadjustment);
         int vadj_value = gtk_adjustment_get_value(image->vadjustment);
-        if(hadj_value - x >= 0 &&  - x <= image->hmax_value){
+        if(hadj_value -x < 0){
+            gtk_adjustment_set_value(image->hadjustment,0);
+        }else if(hadj_value - x > image->hmax_value){
+            gtk_adjustment_set_value(image->hadjustment,image->hmax_value);
+        }
+        else{
             gtk_adjustment_set_value(image->hadjustment,-x/2.0);
         }
-        if(vadj_value - y >= 0 &&  - y <= image->vmax_value){
+
+        if(vadj_value - x < 0){
+            gtk_adjustment_set_value(image->vadjustment,0);
+        }else if(vadj_value - x > image->vmax_value){
+            gtk_adjustment_set_value(image->vadjustment,image->vmax_value);
+        }else{
             gtk_adjustment_set_value(image->vadjustment,-y/2.0);
         }
-        image->move_count = 0;
-    }else{
-        image->move_count++;
-    }
-    
-}
-
-static void drag_end(GtkGestureDrag * self,double x,double y,MyImage * image){
-    //g_print("%f %f\n",x+image->start_x,y+image->start_y);
-    //sleep(1);
-    int hadj_value = gtk_adjustment_get_value(image->hadjustment);
-    int vadj_value = gtk_adjustment_get_value(image->vadjustment);
-    if(hadj_value - x >= 0 &&  - x <= image->hmax_value){
-        gtk_adjustment_set_value(image->hadjustment,-x);
-    }
-    if(vadj_value - y >= 0 &&  - y <= image->vmax_value){
-        gtk_adjustment_set_value(image->vadjustment,-y);
-    }
+        image->move_count = 0; 
 }
 
 static void my_image_dispose(GObject * object){
@@ -255,7 +247,6 @@ static void my_image_class_init(MyImageClass * self_class){
     gtk_widget_class_bind_template_callback(self_class,pressed_cb);
     gtk_widget_class_bind_template_callback(self_class,drag_start);
     gtk_widget_class_bind_template_callback(self_class,drag_update);
-    gtk_widget_class_bind_template_callback(self_class,drag_end);
 }
 
 void my_image_bind_adjustments(MyImage       * self, 

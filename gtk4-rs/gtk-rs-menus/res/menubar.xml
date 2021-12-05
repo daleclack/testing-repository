@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <menu id = "menubar">
+        <section>
+            <submenu>
+                <attribute name="label">File</attribute>
+                <item>
+                    <attribute name="label">Exit</attribute>
+                </item>
+            </submenu>
+        </section>
+    </menu>
+</interface>
