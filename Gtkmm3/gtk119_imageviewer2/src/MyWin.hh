@@ -8,8 +8,8 @@ class MyWin : public Gtk::Window{
     private:
         //Child widgets
         Gtk::ScrolledWindow sw;
-        Gtk::Image image;
-        Gtk::Box main_box;
+        Gtk::DrawingArea image_area;
+        Gtk::Box main_box,btnbox;
 
         //Gesture control
         
