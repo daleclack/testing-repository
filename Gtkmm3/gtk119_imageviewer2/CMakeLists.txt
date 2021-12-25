@@ -47,9 +47,9 @@ if(WIN32)
 	set_property(SOURCE ../icon.rc APPEND PROPERTY
         OBJECT_DEPENDS ${PROJECT_SOURCE_DIR}/../icon.ico
         )
-	add_executable(${PROJECT_NAME} WIN32 ${app_WINRC} src/main.cc src/MyWin.cc)
+	add_executable(${PROJECT_NAME} WIN32 ${app_WINRC} src/main.cc src/MyWin.cc src/MyImage.cc)
 else()
-	add_executable(${PROJECT_NAME} src/main.cc src/MyWin.cc)
+	add_executable(${PROJECT_NAME} src/main.cc src/MyWin.cc src/MyImage.cc)
 
 endif(WIN32)
 
