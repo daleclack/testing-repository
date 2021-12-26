@@ -30,4 +30,7 @@ bool MyImage::on_draw(const Cairo::RefPtr<Cairo::Context> &cr){
 void MyImage::set_pixbuf(const Glib::RefPtr<Gdk::Pixbuf> &pixbuf)
 {
     image = pixbuf;
+
+    //ReDraw the draw area
+    queue_draw();
 }

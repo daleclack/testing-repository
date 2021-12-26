@@ -30,9 +30,23 @@ btnopen("Open Image")
 }
 
 void MyWin::btnopen_clicked(){
+    //Create a file open dialog
+    dialog = Gtk::FileChooserNative::create("Open a image File",*this,Gtk::FILE_CHOOSER_ACTION_OPEN,
+                                            "OK","Cancel");
+    
+    dialog->signal_response().connect(sigc::mem_fun(*this,&MyWin::dialog_response));
 
+    dialog->show();
 }
 
 void MyWin::dialog_response(int response_id){
+    if(response_id == Gtk::RESPONSE_ACCEPT){
+        //Show the image in a drawing area
+        auto filename = dialog->get_filename();
+        auto pixbuf = Gdk::Pixbuf::create_from_file(filename);
+        image_area.set_pixbuf(pixbuf);
+        pixbuf.reset();
+    }
 
+    dialog.reset();
 } 
