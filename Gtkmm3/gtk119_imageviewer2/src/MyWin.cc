@@ -18,6 +18,7 @@ btnopen("Open Image")
     m_adjustment = Gtk::Adjustment::create(1.0,0.1,10.0,0.1,0.1);
     scale.set_default_direction(Gtk::TEXT_DIR_LTR);
     scale.set_adjustment(m_adjustment);
+    scale.signal_value_changed().connect(sigc::mem_fun(*this,&MyWin::scale_changed));
 
     //Add control widgets
     btnbox.pack_start(scale);
@@ -49,4 +50,10 @@ void MyWin::dialog_response(int response_id){
     }
 
     dialog.reset();
-} 
+}
+
+void MyWin::scale_changed(){
+    double value = scale.get_value();
+    g_print("%f\n",value);
+    image_area.scale_draw(value);
+}

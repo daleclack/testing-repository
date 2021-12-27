@@ -21,4 +21,5 @@ class MyWin : public Gtk::Window{
         //Signal Handlers
         void btnopen_clicked();
         void dialog_response(int response_id);
+        void scale_changed();
 };
