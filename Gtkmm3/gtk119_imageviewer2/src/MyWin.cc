@@ -26,12 +26,27 @@ MyWin::MyWin()
     main_box.pack_start(btnbox, Gtk::PACK_SHRINK);
     btnopen.signal_clicked().connect(sigc::mem_fun(*this, &MyWin::btnopen_clicked));
 
-    // Add Gesture
+    // Add Drag Gesture
     gesture_drag = Gtk::GestureDrag::create(image_area);
     gesture_drag->set_button(GDK_BUTTON_PRIMARY);
-    // gesture_drag->signal_drag_begin().connect(sigc::mem_fun(*this,&MyWin::drag_begin));
     gesture_drag->signal_drag_update().connect(sigc::mem_fun(*this, &MyWin::drag_update));
     gesture_drag->signal_drag_end().connect(sigc::mem_fun(*this, &MyWin::drag_end));
+
+    gesture_click = Gtk::GestureMultiPress::create(image_area);
+    gesture_click->set_button(GDK_BUTTON_SECONDARY);
+    gesture_click->signal_pressed().connect(sigc::mem_fun(*this,&MyWin::press));
+
+    // Add Menu
+    auto builder = Gtk::Builder::create_from_resource("/org/gtk/daleclack/appmenu.xml");
+    auto object = builder->get_object("model");
+    auto gmenu = Glib::RefPtr<Gio::MenuModel>::cast_dynamic(object);
+    popover.bind_model(gmenu);
+    popover.set_relative_to(image_area);
+
+    // Add actions for menu
+    add_action("zoom_in", sigc::mem_fun(*this, &MyWin::image_zoom_in));
+    add_action("zoom_out", sigc::mem_fun(*this, &MyWin::image_zoom_out));
+    add_action("zoom_reset", sigc::mem_fun(*this, &MyWin::image_zoom_reset));
 
     overlay.add(main_box);
     add(overlay);
@@ -73,15 +88,16 @@ void MyWin::dialog_response(int response_id)
 
 void MyWin::scale_changed()
 {
+    // Get Value of scale widget and scale image
     double value = scale.get_value();
-    g_print("%f\n", value);
+    // g_print("%f\n", value);
     image_area.scale_draw(value);
 }
 
-void MyWin::drag_begin(double x, double y)
-{
-    // g_print("drag begins\n");
-    // move_to(x,y);
+void MyWin::press(int n_press,double x,double y){
+    // Set Popover to the position of mouse and show
+    popover.set_pointing_to(Gdk::Rectangle(x,y,1,1));
+    popover.popup();
 }
 
 void MyWin::drag_update(double x, double y)
@@ -128,4 +144,26 @@ void MyWin::move_to(double x, double y)
     // Perform movement
     hadjustment->set_value(h_value);
     vadjustment->set_value(v_value);
+}
+
+void MyWin::image_zoom_in(){
+    // Scale 0.1 More
+    double value = scale.get_value();
+    value+=0.1;
+    scale.set_value(value);
+    image_area.scale_draw(value);
+}
+
+void MyWin::image_zoom_out(){
+    // Scale 0.1 Less
+    double value = scale.get_value();
+    value-=0.1;
+    scale.set_value(value);
+    image_area.scale_draw(value);
+}
+
+void MyWin::image_zoom_reset(){
+    // Scale as 1:1
+    scale.set_value(1.0);
+    image_area.scale_draw(1.0);
 }

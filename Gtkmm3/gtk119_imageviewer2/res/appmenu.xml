@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <menu id="model">
+        <item>
+            <attribute name="label">Zoom Out</attribute>
+            <attribute name="action">win.zoom_out</attribute>
+        </item>
+        <item>
+            <attribute name="label">Zoom In</attribute>
+            <attribute name="action">win.zoom_in</attribute>
+        </item>
+        <item>
+            <attribute name="label">1∶1</attribute>
+            <attribute name="action">win.zoom_reset</attribute>
+        </item>
+      </menu>
+</interface>

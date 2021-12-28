@@ -1,6 +1,6 @@
 set(CMAKE_CXX_STANDARD 17)
 cmake_minimum_required(VERSION 3.0.0)
-project(gtk117 VERSION 1.0.0)
+project(gtk119 VERSION 1.0.0)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../../GCR_CMake/macros)
 include(GlibCompileResourcesSupport)
@@ -22,23 +22,19 @@ link_directories (${GTKMM3_LIBRARY_DIRS})
 
 #Compile Resource
 
-# set(RESOURCE_LIST
-#     gnome-fs-directory.png
-#     gnome-fs-regular.png
-#     icons/24x24/actions/view-grid-symbolic.png
-#     icons/24x24/actions/view-list-symbolic.png
-#     icons/48x48/actions/dialog-error.png)
+set(RESOURCE_LIST
+    appmenu.xml)
 
-# compile_gresources(RESOURCE_FILE
-#                    XML_OUT
-#                    TYPE EMBED_C
-#                    RESOURCES ${RESOURCE_LIST}
-#                    PREFIX "/org/gtk/daleclack"
-#                    SOURCE_DIR ${PROJECT_SOURCE_DIR}/../default_res)
+compile_gresources(RESOURCE_FILE
+                   XML_OUT
+                   TYPE EMBED_C
+                   RESOURCES ${RESOURCE_LIST}
+                   PREFIX "/org/gtk/daleclack"
+                   SOURCE_DIR ${PROJECT_SOURCE_DIR}/res)
                    
 # Add a custom target to the makefile. Now make builds our resource file.
 # It depends on the output RESOURCE_FILE.
-# add_custom_target(resource ALL DEPENDS ${RESOURCE_FILE})
+add_custom_target(resource ALL DEPENDS ${RESOURCE_FILE})
 
 #For win32 platform,use rc resource and .ico icon
 if(WIN32)
@@ -47,9 +43,9 @@ if(WIN32)
 	set_property(SOURCE ../icon.rc APPEND PROPERTY
         OBJECT_DEPENDS ${PROJECT_SOURCE_DIR}/../icon.ico
         )
-	add_executable(${PROJECT_NAME} WIN32 ${app_WINRC} src/main.cc src/MyWin.cc src/MyImage.cc)
+	add_executable(${PROJECT_NAME} WIN32 ${app_WINRC} src/main.cc src/MyWin.cc src/MyImage.cc ${RESOURCE_FILE})
 else()
-	add_executable(${PROJECT_NAME} src/main.cc src/MyWin.cc src/MyImage.cc)
+	add_executable(${PROJECT_NAME} src/main.cc src/MyWin.cc src/MyImage.cc ${RESOURCE_FILE})
 
 endif(WIN32)
 

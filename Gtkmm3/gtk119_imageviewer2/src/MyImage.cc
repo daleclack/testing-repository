@@ -31,6 +31,14 @@ bool MyImage::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
 void MyImage::scale_draw(double scale)
 {
     // Set the scale radio and scale
+    if(scale <= 0){
+        scale_radio = 0.1;
+        return;
+    }
+    if(scale > 10.0){
+        scale_radio = 10.0;
+        return;
+    }
     scale_radio = scale;
     queue_draw();
 }
