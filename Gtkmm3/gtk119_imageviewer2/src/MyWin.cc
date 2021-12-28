@@ -26,6 +26,13 @@ btnopen("Open Image")
     main_box.pack_start(btnbox,Gtk::PACK_SHRINK);
     btnopen.signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnopen_clicked));
 
+    //Add Gesture
+    gesture_drag = Gtk::GestureDrag::create(image_area);
+    gesture_drag->set_button(GDK_BUTTON_PRIMARY);
+    //gesture_drag->signal_drag_begin().connect(sigc::mem_fun(*this,&MyWin::drag_begin));
+    gesture_drag->signal_drag_update().connect(sigc::mem_fun(*this,&MyWin::drag_update));
+    gesture_drag->signal_drag_end().connect(sigc::mem_fun(*this,&MyWin::drag_end));
+
     add(main_box);
     show_all_children();
 }
@@ -47,6 +54,13 @@ void MyWin::dialog_response(int response_id){
         auto pixbuf = Gdk::Pixbuf::create_from_file(filename);
         image_area.set_pixbuf(pixbuf);
         pixbuf.reset();
+        //Set Adjustments
+        if(hadjustment){
+            hadjustment.reset();
+            vadjustment.reset();
+        }
+        hadjustment = sw.get_hadjustment();
+        vadjustment = sw.get_vadjustment();
     }
 
     dialog.reset();
@@ -56,4 +70,23 @@ void MyWin::scale_changed(){
     double value = scale.get_value();
     g_print("%f\n",value);
     image_area.scale_draw(value);
+}
+
+void MyWin::drag_begin(double x,double y){
+    //g_print("drag begins\n");
+    //move_to(x,y);
+}
+
+void MyWin::drag_update(double x,double y){
+    //g_print("drag updated\n");
+    move_to(x,y);
+}
+
+void MyWin::drag_end(double x,double y){
+    //g_print("drag ended\n");
+    move(x,y);
+}
+
+void MyWin::move_to(double x,double y){
+    g_print("%f %f\n",x,y);
 }
