@@ -34,7 +34,7 @@ MyWin::MyWin()
 
     gesture_click = Gtk::GestureMultiPress::create(image_area);
     gesture_click->set_button(GDK_BUTTON_SECONDARY);
-    gesture_click->signal_pressed().connect(sigc::mem_fun(*this,&MyWin::press));
+    gesture_click->signal_pressed().connect(sigc::mem_fun(*this, &MyWin::press));
 
     // Add Menu
     auto builder = Gtk::Builder::create_from_resource("/org/gtk/daleclack/appmenu.xml");
@@ -94,9 +94,10 @@ void MyWin::scale_changed()
     image_area.scale_draw(value);
 }
 
-void MyWin::press(int n_press,double x,double y){
+void MyWin::press(int n_press, double x, double y)
+{
     // Set Popover to the position of mouse and show
-    popover.set_pointing_to(Gdk::Rectangle(x,y,1,1));
+    popover.set_pointing_to(Gdk::Rectangle(x, y, 1, 1));
     popover.popup();
 }
 
@@ -123,7 +124,7 @@ void MyWin::move_to(double x, double y)
     double vmaxvalue = hadjustment->get_upper(); //- vadjustment->get_page_size();
     h_value -= x;
     v_value -= y;
-    //Before movement, make sure the value is vaild
+    // Before movement, make sure the value is vaild
     if (h_value < 0)
     {
         h_value = 0;
@@ -132,7 +133,7 @@ void MyWin::move_to(double x, double y)
     {
         h_value = hmaxvalue;
     }
-    //Before movement, make sure the value is vaild
+    // Before movement, make sure the value is vaild
     if (v_value < 0)
     {
         v_value = 0;
@@ -146,23 +147,26 @@ void MyWin::move_to(double x, double y)
     vadjustment->set_value(v_value);
 }
 
-void MyWin::image_zoom_in(){
+void MyWin::image_zoom_in()
+{
     // Scale 0.1 More
     double value = scale.get_value();
-    value+=0.1;
+    value += 0.1;
     scale.set_value(value);
     image_area.scale_draw(value);
 }
 
-void MyWin::image_zoom_out(){
+void MyWin::image_zoom_out()
+{
     // Scale 0.1 Less
     double value = scale.get_value();
-    value-=0.1;
+    value -= 0.1;
     scale.set_value(value);
     image_area.scale_draw(value);
 }
 
-void MyWin::image_zoom_reset(){
+void MyWin::image_zoom_reset()
+{
     // Scale as 1:1
     scale.set_value(1.0);
     image_area.scale_draw(1.0);
