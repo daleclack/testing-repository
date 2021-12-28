@@ -13,6 +13,7 @@ class MyWin : public Gtk::Window{
         Gtk::Box main_box,btnbox;
         Gtk::Button btnopen;
         Gtk::Scale scale;
+        Gtk::Overlay overlay;
         Glib::RefPtr<Gtk::Adjustment> m_adjustment,hadjustment,vadjustment;
         Glib::RefPtr<Gtk::FileChooserNative> dialog;
 
