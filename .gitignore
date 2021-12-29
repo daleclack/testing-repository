@@ -24,8 +24,18 @@ Makefile
 #backup files 
 *.*~
 
+#Music files
+*.mp3
+*.aac
+*.wav
+*.m4a
+*.flac
+*.wma
+
 #Gresource prebuild file
 */src/resources.cpp
+build/*
+build/mingw/*
 
 #gschemas file
 gschemas.compiled
@@ -68,4 +78,5 @@ FiveRow
 *.exe
 *.out
 *.app
+*.bin
 
