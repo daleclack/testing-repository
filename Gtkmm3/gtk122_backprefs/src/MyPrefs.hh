@@ -40,8 +40,12 @@ private:
     Glib::RefPtr<Gdk::Pixbuf> folder_pixbuf;
     Glib::RefPtr<Gtk::FileChooserNative> dialog;
     void dialog_response(int response_id);
+    
+    Glib::RefPtr<Gtk::TreeSelection> selection;
 
     //Signal Handlers
     void btnadd_clicked();
     void btnremove_clicked();
+    void folders_view_changed();
+    void images_view_changed();
 };

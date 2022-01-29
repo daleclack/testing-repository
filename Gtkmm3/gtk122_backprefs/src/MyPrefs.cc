@@ -48,6 +48,7 @@ MyPrefs::MyPrefs()
     btnadd.set_image_from_icon_name("list-add");
     btnadd.signal_clicked().connect(sigc::mem_fun(*this, &MyPrefs::btnadd_clicked));
     btnremove.set_image_from_icon_name("list-remove");
+    btnremove.signal_clicked().connect(sigc::mem_fun(*this,&MyPrefs::btnremove_clicked));
     btnbox.pack_start(btnadd, Gtk::PACK_SHRINK);
     btnbox.pack_start(btnremove, Gtk::PACK_SHRINK);
     main_box.pack_start(btnbox, Gtk::PACK_SHRINK);
@@ -93,7 +94,18 @@ void MyPrefs::dialog_response(int response_id)
     dialog.reset();
 }
 
-void MyPrefs::btnremove_clicked() {}
+void MyPrefs::btnremove_clicked() {
+    // Get the selection and remove the selected item
+    selection = folders_view.get_selection();
+    auto iter = selection->get_selected();
+    if(iter){
+        folders_store->erase(iter);
+    }
+}
+
+void MyPrefs::folders_view_changed(){}
+
+void MyPrefs::images_view_changed(){}
 
 void MyPrefs::set_background(Gtk::Image *back)
 {
