@@ -22,19 +22,21 @@ link_directories (${GTKMM3_LIBRARY_DIRS})
 
 #Compile Resource
 
-#set(RESOURCE_LIST
-    #stack.ui)
+set(RESOURCE_LIST
+    icons/16x16/actions/list-add.svg
+    icons/16x16/actions/list-remove.svg
+    folder.svg)
 
-#compile_gresources(RESOURCE_FILE
-                   #XML_OUT
-                   #TYPE EMBED_C
-                   #RESOURCES ${RESOURCE_LIST}
-                   #PREFIX "/org/gtk/daleclack"
-                   #SOURCE_DIR ${PROJECT_SOURCE_DIR}/res)
+compile_gresources(RESOURCE_FILE
+                   XML_OUT
+                   TYPE EMBED_C
+                   RESOURCES ${RESOURCE_LIST}
+                   PREFIX "/org/gtk/daleclack"
+                   SOURCE_DIR ${PROJECT_SOURCE_DIR}/../default_res)
                    
 # Add a custom target to the makefile. Now make builds our resource file.
 # It depends on the output RESOURCE_FILE.
-#add_custom_target(resource ALL DEPENDS ${RESOURCE_FILE})
+add_custom_target(resource ALL DEPENDS ${RESOURCE_FILE})
 
 #For win32 platform,use rc resource and .ico icon
 if(WIN32)
@@ -43,9 +45,9 @@ if(WIN32)
 	set_property(SOURCE ../icon.rc APPEND PROPERTY
         OBJECT_DEPENDS ${PROJECT_SOURCE_DIR}/../icon.ico
         )
-	add_executable(${PROJECT_NAME} WIN32 ${app_WINRC} src/main.cc src/MyWin.cc src/MyPrefs.cc)
+	add_executable(${PROJECT_NAME} WIN32 ${app_WINRC} src/main.cc src/MyWin.cc src/MyPrefs.cc ${RESOURCE_FILE})
 else()
-	add_executable(${PROJECT_NAME} src/main.cc src/MyWin.cc src/MyPrefs.cc)
+	add_executable(${PROJECT_NAME} src/main.cc src/MyWin.cc src/MyPrefs.cc ${RESOURCE_FILE})
 
 endif(WIN32)
 
