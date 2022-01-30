@@ -25,7 +25,8 @@ link_directories (${GTKMM3_LIBRARY_DIRS})
 set(RESOURCE_LIST
     icons/16x16/actions/list-add.svg
     icons/16x16/actions/list-remove.svg
-    folder.svg)
+    folder.svg
+    folder-images.svg)
 
 compile_gresources(RESOURCE_FILE
                    XML_OUT

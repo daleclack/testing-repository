@@ -17,10 +17,12 @@ protected:
             add(m_col_pixbuf);
             add(m_col_path);
             add(m_col_name);
+            add(m_col_internal);
         }
         Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf>> m_col_pixbuf;
         Gtk::TreeModelColumn<std::string> m_col_path;
         Gtk::TreeModelColumn<Glib::ustring> m_col_name;
+        Gtk::TreeModelColumn<bool> m_col_internal;
     };
 
     ModelColumns n_columns;
@@ -37,15 +39,17 @@ private:
     Gtk::Button btnadd, btnremove;
 
     //Folder Open Dialog
-    Glib::RefPtr<Gdk::Pixbuf> folder_pixbuf;
+    Glib::RefPtr<Gdk::Pixbuf> folder_pixbuf, image_pixbuf;
     Glib::RefPtr<Gtk::FileChooserNative> dialog;
     void dialog_response(int response_id);
     
-    Glib::RefPtr<Gtk::TreeSelection> selection;
+    Glib::RefPtr<Gtk::TreeSelection> folder_selection, image_selection;
 
     //Signal Handlers
     void btnadd_clicked();
     void btnremove_clicked();
     void folders_view_changed();
     void images_view_changed();
+    void default_folders_view();
+    void set_background_internal(const char * const * data);
 };
