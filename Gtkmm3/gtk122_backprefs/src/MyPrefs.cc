@@ -160,6 +160,8 @@ void MyPrefs::default_folders_view()
     row[n_columns.m_col_pixbuf] = image_pixbuf;
 }
 
+void MyPrefs::update_images_view() {}
+
 void MyPrefs::images_view_changed()
 {
     // Set the background as selected
@@ -183,6 +185,16 @@ void MyPrefs::set_background_internal(const char *const *data)
 {
     // Set a internal background
     auto pixbuf = Gdk::Pixbuf::create_from_xpm_data(data);
+    auto sized = pixbuf->scale_simple(1024, 576, Gdk::INTERP_BILINEAR);
+    gtk_image_set_from_pixbuf(background1->gobj(), sized->gobj());
+    pixbuf.reset();
+    sized.reset();
+}
+
+void MyPrefs::set_background_file(std::string &path)
+{
+    // Set Background from a file
+    auto pixbuf = Gdk::Pixbuf::create_from_file(path);
     auto sized = pixbuf->scale_simple(1024, 576, Gdk::INTERP_BILINEAR);
     gtk_image_set_from_pixbuf(background1->gobj(), sized->gobj());
     pixbuf.reset();

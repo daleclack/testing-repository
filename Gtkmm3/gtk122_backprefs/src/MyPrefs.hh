@@ -51,5 +51,7 @@ private:
     void folders_view_changed();
     void images_view_changed();
     void default_folders_view();
+    void update_images_view();
     void set_background_internal(const char * const * data);
+    void set_background_file(std::string &path);
 };
