@@ -41,7 +41,7 @@ private:
     Gtk::Button btnadd, btnremove;
 
     // Folder Open Dialog
-    Glib::RefPtr<Gdk::Pixbuf> folder_pixbuf, image_pixbuf;
+    Glib::RefPtr<Gdk::Pixbuf> folder_pixbuf, image_pixbuf, imagefile_pixbuf;
     Glib::RefPtr<Gtk::FileChooserNative> dialog;
     void dialog_response(int response_id);
 

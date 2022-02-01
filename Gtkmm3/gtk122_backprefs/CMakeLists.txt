@@ -26,7 +26,8 @@ set(RESOURCE_LIST
     icons/16x16/actions/list-add.svg
     icons/16x16/actions/list-remove.svg
     folder.svg
-    folder-images.svg)
+    folder-images.svg
+    image_file.svg)
 
 compile_gresources(RESOURCE_FILE
                    XML_OUT

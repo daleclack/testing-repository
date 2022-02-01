@@ -36,6 +36,9 @@ MyPrefs::MyPrefs()
     pixbuf = Gdk::Pixbuf::create_from_resource("/org/gtk/daleclack/folder-images.svg");
     image_pixbuf = pixbuf->scale_simple(24, 24, Gdk::INTERP_BILINEAR);
     pixbuf.reset();
+    pixbuf = Gdk::Pixbuf::create_from_resource("/org/gtk/daleclack/image_file.svg");
+    imagefile_pixbuf = pixbuf->scale_simple(24, 24, Gdk::INTERP_BILINEAR);
+    pixbuf.reset();
 
     // Add Default Value for folders view
     auto row = *(folders_store->append());
@@ -162,13 +165,13 @@ void MyPrefs::default_folders_view()
     row[n_columns.m_col_path] = ":1";
     row[n_columns.m_col_name] = "winpe.xpm";
     row[n_columns.m_col_internal] = true;
-    row[n_columns.m_col_pixbuf] = image_pixbuf;
+    row[n_columns.m_col_pixbuf] = imagefile_pixbuf;
 
     row = *(images_store->append());
     row[n_columns.m_col_path] = ":2";
     row[n_columns.m_col_name] = "img7.xpm";
     row[n_columns.m_col_internal] = true;
-    row[n_columns.m_col_pixbuf] = image_pixbuf;
+    row[n_columns.m_col_pixbuf] = imagefile_pixbuf;
 }
 
 int MyPrefs::sort_func(const Gtk::TreeModel::iterator &a, const Gtk::TreeModel::iterator &b)
@@ -223,7 +226,6 @@ void MyPrefs::update_images_view(std::string &folder_path)
             display_name = Glib::filename_to_utf8(filename);
 
             // Filter the file
-
             // Get Pattern of the file
             file_valid = false;
             size_t pos = filename.find_last_of('.');
@@ -248,7 +250,7 @@ void MyPrefs::update_images_view(std::string &folder_path)
                 row[n_columns.m_col_path] = pathname;
                 row[n_columns.m_col_name] = display_name;
                 row[n_columns.m_col_internal] = false;
-                row[n_columns.m_col_pixbuf] = image_pixbuf;
+                row[n_columns.m_col_pixbuf] = imagefile_pixbuf;
             }
         } while (filename != "");
 
