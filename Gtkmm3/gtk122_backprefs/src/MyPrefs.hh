@@ -27,6 +27,8 @@ protected:
 
     ModelColumns n_columns;
     Glib::RefPtr<Gtk::ListStore> folders_store, images_store;
+    Glib::RefPtr<Gtk::TreeSelection> folder_selection, image_selection;
+    bool has_selection;
 
 private:
     // Widget for parent window
@@ -38,20 +40,21 @@ private:
     Gtk::Box main_box, views_box, btnbox;
     Gtk::Button btnadd, btnremove;
 
-    //Folder Open Dialog
+    // Folder Open Dialog
     Glib::RefPtr<Gdk::Pixbuf> folder_pixbuf, image_pixbuf;
     Glib::RefPtr<Gtk::FileChooserNative> dialog;
     void dialog_response(int response_id);
-    
-    Glib::RefPtr<Gtk::TreeSelection> folder_selection, image_selection;
 
-    //Signal Handlers
+    // Sort for ListStore
+    int sort_func(const Gtk::TreeModel::iterator &a, const Gtk::TreeModel::iterator &b);
+
+    // Signal Handlers
     void btnadd_clicked();
     void btnremove_clicked();
     void folders_view_changed();
     void images_view_changed();
     void default_folders_view();
-    void update_images_view();
-    void set_background_internal(const char * const * data);
+    void update_images_view(std::string &folder_path);
+    void set_background_internal(const char *const *data);
     void set_background_file(std::string &path);
 };
