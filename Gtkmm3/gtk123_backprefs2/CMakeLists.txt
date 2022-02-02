@@ -20,6 +20,9 @@ pkg_check_modules (GTKMM3 REQUIRED gtkmm-3.0)
 include_directories (${GTKMM3_INCLUDE_DIRS})
 link_directories (${GTKMM3_LIBRARY_DIRS})
 
+#Source files
+set(SOURCE_FILE src/main.cc src/MyWin.cc src/MyPrefs.cc ../cfgfile/cfgfile.cc)
+
 #Compile Resource
 
 set(RESOURCE_LIST
@@ -48,9 +51,9 @@ if(WIN32)
 	set_property(SOURCE ../icon.rc APPEND PROPERTY
         OBJECT_DEPENDS ${PROJECT_SOURCE_DIR}/../icon.ico
         )
-	add_executable(${PROJECT_NAME} WIN32 ${app_WINRC} src/main.cc src/MyWin.cc src/MyPrefs.cc ${RESOURCE_FILE})
+	add_executable(${PROJECT_NAME} WIN32 ${app_WINRC} ${SOURCE_FILE} ${RESOURCE_FILE})
 else()
-	add_executable(${PROJECT_NAME} src/main.cc src/MyWin.cc src/MyPrefs.cc ${RESOURCE_FILE})
+	add_executable(${PROJECT_NAME} ${SOURCE_FILE} ${RESOURCE_FILE})
 
 endif(WIN32)
 

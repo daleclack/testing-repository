@@ -2,6 +2,7 @@
 #include "winpe.xpm"
 #include "../Gtk4/img7.xpm"
 #include "image_types.hh"
+#include "cfgfile/cfgfile.hh"
 #include <iostream>
 
 MyPrefs::MyPrefs()
