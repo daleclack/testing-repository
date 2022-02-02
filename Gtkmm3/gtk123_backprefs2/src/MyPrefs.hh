@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gtkmm.h>
+#include <string>
 
 class MyPrefs : public Gtk::Window
 {
@@ -34,10 +35,11 @@ private:
     // Widget for parent window
     Gtk::Image *background1;
 
+    //Page switcher and another page
     Glib::RefPtr<Gtk::Builder> stackbuilder;
+    Gtk::Box *stack_box, *back_page;
 
     // Child Widgets
-    Gtk::Stack *stack;
     Gtk::TreeView folders_view, images_view;
     Gtk::ScrolledWindow sw_folders, sw_images;
     Gtk::Box main_box, views_box, btnbox;
@@ -50,6 +52,7 @@ private:
 
     // Sort for ListStore
     int sort_func(const Gtk::TreeModel::iterator &a, const Gtk::TreeModel::iterator &b);
+    bool icasecompare(const std::string &a, const std::string &b);
 
     // Signal Handlers
     void btnadd_clicked();

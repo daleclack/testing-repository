@@ -27,14 +27,15 @@ set(RESOURCE_LIST
     icons/16x16/actions/list-remove.svg
     folder.svg
     folder-images.svg
-    image_file.svg)
+    image_file.svg
+    prefs_stack.ui)
 
 compile_gresources(RESOURCE_FILE
                    XML_OUT
                    TYPE EMBED_C
                    RESOURCES ${RESOURCE_LIST}
                    PREFIX "/org/gtk/daleclack"
-                   SOURCE_DIR ${PROJECT_SOURCE_DIR}/../default_res)
+                   SOURCE_DIR ${PROJECT_SOURCE_DIR}/res)
                    
 # Add a custom target to the makefile. Now make builds our resource file.
 # It depends on the output RESOURCE_FILE.

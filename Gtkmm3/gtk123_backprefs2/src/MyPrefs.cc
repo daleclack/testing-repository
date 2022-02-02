@@ -3,7 +3,6 @@
 #include "../Gtk4/img7.xpm"
 #include "image_types.hh"
 #include <iostream>
-#include <string>
 
 MyPrefs::MyPrefs()
     : main_box(Gtk::ORIENTATION_VERTICAL, 10),
@@ -89,11 +88,20 @@ MyPrefs::MyPrefs()
 
     // Add Main Box to window
     const int margin_value = 15;
+    main_box.set_hexpand();
+    main_box.set_vexpand();
     main_box.set_margin_top(margin_value);
     main_box.set_margin_bottom(margin_value);
     main_box.set_margin_start(margin_value);
     main_box.set_margin_end(margin_value);
-    add(main_box);
+
+    //Get Widgets for multi pages
+    stackbuilder = Gtk::Builder::create_from_resource("/org/gtk/daleclack/prefs_stack.ui");
+    stackbuilder->get_widget("stack_box",stack_box);
+    stackbuilder->get_widget("back_page",back_page);
+
+    back_page->pack_start(main_box);
+    add(*stack_box);
     show_all_children();
 }
 
@@ -199,6 +207,22 @@ int MyPrefs::sort_func(const Gtk::TreeModel::iterator &a, const Gtk::TreeModel::
     }
 }
 
+bool MyPrefs::icasecompare(const std::string &a, const std::string &b)
+{
+    if (a.length() == b.length())
+    {
+        return std::equal(a.begin(), a.end(), b.begin(),
+                          [](char a, char b)
+                          {
+                              return tolower(a) == tolower(b);
+                          });
+    }
+    else
+    {
+        return false;
+    }
+}
+
 void MyPrefs::update_images_view(std::string &folder_path)
 {
     // Unselect everything
@@ -235,7 +259,7 @@ void MyPrefs::update_images_view(std::string &folder_path)
                 for (int i = 0; supported_globs[i] != NULL; i++)
                 {
                     std::string glob = std::string(supported_globs[i]);
-                    if (glob == pattern)
+                    if (icasecompare(glob, pattern))
                     {
                         file_valid = true;
                         break;
