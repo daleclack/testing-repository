@@ -28,6 +28,7 @@ set(SOURCE_FILE src/main.cc src/MyWin.cc src/MyPrefs.cc ../cfgfile/cfgfile.cc)
 set(RESOURCE_LIST
     icons/16x16/actions/list-add.svg
     icons/16x16/actions/list-remove.svg
+    icons/scalable/status/display_prefs.svg
     folder.svg
     folder-images.svg
     image_file.svg
