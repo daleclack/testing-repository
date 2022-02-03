@@ -4,12 +4,17 @@
 #include "image_types.hh"
 #include "cfgfile/cfgfile.hh"
 #include <iostream>
+#include <fstream>
 
 MyPrefs::MyPrefs()
     : main_box(Gtk::ORIENTATION_VERTICAL, 10),
       views_box(Gtk::ORIENTATION_HORIZONTAL, 5),
-      btnbox(Gtk::ORIENTATION_HORIZONTAL, 5)
+      btnbox(Gtk::ORIENTATION_HORIZONTAL, 5),
+      width(1024),
+      height(576)
 {
+    /*Step 1: Initalize widget that without Gtk::Builder*/
+
     // Initalize Window
     set_title("Window Preferences");
     set_default_size(800, 450);
@@ -96,10 +101,35 @@ MyPrefs::MyPrefs()
     main_box.set_margin_start(margin_value);
     main_box.set_margin_end(margin_value);
 
-    //Get Widgets for multi pages
+    /*Step 2: Initalize widgets from glade xml file ('.ui' file)*/
+
+    // Get Widgets for multi pages
     stackbuilder = Gtk::Builder::create_from_resource("/org/gtk/daleclack/prefs_stack.ui");
-    stackbuilder->get_widget("stack_box",stack_box);
-    stackbuilder->get_widget("back_page",back_page);
+    stackbuilder->get_widget("stack_box", stack_box);
+    stackbuilder->get_widget("back_page", back_page);
+    stackbuilder->get_widget("combo_default", combo_default);
+    stackbuilder->get_widget("radio_default", radio_default);
+    stackbuilder->get_widget("radio_custom", radio_custom);
+    stackbuilder->get_widget("spin_width", spin_width);
+    stackbuilder->get_widget("spin_height", spin_height);
+    stackbuilder->get_widget("btnapply", btnapply);
+    stackbuilder->get_widget("btnGet",btnGet);
+    stackbuilder->get_widget("label_size",label_size);
+
+    // Initalize radio buttons
+    radio_default->set_active();
+    radio_default->signal_toggled().connect(sigc::mem_fun(*this, &MyPrefs::radiobutton_toggled));
+    radio_custom->signal_toggled().connect(sigc::mem_fun(*this, &MyPrefs::radiobutton_toggled));
+
+    // Initalize other widgets
+    btnapply->signal_clicked().connect(sigc::mem_fun(*this, &MyPrefs::btnapply_clicked));
+    btnGet->signal_clicked().connect(sigc::mem_fun(*this,&MyPrefs::btnGet_clicked));
+
+    // Initalize Label
+    load_winsize_config();
+    char * size_str = g_strdup_printf("Current Config: %d x %d", width, height);
+    label_size->set_label(size_str);
+    g_free(size_str);
 
     back_page->pack_start(main_box);
     add(*stack_box);
@@ -295,7 +325,7 @@ void MyPrefs::images_view_changed()
         auto row = *(image_selection->get_selected());
         if (row[n_columns.m_col_internal])
         {
-            std::string path = row[n_columns.m_col_path];
+            path = row[n_columns.m_col_path];
             switch (path[1])
             {
             case '1':
@@ -308,8 +338,8 @@ void MyPrefs::images_view_changed()
         }
         else
         {
-            std::string path = row[n_columns.m_col_path];
-            set_background_file(path);
+            path = row[n_columns.m_col_path];
+            set_background_file();
         }
     }
 }
@@ -318,23 +348,108 @@ void MyPrefs::set_background_internal(const char *const *data)
 {
     // Set a internal background
     auto pixbuf = Gdk::Pixbuf::create_from_xpm_data(data);
-    auto sized = pixbuf->scale_simple(1024, 576, Gdk::INTERP_BILINEAR);
+    auto sized = pixbuf->scale_simple(width, height, Gdk::INTERP_BILINEAR);
     gtk_image_set_from_pixbuf(background1->gobj(), sized->gobj());
     pixbuf.reset();
     sized.reset();
+    background_internal = true;
 }
 
-void MyPrefs::set_background_file(std::string &path)
+void MyPrefs::set_background_file()
 {
     // Set Background from a file
     auto pixbuf = Gdk::Pixbuf::create_from_file(path);
-    auto sized = pixbuf->scale_simple(1024, 576, Gdk::INTERP_BILINEAR);
+    auto sized = pixbuf->scale_simple(width, height, Gdk::INTERP_BILINEAR);
     gtk_image_set_from_pixbuf(background1->gobj(), sized->gobj());
     pixbuf.reset();
     sized.reset();
+    background_internal = false;
 }
+
+void MyPrefs::update_background_size()
+{}
 
 void MyPrefs::set_background(Gtk::Image *back)
 {
     background1 = back;
+}
+
+void MyPrefs::radiobutton_toggled()
+{
+    // Change sensitive state of buttons
+    bool mode = radio_default->get_active();
+    combo_default->set_sensitive(mode);
+    spin_height->set_sensitive(!mode);
+    spin_width->set_sensitive(!mode);
+    btnGet->set_sensitive(!mode);
+}
+
+void MyPrefs::btnapply_clicked()
+{
+    // Get Config
+    if (radio_default->get_active())
+    {
+        int mode = combo_default->get_active_row_number();
+        switch (mode)
+        {
+        case 0:
+            width = 640;
+            height = 360;
+            break;
+        case 1:
+            width = 800;
+            height = 576;
+            break;
+        case 2:
+            width = 1024;
+            height = 576;
+            break;
+        case 3:
+            width = 1280;
+            height = 720;
+            break;
+        }
+    }
+    else
+    {
+        width = spin_width->get_value_as_int();
+        height = spin_height->get_value_as_int();
+    }
+
+    // Open the file for configs
+    std::fstream outfile;
+    outfile.open("config", std::ios_base::out);
+    if (outfile.is_open())
+    {
+        outfile << "width=" << width << std::endl;
+        outfile << "height=" << height << std::endl;
+        outfile.close();
+    }
+}
+
+void MyPrefs::btnGet_clicked()
+{
+    //Get Current Window Size
+    width = background1->get_width();
+    height = background1->get_height();
+    spin_width->set_value(width);
+    spin_height->set_value(height);
+}
+
+void MyPrefs::load_winsize_config(){
+    std::string height_str, width_str;
+
+    // Read values from a file
+    if (readCfgFile("config", "width", width_str) && readCfgFile("config", "height", height_str))
+    {
+        height = atoi(height_str.c_str());
+        width = atoi(width_str.c_str());
+    }
+}
+
+void MyPrefs::get_winsize_config(int &width1, int &height1)
+{
+    // Apply Config
+    width1 = width;
+    height1 = height;
 }

@@ -8,6 +8,9 @@ class MyPrefs : public Gtk::Window
 public:
     MyPrefs();
     void set_background(Gtk::Image *back);
+    void load_winsize_config();
+    void get_winsize_config(int &width1,int &height1);
+    void update_background_size();
 
 protected:
     class ModelColumns : public Gtk::TreeModelColumnRecord
@@ -32,12 +35,20 @@ protected:
     bool has_selection;
 
 private:
-    // Widget for parent window
+    // Background widget and properties
+    int width, height;
     Gtk::Image *background1;
+    std::string path;
+    bool background_internal;
 
     //Page switcher and another page
     Glib::RefPtr<Gtk::Builder> stackbuilder;
-    Gtk::Box *stack_box, *back_page;
+    Gtk::Box *stack_box, *back_page, *winsize_page;
+    Gtk::RadioButton *radio_default, *radio_custom;
+    Gtk::ComboBoxText *combo_default;
+    Gtk::SpinButton *spin_width, *spin_height;
+    Gtk::Button *btnapply, *btnGet;
+    Gtk::Label *label_size;
 
     // Child Widgets
     Gtk::TreeView folders_view, images_view;
@@ -62,5 +73,8 @@ private:
     void default_folders_view();
     void update_images_view(std::string &folder_path);
     void set_background_internal(const char *const *data);
-    void set_background_file(std::string &path);
+    void set_background_file();
+    void radiobutton_toggled();
+    void btnapply_clicked();
+    void btnGet_clicked();
 };

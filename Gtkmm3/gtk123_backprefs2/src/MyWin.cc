@@ -3,14 +3,17 @@
 
 MyWin::MyWin()
 {
+    int width, height;
+
     // Initalize Window
     set_icon_name("org.gtk.daleclack");
-    set_default_size(1024, 576);
     set_title("Background Preferences Test");
+
+    prefs_win.get_winsize_config(width, height);
 
     // Add Background
     auto pixbuf = Gdk::Pixbuf::create_from_xpm_data(winpe);
-    auto sized = pixbuf->scale_simple(1024, 576, Gdk::INTERP_BILINEAR);
+    auto sized = pixbuf->scale_simple(width, height, Gdk::INTERP_BILINEAR);
     gtk_image_set_from_pixbuf(m_back.gobj(), sized->gobj());
     pixbuf.reset();
     sized.reset();
@@ -24,6 +27,8 @@ MyWin::MyWin()
     btnback.signal_clicked().connect(sigc::mem_fun(*this, &MyWin::btnback_clicked));
 
     // Add widgets
+    m_back.set_hexpand();
+    m_back.set_vexpand();
     m_overlay.add(m_back);
     add(m_overlay);
 
