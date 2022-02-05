@@ -1,0 +1,9 @@
+/*
+css style for launchpad
+*/
+
+@import url("resource://org/gtk/daleclack/reset.css");
+
+grid{
+	background-color:alpha(black,0.7);
+}
