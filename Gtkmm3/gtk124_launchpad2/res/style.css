@@ -5,5 +5,5 @@ css style for launchpad
 @import url("resource://org/gtk/daleclack/reset.css");
 
 grid{
-	background-color:alpha(black,0.7);
+	background-color:alpha(rgb(49, 48, 48),0.3);
 }
