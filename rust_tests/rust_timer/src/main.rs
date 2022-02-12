@@ -1,3 +1,6 @@
+use chrono::prelude::*;
+
 fn main() {
-    println!("Hello, world!");
+    let local = Local::now();
+    println!("{} {} {}",local.year(),local.month(),local.day());
 }
