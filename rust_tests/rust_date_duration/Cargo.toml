@@ -1,5 +1,5 @@
 [package]
-name = "rust-timer"
+name = "rust_date_duration"
 version = "0.1.0"
 edition = "2021"
 
