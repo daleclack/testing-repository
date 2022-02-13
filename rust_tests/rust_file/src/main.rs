@@ -1,7 +1,9 @@
 use chrono::*;
-use std::fs;
+use std::{fs, str::FromStr};
 
 fn main() {
+    let version = String::from_str("7.2").unwrap();
+    //version = fs::read_to_string("config").expect("Fail to Open the file!\n");
     
     // Get current time
     let now = Utc::now();
@@ -14,10 +16,11 @@ fn main() {
 
     // Just print it on terminal
     println!(
-        "{}-{}-{} 7.2.{}",
+        "{}-{}-{} {}.{}",
         local.year(),
         local.month(),
         local.day(),
+        version,
         diff.num_days()
     );
 
@@ -28,10 +31,10 @@ fn main() {
         + "-"
         + &local.day().to_string()
         + " "
-        + "7.2."
+        + &version
         + &diff.num_days().to_string()
         + "\n";
 
     // Print the content to a file
-    fs::write("xe-7.x", contents).expect("Fail to write the file!");
+    fs::write("xe-7.x", contents).expect("Fail to write the file!\n");
 }
