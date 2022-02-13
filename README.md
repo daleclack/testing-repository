@@ -2,9 +2,11 @@
 
 ## A testing repository
 
-[Experimental]: The rust programming language is imported for some codes
+\[Experimental]:  1. The rust programming language is imported for some codes
 
-[News]: After gtk112 and gtk113, the submodule GCR_CMake is imported
+2. A test of building Xe Release with Rust is going on.
+
+\[News]: After gtk112 and gtk113, the submodule GCR_CMake is imported
 
 Thanks for the project author https://github.com/Makman2/GCR_CMake
 
@@ -66,6 +68,7 @@ int main(int argc,char ** argv){
 ```
 
 Java version
+
 ```java
 public class Args{
     public static void main(String[] args){ 
@@ -75,8 +78,9 @@ public class Args{
 ```
 
 Rust Version
+
 ```rust
 fn main(){
-    
+
 }
 ```
