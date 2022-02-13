@@ -77,7 +77,7 @@ public class Args{
 }
 ```
 
-Rust Version
+Rust Version ( Currently only support Linux or macOS )
 
 ```rust
 use std::env;
@@ -95,5 +95,4 @@ fn main() {
     // Print the path of executive
     println!("{}", path);
 }
-
 ```
