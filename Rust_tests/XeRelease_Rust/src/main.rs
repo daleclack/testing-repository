@@ -10,14 +10,20 @@ fn main() {
     println!("1.longterm;2.stable;3.develop");
 
     // Input mode selection
-    let mut string = String::new();
-    io::stdin().read_line(&mut string).expect("Read Error!");
-    let index: usize = string.trim().parse().unwrap();
-
-    funcs[index]();
+    let mut string1 = String::new();
+    io::stdin().read_line(&mut string1).expect("Read Error!");
+    if !string1.trim().is_empty(){
+        // Get index for mode
+        let index: usize = string1.trim().parse().unwrap();
+        funcs[index]();
+    }else{
+        println!("Please input a vaild mode index!");
+    }
+    
 }
 
 fn about() {
+    // Print Help Information
     println!("XeRelease Rust Edition by daleclack");
 }
 
