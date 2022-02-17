@@ -1,5 +1,5 @@
 [package]
-name = "XeRelease_Rust"
+name = "xerelease_rust"
 version = "0.1.0"
 edition = "2021"
 
