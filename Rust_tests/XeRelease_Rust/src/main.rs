@@ -12,14 +12,19 @@ fn main() {
     // Input mode selection
     let mut string1 = String::new();
     io::stdin().read_line(&mut string1).expect("Read Error!");
-    if !string1.trim().is_empty(){
-        // Get index for mode
-        let index: usize = string1.trim().parse().unwrap();
+    let index_string = string1.trim();
+    if !index_string.is_empty()
+        && (index_string == "0"
+            || index_string == "1"
+            || index_string == "2"
+            || index_string == "3")
+    {
+        // Get index for mode5
+        let index: usize = index_string.parse::<usize>().unwrap();
         funcs[index]();
-    }else{
+    } else {
         println!("Please input a vaild mode index!");
     }
-    
 }
 
 fn about() {
