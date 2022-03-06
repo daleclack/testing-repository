@@ -1,0 +1,43 @@
+#: MyPrefs.cc:20 MyWin.cc:22
+msgid "Window Preferences"
+msgstr ""
+
+#: MyPrefs.cc:52
+msgid "Default Backgrounds"
+msgstr ""
+
+#: MyPrefs.cc:58
+msgid "User's Home"
+msgstr ""
+
+#: MyPrefs.cc:64
+msgid "User's Pictures Directory"
+msgstr ""
+
+#: MyPrefs.cc:70
+msgid "Name"
+msgstr ""
+
+#: MyPrefs.cc:75
+msgid "Images"
+msgstr ""
+
+#: MyPrefs.cc:131
+msgid "Current Config"
+msgstr ""
+
+#: MyPrefs.cc:144
+msgid "Add a folder"
+msgstr ""
+
+#: MyPrefs.cc:145
+msgid "OK"
+msgstr ""
+
+#: MyPrefs.cc:145
+msgid "Cancel"
+msgstr ""
+
+#: MyWin.cc:10
+msgid "Background Preferences Test"
+msgstr ""
