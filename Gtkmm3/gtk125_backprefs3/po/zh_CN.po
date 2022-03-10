@@ -1,0 +1,68 @@
+#: MyPrefs.cc:20 MyWin.cc:22
+msgid "Window Preferences"
+msgstr "首选项"
+
+#: MyPrefs.cc:52
+msgid "Default Backgrounds"
+msgstr "默认壁纸"
+
+#: MyPrefs.cc:58
+msgid "User's Home"
+msgstr "主目录"
+
+#: MyPrefs.cc:64
+msgid "User's Pictures Directory"
+msgstr "图片"
+
+#: MyPrefs.cc:70
+msgid "Name"
+msgstr "名称"
+
+#: MyPrefs.cc:75
+msgid "Images"
+msgstr "图像"
+
+#: MyPrefs.cc:131
+msgid "Current Config"
+msgstr "当前设置"
+
+#: MyPrefs.cc:144
+msgid "Add a folder"
+msgstr "添加文件夹"
+
+#: MyPrefs.cc:145
+msgid "OK"
+msgstr "确定"
+
+#: MyPrefs.cc:145
+msgid "Cancel"
+msgstr "取消"
+
+#: MyWin.cc:10
+msgid "Background Preferences Test"
+msgstr ""
+
+#: prefs_stack.ui:57
+msgid "Background Preferences"
+msgstr "背景首选项"
+
+#: prefs_stack.ui:120
+msgid "Use default window size"
+msgstr "使用默认窗口大小"
+
+#: prefs_stack.ui:136
+msgid "User defined window size"
+msgstr "用户自定义窗口大小"
+
+#: prefs_stack.ui:231
+msgid "Apply"
+msgstr "应用"
+
+#: prefs_stack.ui:246
+msgid "Get Current"
+msgstr "获取当前配置"
+
+#: prefs_stack.ui:282
+msgid "Window Size Config"
+msgstr "窗口大小首选项"
+

@@ -1,0 +1,5 @@
+# List of source files containing translatable strings.
+# Please keep this file in alphabetical order.
+res/prefs_stack.ui
+src/MyPrefs.cc
+src/MyWin.cc

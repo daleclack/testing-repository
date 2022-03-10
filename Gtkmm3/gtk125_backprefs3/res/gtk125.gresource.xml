@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="org/gtk/daleclack">
+        <file>icons/16x16/actions/list-add.svg</file>
+        <file>icons/16x16/actions/list-remove.svg</file>
+        <file>icons/scalable/status/display_prefs.svg</file>
+        <file>folder-images.svg</file>
+        <file>folder.svg</file>
+        <file>image_file.svg</file>
+        <file preprocess="xml-stripblanks">prefs_stack.ui</file>
+    </gresource>
+</gresources>
