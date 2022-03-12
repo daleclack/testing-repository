@@ -26,7 +26,7 @@ find_package (Gettext REQUIRED)
 set(PO_DIR ${CMAKE_BINARY_DIR}/po/zh_CN/LC_MESSAGES)
 
 #Source files
-set(SOURCE_FILE src/main.cc src/MyWin.cc)
+set(SOURCE_FILE src/main.cc src/MyWin.cc src/ColorPicker.cc)
 
 #Compile Resource
 

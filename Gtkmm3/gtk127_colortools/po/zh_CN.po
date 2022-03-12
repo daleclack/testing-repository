@@ -53,3 +53,9 @@ msgstr "图像文件"
 #: src/MyWin.cc:172
 msgid "Any Files"
 msgstr "所有文件"
+
+msgid "Color Panel"
+msgstr "调色板"
+
+msgid "Color Reference"
+msgstr "颜色参考"

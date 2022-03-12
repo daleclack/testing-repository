@@ -10,6 +10,6 @@ int main(int argc,char ** argv){
 
     // Create the application
     auto app = Gtk::Application::create(argc,argv,"org.gtk.daleclack");
-    MyWin window;
-    return app->run(window);
+    auto window = MyWin::create();
+    return app->run(*window);
 }
