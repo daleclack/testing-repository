@@ -58,17 +58,20 @@ if(WIN32)
         OBJECT_DEPENDS ${PROJECT_SOURCE_DIR}/../icon.ico
         )
 	add_executable(${PROJECT_NAME} WIN32 ${app_WINRC} ${SOURCE_FILE} ${RESOURCE_FILE})
+    add_custom_command( TARGET ${PROJECT_NAME} 
+                        COMMAND echo * > ${CMAKE_BINARY_DIR}/.gitignore
+                        COMMAND echo **/* > ${CMAKE_BINARY_DIR}/.hgignore)
 else()
 	add_executable(${PROJECT_NAME} ${SOURCE_FILE} ${RESOURCE_FILE})
-
+    add_custom_command( TARGET ${PROJECT_NAME}
+                        COMMAND echo \"*\" > ${CMAKE_BINARY_DIR}/.gitignore
+                        COMMAND echo \"**/*\" > ${CMAKE_BINARY_DIR}/.hgignore)   
 endif(WIN32)
 
 #Add command to generate .gitignore and .mo files
-add_custom_command(TARGET ${PROJECT_NAME} 
-                   COMMAND echo \"*\" > ${CMAKE_BINARY_DIR}/.gitignore
-                   COMMAND echo \"**/*\" > ${CMAKE_BINARY_DIR}/.hgignore
-                   COMMAND mkdir -p ${PO_DIR}
-                   COMMAND ${GETTEXT_MSGFMT_EXECUTABLE} ${CMAKE_SOURCE_DIR}/po/zh_CN.po -o ${PO_DIR}/${PROJECT_NAME}.mo)
+add_custom_command( TARGET ${PROJECT_NAME} 
+                    COMMAND mkdir -p ${PO_DIR}
+                    COMMAND ${GETTEXT_MSGFMT_EXECUTABLE} ${CMAKE_SOURCE_DIR}/po/zh_CN.po -o ${PO_DIR}/${PROJECT_NAME}.mo)
 
 SET (CMAKE_EXTRA_CXX_FLAGS ${GTKMM3_CFLAGS_OTHER})
 target_link_libraries (${PROJECT_NAME} ${GTKMM3_LIBRARIES} -lpthread)
