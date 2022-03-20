@@ -10,13 +10,13 @@ ColorPicker::ColorPicker()
       btnbox(Gtk::ORIENTATION_VERTICAL, 5),
       frame_pos(_("Position")),
       frame_css_rgba(_("rgb()/rgba() for css3")),
-      frame_rgba_str(_("RGB(A) Code")),
+      frame_rgba_str(_("(A)RGB Code")),
       label_pos("(640,480)"),
       label_css_rgba("rgba(255,255,255,255)"),
       label_test(_("Color Settings And Position info")),
       label_color_str("#00000000"),
       btn_css_code(_("Copy Css3 Code")),
-      btn_color_str(_("Copy RGB(A) String")),
+      btn_color_str(_("Copy (A)RGB String")),
       btn_select(_("Pick Color"))
 {
     background.set_size_request(640, 480);
@@ -132,7 +132,7 @@ void ColorPicker::get_pixel_color(int x, int y)
     // If the image has a alpha value, use RGBA Code, else use RGB Code
     if (sized->get_has_alpha())
     {
-        color_str = Glib::ustring(g_strdup_printf("#%02X%02X%02X%02X", red, blue, green, alpha));
+        color_str = Glib::ustring(g_strdup_printf("#%02X%02X%02X%02X", alpha, red, blue, green));
     }
     else
     {

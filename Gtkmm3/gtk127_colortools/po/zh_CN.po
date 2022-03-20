@@ -11,8 +11,8 @@ msgid "rgb()/rgba() for css3"
 msgstr "用于css3的rgb()/rgba()代码"
 
 #: src/MyWin.cc:13
-msgid "RGB(A) Code"
-msgstr "RGB(A)代码"
+msgid "(A)RGB Code"
+msgstr "(A)RGB代码"
 
 #: src/MyWin.cc:16
 msgid "Color Settings And Position info"
@@ -23,8 +23,8 @@ msgid "Copy Css3 Code"
 msgstr "复制css3代码"
 
 #: src/MyWin.cc:19
-msgid "Copy RGB(A) String"
-msgstr "复制RGB(A)代码"
+msgid "Copy (A)RGB String"
+msgstr "复制(A)RGB代码"
 
 #: src/MyWin.cc:20
 msgid "Pick Color"
@@ -59,3 +59,9 @@ msgstr "调色板"
 
 msgid "Color Reference"
 msgstr "颜色参考"
+
+msgid "Color:"
+msgstr "颜色:"
+
+msgid "Copy Color Code"
+msgstr "复制颜色代码"

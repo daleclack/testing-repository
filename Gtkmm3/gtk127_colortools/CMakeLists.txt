@@ -31,6 +31,7 @@ set(SOURCE_FILE src/main.cc src/MyWin.cc src/ColorPicker.cc src/ColorPanel.cc sr
 #Compile Resource
 
 set(RESOURCE_LIST
+    colorpanel.ui
     window.ui)
 
 compile_gresources(RESOURCE_FILE

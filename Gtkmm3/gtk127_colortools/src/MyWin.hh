@@ -3,6 +3,7 @@
 #include <gtkmm.h>
 #include <glibmm/i18n.h>
 #include "ColorPicker.hh"
+#include "ColorPanel.hh"
 
 class MyWin : public Gtk::Window
 {
@@ -18,4 +19,7 @@ private:
 
     // Color Picker
     ColorPicker color_picker;
+
+    // Color Panel
+    ColorPanel * color_panel;
 };
