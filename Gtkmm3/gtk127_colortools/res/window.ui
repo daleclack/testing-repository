@@ -153,7 +153,7 @@
                             <property name="can-focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkDrawingArea">
+                              <object class="GtkDrawingArea" id="drawarea_lime">
                                 <property name="width-request">0</property>
                                 <property name="height-request">30</property>
                                 <property name="visible">True</property>
@@ -169,7 +169,7 @@
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">Gray</property>
+                                <property name="label" translatable="yes">Lime</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -200,7 +200,7 @@
                             <property name="can-focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkDrawingArea">
+                              <object class="GtkDrawingArea" id="drawarea_pink">
                                 <property name="width-request">0</property>
                                 <property name="height-request">30</property>
                                 <property name="visible">True</property>
@@ -216,7 +216,7 @@
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">Teal</property>
+                                <property name="label" translatable="yes">Pink</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -247,7 +247,7 @@
                             <property name="can-focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkDrawingArea">
+                              <object class="GtkDrawingArea" id="drawarea_amber">
                                 <property name="width-request">0</property>
                                 <property name="height-request">30</property>
                                 <property name="visible">True</property>
@@ -294,7 +294,7 @@
                             <property name="can-focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkDrawingArea">
+                              <object class="GtkDrawingArea" id="drawarea_purple">
                                 <property name="width-request">0</property>
                                 <property name="height-request">30</property>
                                 <property name="visible">True</property>
@@ -310,7 +310,7 @@
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">Cyan</property>
+                                <property name="label" translatable="yes">Purple</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -341,7 +341,7 @@
                             <property name="can-focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkDrawingArea">
+                              <object class="GtkDrawingArea" id="drawarea_grey">
                                 <property name="width-request">0</property>
                                 <property name="height-request">30</property>
                                 <property name="visible">True</property>
@@ -357,7 +357,7 @@
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">Lime</property>
+                                <property name="label" translatable="yes">Grey</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -388,7 +388,7 @@
                             <property name="can-focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkDrawingArea">
+                              <object class="GtkDrawingArea" id="drawarea_green">
                                 <property name="width-request">0</property>
                                 <property name="height-request">30</property>
                                 <property name="visible">True</property>
@@ -404,7 +404,7 @@
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">Orange</property>
+                                <property name="label" translatable="yes">Green</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -435,7 +435,7 @@
                             <property name="can-focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkDrawingArea">
+                              <object class="GtkDrawingArea" id="drawarea_teal">
                                 <property name="width-request">0</property>
                                 <property name="height-request">30</property>
                                 <property name="visible">True</property>
@@ -451,7 +451,7 @@
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">Red</property>
+                                <property name="label" translatable="yes">Teal</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -482,7 +482,7 @@
                             <property name="can-focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkDrawingArea">
+                              <object class="GtkDrawingArea" id="drawarea_lightblue">
                                 <property name="width-request">0</property>
                                 <property name="height-request">30</property>
                                 <property name="visible">True</property>
@@ -498,7 +498,7 @@
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">Purple</property>
+                                <property name="label" translatable="yes">Light Blue</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -529,7 +529,7 @@
                             <property name="can-focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkDrawingArea">
+                              <object class="GtkDrawingArea" id="drawarea_deep_orange">
                                 <property name="width-request">0</property>
                                 <property name="height-request">30</property>
                                 <property name="visible">True</property>
@@ -545,7 +545,7 @@
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">Deep Purple</property>
+                                <property name="label" translatable="yes">Deep Orange</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -576,7 +576,7 @@
                             <property name="can-focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkDrawingArea">
+                              <object class="GtkDrawingArea" id="drewarea_deep_purple">
                                 <property name="width-request">0</property>
                                 <property name="height-request">30</property>
                                 <property name="visible">True</property>
@@ -592,7 +592,7 @@
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">Deep Orange</property>
+                                <property name="label" translatable="yes">Deep Purple</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -623,7 +623,7 @@
                             <property name="can-focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkDrawingArea">
+                              <object class="GtkDrawingArea" id="drawarea_orange">
                                 <property name="width-request">0</property>
                                 <property name="height-request">30</property>
                                 <property name="visible">True</property>
@@ -639,7 +639,7 @@
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">Light Blue</property>
+                                <property name="label" translatable="yes">Orange</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -670,7 +670,7 @@
                             <property name="can-focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkDrawingArea">
+                              <object class="GtkDrawingArea" id="drawarea_red">
                                 <property name="width-request">0</property>
                                 <property name="height-request">30</property>
                                 <property name="visible">True</property>
@@ -686,7 +686,7 @@
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">Light Blue</property>
+                                <property name="label" translatable="yes">Red</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -717,7 +717,7 @@
                             <property name="can-focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkDrawingArea">
+                              <object class="GtkDrawingArea" id="drawarea_blue_grey">
                                 <property name="width-request">0</property>
                                 <property name="height-request">30</property>
                                 <property name="visible">True</property>
@@ -733,7 +733,7 @@
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">Pink</property>
+                                <property name="label" translatable="yes">Blue Grey</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -764,7 +764,54 @@
                             <property name="can-focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkDrawingArea">
+                              <object class="GtkDrawingArea" id="drawarea_indigo">
+                                <property name="width-request">0</property>
+                                <property name="height-request">30</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes">Indigo</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">13</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="focus-on-click">False</property>
+                        <property name="receives-default">True</property>
+                        <property name="relief">none</property>
+                        <property name="popover">popover1</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkDrawingArea" id="drawarea_blue">
                                 <property name="width-request">0</property>
                                 <property name="height-request">30</property>
                                 <property name="visible">True</property>
@@ -794,23 +841,196 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">13</property>
+                        <property name="position">14</property>
                       </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <object class="GtkMenuButton">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="focus-on-click">False</property>
+                        <property name="receives-default">True</property>
+                        <property name="relief">none</property>
+                        <property name="popover">popover1</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkDrawingArea" id="drawarea_brown">
+                                <property name="width-request">0</property>
+                                <property name="height-request">30</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes">Brown</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">15</property>
+                      </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <object class="GtkMenuButton">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="focus-on-click">False</property>
+                        <property name="receives-default">True</property>
+                        <property name="relief">none</property>
+                        <property name="popover">popover1</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkDrawingArea" id="drawarea_yellow">
+                                <property name="width-request">0</property>
+                                <property name="height-request">30</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes">Yellow</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">16</property>
+                      </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <object class="GtkMenuButton">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="focus-on-click">False</property>
+                        <property name="receives-default">True</property>
+                        <property name="relief">none</property>
+                        <property name="popover">popover1</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkDrawingArea" id="drawarea_light_green">
+                                <property name="width-request">0</property>
+                                <property name="height-request">30</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes">Light Green</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">17</property>
+                      </packing>
                     </child>
                     <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
+                      <object class="GtkMenuButton">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="focus-on-click">False</property>
+                        <property name="receives-default">True</property>
+                        <property name="relief">none</property>
+                        <property name="popover">popover1</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkDrawingArea" id="drawarea_cyan">
+                                <property name="width-request">0</property>
+                                <property name="height-request">30</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes">Cyan</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">18</property>
+                      </packing>
                     </child>
                     <child>
                       <placeholder/>
