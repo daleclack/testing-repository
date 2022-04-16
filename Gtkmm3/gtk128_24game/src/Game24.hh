@@ -10,7 +10,7 @@ typedef std::string string;
 class Game24
 {
 public:
-    void startgame(string user_result);
+    bool startgame(string user_result);
     void getnumbers();
     char numbers_char[20];
 

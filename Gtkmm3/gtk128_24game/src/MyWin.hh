@@ -15,6 +15,9 @@ private:
 
     // 24-Game Class
     Game24 main_game;
+    int pos;
+    bool focused,winned;
+    Glib::ustring tmp;
 
     // Child widgets
     Gtk::Entry *entry_ans;
@@ -25,4 +28,5 @@ private:
     void btns_clicked(Gtk::Button * button);
     void btnstart_clicked();
     void btncheck_clicked();
+    void entry_ans_focus();
 };

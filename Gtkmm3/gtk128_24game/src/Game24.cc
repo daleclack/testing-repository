@@ -8,15 +8,17 @@ static double randnum(int begin = 0, int end = 1)
 }
 
 // The Game Class
-void Game24::startgame(string user_result)
+bool Game24::startgame(string user_result)
 {
     bool winned = false;
 
     // Format result number
-    if (user_result[user_result.length()] != ')' || user_result[0] != '(')
+    if (user_result[user_result.length()-1] != ')' || user_result[0] != '(')
     {
         user_result = '(' + user_result + ')';
     }
+
+    std::cout<<user_result<<std::endl;
 
     // Check user input and the results
     for (std::vector<string>::iterator it = result_strings.begin(); it != result_strings.end(); it++)
@@ -38,6 +40,8 @@ void Game24::startgame(string user_result)
     {
         std::cout << "Lost" << std::endl;
     }
+
+    return winned;
 }
 
 void Game24::getnumbers()
