@@ -6,6 +6,7 @@ MyWin::MyWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glad
 {
     // Get Widgets
     ref_builder->get_widget("label_numbers",label_numbers);
+    ref_builder->get_widget("entry_ans",entry_ans);
     ref_builder->get_widget("btnstart",btnstart);
     ref_builder->get_widget("btncheck",btncheck);
     ref_builder->get_widget("btnexit",btnexit);
@@ -37,9 +38,9 @@ MyWin::MyWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glad
 
 void MyWin::btns_clicked(Gtk::Button *button){
     // Get Original text and add number from button
-    //Glib::ustring text = entry_ans->get_text();
+    Glib::ustring text = entry_ans->get_text();
     Glib::ustring label = button->get_label();
-    //entry_ans->set_text(text+label);
+    entry_ans->set_text(text+label);
 }
 
 void MyWin::btnstart_clicked(){
