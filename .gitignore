@@ -43,8 +43,9 @@ gschemas.compiled
 #backend source
 backend/*
 
-#The binary
+#The binary files
 FiveRow
+24game
 
 # Prerequisites
 *.d
