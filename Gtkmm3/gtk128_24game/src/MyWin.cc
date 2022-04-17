@@ -9,7 +9,9 @@ MyWin::MyWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glad
     ref_builder->get_widget("label_numbers", label_numbers);
     ref_builder->get_widget("entry_ans", entry_ans);
     ref_builder->get_widget("btnstart", btnstart);
+    ref_builder->get_widget("btnnext",btnnext);
     ref_builder->get_widget("btncheck", btncheck);
+    ref_builder->get_widget("btnclear",btnclear);
     ref_builder->get_widget("btnexit", btnexit);
     ref_builder->get_widget("btn0", btns[0]);
     ref_builder->get_widget("btn1", btns[1]);
@@ -31,7 +33,9 @@ MyWin::MyWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glad
     // Link Signals
     btnstart->signal_clicked().connect(sigc::mem_fun(*this, &MyWin::btnstart_clicked));
     btnexit->signal_clicked().connect(sigc::mem_fun(*this, &MyWin::hide));
+    btnnext->signal_clicked().connect(sigc::mem_fun(*this, &MyWin::btnnext_clicked));
     btncheck->signal_clicked().connect(sigc::mem_fun(*this, &MyWin::btncheck_clicked));
+    btnclear->signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnclear_clicked));
     for (int i = 0; i < 16; i++)
     {
         btns[i]->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &MyWin::btns_clicked), btns[i]));
@@ -77,14 +81,17 @@ void MyWin::btnstart_clicked()
     {
         label_numbers->set_label(tmp);
     }
+
+    // Save the numbers
+    tmp = label_numbers->get_label();
 }
 
 void MyWin::btncheck_clicked()
 {
     // Check Answer
     Glib::ustring answer = entry_ans->get_text();
-    tmp = label_numbers->get_label();
-    if (main_game.startgame(std::string(answer.c_str())))
+    winned = main_game.startgame(std::string(answer.c_str()));
+    if (winned)
     {
         label_numbers->set_label("You Winned!");
     }
@@ -92,6 +99,16 @@ void MyWin::btncheck_clicked()
     {
         label_numbers->set_label("You Lost!");
     }
+}
+
+void MyWin::btnnext_clicked(){
+    main_game.getnumbers();
+    label_numbers->set_label(main_game.numbers_char);
+}
+
+void MyWin::btnclear_clicked(){
+    // Clear the text
+    entry_ans->set_text("");
 }
 
 MyWin *MyWin::create()

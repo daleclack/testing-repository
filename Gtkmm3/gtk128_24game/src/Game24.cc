@@ -13,25 +13,38 @@ bool Game24::startgame(string user_result)
     bool winned = false;
 
     // Format result number
-    if (user_result[user_result.length()-1] != ')' || user_result[0] != '(')
+    if (user_result != "")
     {
-        user_result = '(' + user_result + ')';
+        if (user_result[user_result.length() - 1] != ')' || user_result[0] != '(')
+        {
+            user_result = '(' + user_result + ')';
+        }
     }
 
-    std::cout<<user_result<<std::endl;
+    std::cout << user_result << std::endl;
 
     // Check user input and the results
-    for (std::vector<string>::iterator it = result_strings.begin(); it != result_strings.end(); it++)
+    if (count > 0)
     {
-        if (*it == user_result)
+        for (std::vector<string>::iterator it = result_strings.begin(); it != result_strings.end(); it++)
         {
-            std::cout << "Winned!" << std::endl;
-            winned = true;
-            break;
+            if (*it == user_result)
+            {
+                std::cout << "Winned!" << std::endl;
+                winned = true;
+                break;
+            }
+            else
+            {
+                continue;
+            }
         }
-        else
+    }
+    else
+    {
+        if (user_result == "(None)")
         {
-            continue;
+            winned = true;
         }
     }
 
@@ -51,7 +64,7 @@ void Game24::getnumbers()
     {
         // Get Number and output
         number[i] = randnum(1, 13);
-        std::cout << number[i] << " ";
+        // std::cout << number[i] << " ";
 
         // Process number to string for display
         switch ((int)number[i])
@@ -72,11 +85,11 @@ void Game24::getnumbers()
             result[i] = '0' + number[i];
         }
     }
-    std::cout << std::endl;
+    // std::cout << std::endl;
 
     // Get the algorithm that can get the result
     F(n);
-    std::cout << "Has" << count << "Results" << std::endl;
+    // std::cout << "Has" << count << "Results" << std::endl;
     sprintf(numbers_char, "%d %d %d %d", (int)number[0], (int)number[1], (int)number[2], (int)number[3]);
 }
 
@@ -87,7 +100,7 @@ void Game24::F(int n)
     {
         if (number[0] == 24)
         {
-            std::cout << result[0] << std::endl;
+            // std::cout << result[0] << std::endl;
             result_strings.push_back(result[0]);
             count++;
         }
