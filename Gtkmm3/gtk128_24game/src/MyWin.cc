@@ -5,6 +5,8 @@ MyWin::MyWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glad
       ref_builder(ref_Glade),
       winned(true)
 {
+    set_icon_name("24game");
+
     // Get Widgets
     ref_builder->get_widget("label_numbers", label_numbers);
     ref_builder->get_widget("entry_ans", entry_ans);

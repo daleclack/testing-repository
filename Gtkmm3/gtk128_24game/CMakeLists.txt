@@ -31,6 +31,7 @@ set(SOURCE_FILE src/main.cc src/MyWin.cc src/Game24.cc)
 #Compile Resource
 
 set(RESOURCE_LIST
+    icons/scalable/status/24game.svg
     window.ui)
 
 compile_gresources(RESOURCE_FILE
