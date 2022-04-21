@@ -15,7 +15,7 @@ bool Game24::startgame(string user_result)
     // Format result number
     if (user_result != "")
     {
-        if (user_result[user_result.length() - 1] != ')' || user_result[0] != '(')
+        if (user_result.length() < (*(result_strings.begin())).length())
         {
             user_result = '(' + user_result + ')';
         }
