@@ -2,14 +2,22 @@
 
 #include <gtkmm.h>
 
+enum class DrawMode{
+    Default,
+    Line
+};
+
 class Drawing : public Gtk::Window
 {
+    // Drawing Mode
+    DrawMode drawing_mode;
+
     // Child Widgets
     Gtk::DrawingArea draw_area;
     Gtk::ColorButton color_btn;
     Gtk::Label main_label, size_label;
     Gtk::Box main_box, btn_box;
-    Gtk::Button btn_clear, btn_exit;
+    Gtk::Button btn_line, btn_clear, btn_exit;
     Gtk::Scale scale;
 
     // Color Setting

@@ -5,6 +5,7 @@ Drawing::Drawing()
       size_label("Pen Size"),
       main_box(Gtk::ORIENTATION_HORIZONTAL, 5),
       btn_box(Gtk::ORIENTATION_VERTICAL, 5),
+      btn_line("Line to"),
       btn_clear("Clear Board"),
       btn_exit("Exit")
 {
@@ -54,6 +55,9 @@ Drawing::Drawing()
     cr.clear();
     draw_area.queue_draw();
 
+    // Set Draw mode to default
+    drawing_mode = DrawMode::Default;
+
     // Initalize main widget
     draw_area.set_size_request(600, 480);
     draw_area.signal_draw().connect(sigc::mem_fun(*this, &Drawing::draw_event));
@@ -75,19 +79,26 @@ bool Drawing::draw_event(const Cairo::RefPtr<Cairo::Context> &context)
 
 void Drawing::draw_brush(double x, double y)
 {
-    // Create Draw Brush with specificed size
     double size = scale.get_value();
     auto cr = Cairo::Context::create(surface);
-    cr->arc(x, y, size, 0, 2 * G_PI);
 
-    // Set Color
-    cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
-                        m_color.get_blue(), m_color.get_alpha());
+    switch (drawing_mode)
+    {
+    case DrawMode::Default:
+        // Create Draw Brush with specificed size
+        cr->arc(x, y, size, 0, 2 * G_PI);
 
-    // Fill Color and Delete the brush
-    cr->fill();
-    cr.clear();
+        // Set Color
+        cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
+                            m_color.get_blue(), m_color.get_alpha());
 
+        // Fill Color and Delete the brush
+        cr->fill();
+        cr.clear();
+        break;
+    case DrawMode::Line:
+        break;
+    }
     draw_area.queue_draw();
 }
 
