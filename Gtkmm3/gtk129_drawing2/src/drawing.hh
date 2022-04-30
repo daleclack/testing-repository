@@ -32,7 +32,7 @@ class Drawing : public Gtk::Window
     // Signal Handlers
     bool draw_event(const Cairo::RefPtr<Cairo::Context> &context);
 
-    void draw_brush(double x, double y);
+    void draw_brush(double x, double y, bool begin = false);
 
     void button_press();
 

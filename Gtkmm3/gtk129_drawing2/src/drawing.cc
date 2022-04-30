@@ -1,4 +1,5 @@
 #include "drawing.hh"
+#include <iostream>
 
 Drawing::Drawing()
     : main_label("Select a color"),
@@ -77,23 +78,37 @@ bool Drawing::draw_event(const Cairo::RefPtr<Cairo::Context> &context)
     return true;
 }
 
-void Drawing::draw_brush(double x, double y)
+void Drawing::draw_brush(double x, double y, bool begin)
 {
     double size = scale.get_value();
     auto cr = Cairo::Context::create(surface);
+    static int count = 0;
+    static double x1, y1;
 
     switch (drawing_mode)
     {
     case DrawMode::Default:
         // Create Draw Brush with specificed size
-        cr->arc(x, y, size, 0, 2 * G_PI);
+        cr->set_line_width(G_PI * size);
+        if (begin)
+        {
+            x1 = x;
+            y1 = y;
+        }
+        else
+        {
+            cr->move_to(x1, y1);
+            cr->line_to(x, y);
+            x1 = x;
+            y1 = y;
+        }
 
         // Set Color
         cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
                             m_color.get_blue(), m_color.get_alpha());
 
         // Fill Color and Delete the brush
-        cr->fill();
+        cr->stroke();
         cr.clear();
         break;
     case DrawMode::Line:
@@ -120,7 +135,7 @@ void Drawing::drag_begin(double x, double y)
     // The Begin
     start_x = x;
     start_y = y;
-    draw_brush(x, y);
+    draw_brush(x, y, true);
 }
 
 void Drawing::drag_progress(double x, double y)
