@@ -89,7 +89,9 @@ void Drawing::draw_brush(double x, double y, bool begin)
     {
     case DrawMode::Default:
         // Create Draw Brush with specificed size
-        cr->set_line_width(G_PI * size);
+        cr->set_line_width(size * 2);
+
+        // Use Line for main drawing
         if (begin)
         {
             x1 = x;
@@ -103,12 +105,16 @@ void Drawing::draw_brush(double x, double y, bool begin)
             y1 = y;
         }
 
+        // Draw circles to make paint better
+        cr->arc(x, y, size / 5.0, 0.0, 2 * G_PI);
+
         // Set Color
         cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
                             m_color.get_blue(), m_color.get_alpha());
 
         // Fill Color and Delete the brush
         cr->stroke();
+        cr->fill();
         cr.clear();
         break;
     case DrawMode::Line:
