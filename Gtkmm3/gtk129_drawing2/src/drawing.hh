@@ -16,8 +16,9 @@ class Drawing : public Gtk::Window
     Gtk::DrawingArea draw_area;
     Gtk::ColorButton color_btn;
     Gtk::Label main_label, size_label;
-    Gtk::Box main_box, btn_box;
-    Gtk::Button btn_line, btn_clear, btn_exit;
+    Gtk::Box left_box, main_box, btn_box;
+    Gtk::Button btn_clear, btn_exit;
+    Gtk::RadioButton btn_free, btn_line, btn_circle, btn_rectangle;
     Gtk::Scale scale;
 
     // Color Setting

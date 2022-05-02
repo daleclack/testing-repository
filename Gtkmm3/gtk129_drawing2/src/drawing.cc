@@ -4,9 +4,9 @@
 Drawing::Drawing()
     : main_label("Select a color"),
       size_label("Pen Size"),
+      left_box(Gtk::ORIENTATION_VERTICAL,5),
       main_box(Gtk::ORIENTATION_HORIZONTAL, 5),
       btn_box(Gtk::ORIENTATION_VERTICAL, 5),
-      btn_line("Line to"),
       btn_clear("Clear Board"),
       btn_exit("Exit")
 {
@@ -14,6 +14,33 @@ Drawing::Drawing()
     set_icon_name("org.gtk.daleclack");
     set_title("Drawing");
     set_default_size(640, 480);
+
+    // Set the buttons grouped
+    auto group = btn_free.get_group();
+    btn_free.set_mode(false);
+    btn_circle.set_group(group);
+    btn_circle.set_mode(false);
+    btn_line.set_group(group);
+    btn_line.set_mode(false);
+    btn_rectangle.set_group(group);
+    btn_rectangle.set_mode(false);
+
+    // Add images to the button
+    btn_free.set_image_from_icon_name("freehand");
+    btn_free.set_always_show_image();
+    btn_circle.set_image_from_icon_name("circle");
+    btn_circle.set_always_show_image();
+    btn_line.set_image_from_icon_name("line");
+    btn_line.set_always_show_image();
+    btn_rectangle.set_image_from_icon_name("rectangle");
+    btn_rectangle.set_always_show_image();
+
+    //Left Panel
+    left_box.pack_start(btn_free,Gtk::PACK_SHRINK);
+    left_box.pack_start(btn_circle,Gtk::PACK_SHRINK);
+    left_box.pack_start(btn_line,Gtk::PACK_SHRINK);
+    left_box.pack_start(btn_rectangle,Gtk::PACK_SHRINK);
+    left_box.set_valign(Gtk::ALIGN_START);
 
     // Color set panel
     size_adj = Gtk::Adjustment::create(3.0, 1.0, 20.0);
@@ -62,6 +89,7 @@ Drawing::Drawing()
     // Initalize main widget
     draw_area.set_size_request(600, 480);
     draw_area.signal_draw().connect(sigc::mem_fun(*this, &Drawing::draw_event));
+    main_box.pack_start(left_box);
     main_box.pack_start(draw_area);
     main_box.pack_start(btn_box, Gtk::PACK_SHRINK);
     main_box.set_border_width(10);
@@ -99,14 +127,11 @@ void Drawing::draw_brush(double x, double y, bool begin)
         }
         else
         {
-            cr->move_to(x1, y1);
+            cr->move_to(x1-0.1, y1-0.1);
             cr->line_to(x, y);
             x1 = x;
             y1 = y;
         }
-
-        // Draw circles to make paint better
-        cr->arc(x, y, size / 5.0, 0.0, 2 * G_PI);
 
         // Set Color
         cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
@@ -114,7 +139,6 @@ void Drawing::draw_brush(double x, double y, bool begin)
 
         // Fill Color and Delete the brush
         cr->stroke();
-        cr->fill();
         cr.clear();
         break;
     case DrawMode::Line:
