@@ -63,7 +63,7 @@ Drawing::Drawing()
     drag->set_button(GDK_BUTTON_PRIMARY);
     drag->signal_drag_begin().connect(sigc::mem_fun(*this, &Drawing::drag_begin));
     drag->signal_drag_update().connect(sigc::mem_fun(*this, &Drawing::drag_progress));
-    drag->signal_drag_end().connect(sigc::mem_fun(*this, &Drawing::drag_progress));
+    drag->signal_drag_end().connect(sigc::mem_fun(*this, &Drawing::drag_end));
 
     // Create a Surface
     surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, 600, 480);
@@ -106,7 +106,7 @@ bool Drawing::draw_event(const Cairo::RefPtr<Cairo::Context> &context)
     return true;
 }
 
-void Drawing::draw_brush(double x, double y, bool begin)
+void Drawing::draw_brush(double x, double y, DrawProcess process)
 {
     double size = scale.get_value();
     auto cr = Cairo::Context::create(surface);
@@ -120,7 +120,7 @@ void Drawing::draw_brush(double x, double y, bool begin)
         cr->set_line_width(size * 2);
 
         // Use Line for main drawing
-        if (begin)
+        if (process == DrawProcess::Begin)
         {
             x1 = x;
             y1 = y;
@@ -142,6 +142,7 @@ void Drawing::draw_brush(double x, double y, bool begin)
         cr.clear();
         break;
     case DrawMode::Line:
+
         break;
     }
     draw_area.queue_draw();
@@ -165,11 +166,16 @@ void Drawing::drag_begin(double x, double y)
     // The Begin
     start_x = x;
     start_y = y;
-    draw_brush(x, y, true);
+    draw_brush(x, y, DrawProcess::Begin);
 }
 
 void Drawing::drag_progress(double x, double y)
 {
+    // Progress and end
+    draw_brush(x + start_x, y + start_y);
+}
+
+void Drawing::drag_end(double x, double y){
     // Progress and end
     draw_brush(x + start_x, y + start_y);
 }

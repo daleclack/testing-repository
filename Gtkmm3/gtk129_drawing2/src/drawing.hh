@@ -2,9 +2,19 @@
 
 #include <gtkmm.h>
 
+// 4 Draw modes: default(free draw), circle, line, rectangle
 enum class DrawMode{
     Default,
-    Line
+    Circle,
+    Line,
+    Rectangle
+};
+
+// Flage for process of drawing
+enum class DrawProcess{
+    Begin,      // The beginning of draw
+    Update,     // The Process(Position update)
+    End         // The end of draw
 };
 
 class Drawing : public Gtk::Window
@@ -33,13 +43,15 @@ class Drawing : public Gtk::Window
     // Signal Handlers
     bool draw_event(const Cairo::RefPtr<Cairo::Context> &context);
 
-    void draw_brush(double x, double y, bool begin = false);
+    void draw_brush(double x, double y, DrawProcess process = DrawProcess::Update);
 
     void button_press();
 
     void drag_begin(double x, double y);
 
     void drag_progress(double x, double y);
+
+    void drag_end(double x, double y);
 
     void color_set();
 
