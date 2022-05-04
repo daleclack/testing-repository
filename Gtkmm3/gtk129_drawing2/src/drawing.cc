@@ -15,7 +15,7 @@ Drawing::Drawing()
     set_title("Drawing");
     set_default_size(640, 480);
 
-    // Set the buttons grouped
+    // Set the buttons grouped and set normal draw mode
     auto group = btn_free.get_group();
     btn_free.set_mode(false);
     btn_circle.set_group(group);
