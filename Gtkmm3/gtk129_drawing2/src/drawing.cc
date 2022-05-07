@@ -172,12 +172,12 @@ void Drawing::drag_begin(double x, double y)
 void Drawing::drag_progress(double x, double y)
 {
     // Progress and end
-    draw_brush(x + start_x, y + start_y);
+    draw_brush(x + start_x, y + start_y, DrawProcess::Update);
 }
 
 void Drawing::drag_end(double x, double y){
     // Progress and end
-    draw_brush(x + start_x, y + start_y);
+    draw_brush(x + start_x, y + start_y, DrawProcess::End);
 }
 
 void Drawing::color_set()

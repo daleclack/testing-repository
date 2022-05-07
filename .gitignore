@@ -5,6 +5,9 @@
 */build/*
 */build_mingw/*
 
+# Qt Build Directory
+build*
+
 #Visual Studio Build Directory
 */Debug/*
 */Release/*
