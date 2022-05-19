@@ -4,7 +4,7 @@
 Drawing::Drawing()
     : main_label("Select a color"),
       size_label("Pen Size"),
-      left_box(Gtk::ORIENTATION_VERTICAL,5),
+      left_box(Gtk::ORIENTATION_VERTICAL, 5),
       main_box(Gtk::ORIENTATION_HORIZONTAL, 5),
       btn_box(Gtk::ORIENTATION_VERTICAL, 5),
       btn_clear("Clear Board"),
@@ -28,18 +28,22 @@ Drawing::Drawing()
     // Add images to the button
     btn_free.set_image_from_icon_name("freehand");
     btn_free.set_always_show_image();
+    btn_free.signal_clicked().connect(sigc::mem_fun(*this, &Drawing::btnfree_clicked));
     btn_circle.set_image_from_icon_name("circle");
     btn_circle.set_always_show_image();
+    btn_circle.signal_clicked().connect(sigc::mem_fun(*this, &Drawing::btncircle_clicked));
     btn_line.set_image_from_icon_name("line");
     btn_line.set_always_show_image();
+    btn_line.signal_clicked().connect(sigc::mem_fun(*this, &Drawing::btnline_clicked));
     btn_rectangle.set_image_from_icon_name("rectangle");
     btn_rectangle.set_always_show_image();
+    btn_rectangle.signal_clicked().connect(sigc::mem_fun(*this, &Drawing::btnrectangle_clicked));
 
-    //Left Panel
-    left_box.pack_start(btn_free,Gtk::PACK_SHRINK);
-    left_box.pack_start(btn_circle,Gtk::PACK_SHRINK);
-    left_box.pack_start(btn_line,Gtk::PACK_SHRINK);
-    left_box.pack_start(btn_rectangle,Gtk::PACK_SHRINK);
+    // Left Panel
+    left_box.pack_start(btn_free, Gtk::PACK_SHRINK);
+    left_box.pack_start(btn_circle, Gtk::PACK_SHRINK);
+    left_box.pack_start(btn_line, Gtk::PACK_SHRINK);
+    left_box.pack_start(btn_rectangle, Gtk::PACK_SHRINK);
     left_box.set_valign(Gtk::ALIGN_START);
 
     // Color set panel
@@ -56,7 +60,7 @@ Drawing::Drawing()
     btn_box.set_valign(Gtk::ALIGN_CENTER);
 
     // Add Gesture
-    btn_clear.signal_clicked().connect(sigc::mem_fun(*this, &Drawing::button_press));
+    btn_clear.signal_clicked().connect(sigc::mem_fun(*this, &Drawing::btnclear_clicked));
     btn_exit.signal_clicked().connect(sigc::mem_fun(*this, &Drawing::hide));
 
     drag = Gtk::GestureDrag::create(draw_area);
@@ -64,6 +68,10 @@ Drawing::Drawing()
     drag->signal_drag_begin().connect(sigc::mem_fun(*this, &Drawing::drag_begin));
     drag->signal_drag_update().connect(sigc::mem_fun(*this, &Drawing::drag_progress));
     drag->signal_drag_end().connect(sigc::mem_fun(*this, &Drawing::drag_end));
+
+    press = Gtk::GestureMultiPress::create(draw_area);
+    press->set_button();
+    press->signal_pressed().connect(sigc::mem_fun(*this, &Drawing::button_press));
 
     // Create a Surface
     surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, 600, 480);
@@ -97,6 +105,35 @@ Drawing::Drawing()
     show_all_children();
 }
 
+void Drawing::btnfree_clicked()
+{
+    // Mode1: Free Drawing
+    drawing_mode = DrawMode::Default;
+}
+
+void Drawing::btnline_clicked()
+{
+    // Mode2: Draw line, click for start point and end point
+    drawing_mode = DrawMode::Line;
+}
+
+void Drawing::btncircle_clicked()
+{
+    // Mode3: Draw circle, click for radius
+    drawing_mode = DrawMode::Circle;
+}
+
+void Drawing::btnrectangle_clicked()
+{
+    // Mode4: Draw a rectangle
+    drawing_mode = DrawMode::Rectangle;
+}
+
+void Drawing::btnclear_clicked()
+{
+    button_press(0, 0.0, 0.0);
+}
+
 // Signal Handlers
 bool Drawing::draw_event(const Cairo::RefPtr<Cairo::Context> &context)
 {
@@ -108,62 +145,108 @@ bool Drawing::draw_event(const Cairo::RefPtr<Cairo::Context> &context)
 
 void Drawing::draw_brush(double x, double y, DrawProcess process)
 {
-    double size = scale.get_value();
+    brush_size = scale.get_value();
     auto cr = Cairo::Context::create(surface);
-    static int count = 0;
-    static double x1, y1;
+
+    // Create Draw Brush with specificed size
+    cr->set_line_width(brush_size * 2);
 
     switch (drawing_mode)
     {
-    case DrawMode::Default:
-        // Create Draw Brush with specificed size
-        cr->set_line_width(size * 2);
+        case DrawMode::Default:
+            // Use Line for main drawing
+            if (process == DrawProcess::Begin)
+            {
+                rel_x = x;
+                rel_y = y;
+            }
+            else
+            {
+                cr->move_to(rel_x - 0.1, rel_y - 0.1);
+                cr->line_to(x, y);
+                rel_x = x;
+                rel_y = y;
+            }
 
-        // Use Line for main drawing
-        if (process == DrawProcess::Begin)
-        {
-            x1 = x;
-            y1 = y;
-        }
-        else
-        {
-            cr->move_to(x1-0.1, y1-0.1);
-            cr->line_to(x, y);
-            x1 = x;
-            y1 = y;
-        }
+            // Set Color
+            cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
+                                m_color.get_blue(), m_color.get_alpha());
 
-        // Set Color
-        cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
-                            m_color.get_blue(), m_color.get_alpha());
+            // Fill Color and Delete the brush
+            cr->stroke();
+            cr.clear();
+            break;
+        case DrawMode::Line:
+            cr->move_to(rel_x,rel_y);
+            cr->line_to(x,y);
 
-        // Fill Color and Delete the brush
-        cr->stroke();
-        cr.clear();
-        break;
-    case DrawMode::Line:
+            // Set Color
+            cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
+                                m_color.get_blue(), m_color.get_alpha());
+            
+            // Fill Color and Delete the brush
+            cr->stroke();
+            cr.clear();
+            break;
+        case DrawMode::Circle:
+            cr->arc(rel_x,rel_y,sqrt((x-rel_x)*(x-rel_x)+(y-rel_y)*(y-rel_y)),0.0,2*G_PI);
 
-        break;
+            cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
+                                m_color.get_blue(), m_color.get_alpha());
+            
+            // Fill Color and Delete the brush
+            cr->stroke();
+            cr.clear();
+            break;
+        case DrawMode::Rectangle:
+            cr->rectangle(rel_x,rel_y,abs(x-rel_x),abs(y-rel_y));
+
+            cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
+                                m_color.get_blue(), m_color.get_alpha());
+            
+            // Fill Color and Delete the brush
+            cr->stroke();
+            cr.clear();
+            break;
     }
     draw_area.queue_draw();
 }
 
-void Drawing::button_press()
+void Drawing::button_press(int n_press, double x, double y)
 {
-    if (surface)
+    auto button = press->get_current_button();
+    // std::cout<<button<<std::endl;
+    switch (button)
     {
-        // Clear the content in draw area
-        auto cr = Cairo::Context::create(surface);
-        cr->set_source_rgb(1, 1, 1);
-        cr->paint();
-        cr.clear();
-        draw_area.queue_draw();
+    case 1:
+        if (begin && drawing_mode != DrawMode::Default)
+        {
+            begin = !begin;
+            rel_x = x;
+            rel_y = y;
+        }
+        else
+        {
+            begin = !begin;
+            draw_brush(x,y,DrawProcess::End);
+        }
+        break;
+    case 3:
+        if (surface)
+        {
+            // Clear the content in draw area
+            auto cr = Cairo::Context::create(surface);
+            cr->set_source_rgb(1, 1, 1);
+            cr->paint();
+            cr.clear();
+            draw_area.queue_draw();
+        }
+        break;
     }
 }
 
 void Drawing::drag_begin(double x, double y)
 {
-    // The Begin
     start_x = x;
     start_y = y;
     draw_brush(x, y, DrawProcess::Begin);
@@ -175,7 +258,8 @@ void Drawing::drag_progress(double x, double y)
     draw_brush(x + start_x, y + start_y, DrawProcess::Update);
 }
 
-void Drawing::drag_end(double x, double y){
+void Drawing::drag_end(double x, double y)
+{
     // Progress and end
     draw_brush(x + start_x, y + start_y, DrawProcess::End);
 }

@@ -35,8 +35,14 @@ class Drawing : public Gtk::Window
     Gdk::RGBA m_color;
     Cairo::RefPtr<Cairo::ImageSurface> surface;
 
+    // Draw Brush Settings
+    double brush_size;
+    double rel_x, rel_y;
+    bool begin = true;
+
     // Gesture to draw
     Glib::RefPtr<Gtk::GestureDrag> drag;
+    Glib::RefPtr<Gtk::GestureMultiPress> press;
     Glib::RefPtr<Gtk::Adjustment> size_adj;
     double start_x, start_y;
 
@@ -45,7 +51,7 @@ class Drawing : public Gtk::Window
 
     void draw_brush(double x, double y, DrawProcess process = DrawProcess::Update);
 
-    void button_press();
+    void button_press(int n_press, double x, double y);
 
     void drag_begin(double x, double y);
 
@@ -54,6 +60,16 @@ class Drawing : public Gtk::Window
     void drag_end(double x, double y);
 
     void color_set();
+
+    void btnfree_clicked();
+
+    void btnline_clicked();
+
+    void btncircle_clicked();
+
+    void btnrectangle_clicked();
+
+    void btnclear_clicked();
 
 public:
     Drawing();
