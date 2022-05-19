@@ -4,6 +4,8 @@
 Drawing::Drawing()
     : main_label("Select a color"),
       size_label("Pen Size"),
+      pos_label("Mouse Position"),
+      pos_label1("(0,0)"),
       left_box(Gtk::ORIENTATION_VERTICAL, 5),
       main_box(Gtk::ORIENTATION_HORIZONTAL, 5),
       btn_box(Gtk::ORIENTATION_VERTICAL, 5),
@@ -50,6 +52,8 @@ Drawing::Drawing()
     size_adj = Gtk::Adjustment::create(3.0, 1.0, 20.0);
     scale.set_adjustment(size_adj);
     scale.set_value_pos(Gtk::POS_BOTTOM);
+    btn_box.pack_start(pos_label, Gtk::PACK_SHRINK);
+    btn_box.pack_start(pos_label1, Gtk::PACK_SHRINK);
     btn_box.pack_start(main_label, Gtk::PACK_SHRINK);
     btn_box.pack_start(color_btn, Gtk::PACK_SHRINK);
     btn_box.pack_start(size_label, Gtk::PACK_SHRINK);
@@ -153,61 +157,61 @@ void Drawing::draw_brush(double x, double y, DrawProcess process)
 
     switch (drawing_mode)
     {
-        case DrawMode::Default:
-            // Use Line for main drawing
-            if (process == DrawProcess::Begin)
-            {
-                rel_x = x;
-                rel_y = y;
-            }
-            else
-            {
-                cr->move_to(rel_x - 0.1, rel_y - 0.1);
-                cr->line_to(x, y);
-                rel_x = x;
-                rel_y = y;
-            }
+    case DrawMode::Default:
+        // Use Line for main drawing
+        if (process == DrawProcess::Begin)
+        {
+            rel_x = x;
+            rel_y = y;
+        }
+        else
+        {
+            cr->move_to(rel_x - 0.1, rel_y - 0.1);
+            cr->line_to(x, y);
+            rel_x = x;
+            rel_y = y;
+        }
 
-            // Set Color
-            cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
-                                m_color.get_blue(), m_color.get_alpha());
+        // Set Color
+        cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
+                            m_color.get_blue(), m_color.get_alpha());
 
-            // Fill Color and Delete the brush
-            cr->stroke();
-            cr.clear();
-            break;
-        case DrawMode::Line:
-            cr->move_to(rel_x,rel_y);
-            cr->line_to(x,y);
+        // Fill Color and Delete the brush
+        cr->stroke();
+        cr.clear();
+        break;
+    case DrawMode::Line:
+        cr->move_to(rel_x, rel_y);
+        cr->line_to(x, y);
 
-            // Set Color
-            cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
-                                m_color.get_blue(), m_color.get_alpha());
-            
-            // Fill Color and Delete the brush
-            cr->stroke();
-            cr.clear();
-            break;
-        case DrawMode::Circle:
-            cr->arc(rel_x,rel_y,sqrt((x-rel_x)*(x-rel_x)+(y-rel_y)*(y-rel_y)),0.0,2*G_PI);
+        // Set Color
+        cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
+                            m_color.get_blue(), m_color.get_alpha());
 
-            cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
-                                m_color.get_blue(), m_color.get_alpha());
-            
-            // Fill Color and Delete the brush
-            cr->stroke();
-            cr.clear();
-            break;
-        case DrawMode::Rectangle:
-            cr->rectangle(rel_x,rel_y,abs(x-rel_x),abs(y-rel_y));
+        // Fill Color and Delete the brush
+        cr->stroke();
+        cr.clear();
+        break;
+    case DrawMode::Circle:
+        cr->arc(rel_x, rel_y, sqrt((x - rel_x) * (x - rel_x) + (y - rel_y) * (y - rel_y)), 0.0, 2 * G_PI);
 
-            cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
-                                m_color.get_blue(), m_color.get_alpha());
-            
-            // Fill Color and Delete the brush
-            cr->stroke();
-            cr.clear();
-            break;
+        cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
+                            m_color.get_blue(), m_color.get_alpha());
+
+        // Fill Color and Delete the brush
+        cr->stroke();
+        cr.clear();
+        break;
+    case DrawMode::Rectangle:
+        cr->rectangle(rel_x, rel_y, abs(x - rel_x), abs(y - rel_y));
+
+        cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
+                            m_color.get_blue(), m_color.get_alpha());
+
+        // Fill Color and Delete the brush
+        cr->stroke();
+        cr.clear();
+        break;
     }
     draw_area.queue_draw();
 }
@@ -228,7 +232,7 @@ void Drawing::button_press(int n_press, double x, double y)
         else
         {
             begin = !begin;
-            draw_brush(x,y,DrawProcess::End);
+            draw_brush(x, y, DrawProcess::End);
         }
         break;
     case 3:
