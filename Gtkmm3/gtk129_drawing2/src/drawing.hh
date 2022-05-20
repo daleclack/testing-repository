@@ -27,13 +27,17 @@ class Drawing : public Gtk::Window
     Gtk::ColorButton color_btn;
     Gtk::Label main_label, size_label, pos_label, pos_label1;
     Gtk::Box left_box, main_box, btn_box;
-    Gtk::Button btn_clear, btn_exit;
+    Gtk::Button btn_clear, btn_save, btn_exit;
     Gtk::RadioButton btn_free, btn_line, btn_circle, btn_rectangle;
     Gtk::Scale scale;
 
     // Color Setting
     Gdk::RGBA m_color;
     Cairo::RefPtr<Cairo::ImageSurface> surface;
+
+    // Image Save Dialog
+    Glib::RefPtr<Gtk::FileChooserNative> dialog;
+    void dialog_response(int response_id);
 
     // Draw Brush Settings
     double brush_size;
@@ -70,6 +74,8 @@ class Drawing : public Gtk::Window
     void btnrectangle_clicked();
 
     void btnclear_clicked();
+
+    void btnsave_clicked();
 
 public:
     Drawing();

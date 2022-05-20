@@ -10,6 +10,7 @@ Drawing::Drawing()
       main_box(Gtk::ORIENTATION_HORIZONTAL, 5),
       btn_box(Gtk::ORIENTATION_VERTICAL, 5),
       btn_clear("Clear Board"),
+      btn_save("Save to png"),
       btn_exit("Exit")
 {
     // Ininalize window
@@ -58,6 +59,7 @@ Drawing::Drawing()
     btn_box.pack_start(color_btn, Gtk::PACK_SHRINK);
     btn_box.pack_start(size_label, Gtk::PACK_SHRINK);
     btn_box.pack_start(scale, Gtk::PACK_SHRINK);
+    btn_box.pack_start(btn_save, Gtk::PACK_SHRINK);
     btn_box.pack_start(btn_clear, Gtk::PACK_SHRINK);
     btn_box.pack_start(btn_exit, Gtk::PACK_SHRINK);
     btn_box.set_halign(Gtk::ALIGN_CENTER);
@@ -65,6 +67,7 @@ Drawing::Drawing()
 
     // Add Gesture
     btn_clear.signal_clicked().connect(sigc::mem_fun(*this, &Drawing::btnclear_clicked));
+    btn_save.signal_clicked().connect(sigc::mem_fun(*this,&Drawing::btnsave_clicked));
     btn_exit.signal_clicked().connect(sigc::mem_fun(*this, &Drawing::hide));
 
     drag = Gtk::GestureDrag::create(draw_area);
@@ -109,6 +112,44 @@ Drawing::Drawing()
     show_all_children();
 }
 
+void Drawing::btnsave_clicked(){
+    // Create a dialog
+    dialog = Gtk::FileChooserNative::create("Save to png file",*this,
+    Gtk::FILE_CHOOSER_ACTION_SAVE,"OK","Cancel");
+
+    // Link Signal
+    dialog->signal_response().connect(sigc::mem_fun(*this,&Drawing::dialog_response));
+
+    // Create Filters
+
+    auto filter_png = Gtk::FileFilter::create();
+    filter_png->set_name("Png files");
+    filter_png->add_pattern("*.png");
+    dialog->add_filter(filter_png);
+
+    auto filter_any = Gtk::FileFilter::create();
+    filter_any->set_name("Any Files");
+    filter_any->add_pattern("*");
+    dialog->add_filter(filter_any);
+
+    dialog->show();
+}
+
+void Drawing::dialog_response(int response_id){
+    // Save cairo surface to png file
+    if(response_id == Gtk::RESPONSE_ACCEPT){
+        // Write surface data to a png file
+        std::string filename;
+        auto file = dialog->get_file();
+        filename = file->get_path();
+
+        // Auto complete the extension of the image file
+        
+        surface->write_to_png(filename);
+    }
+    dialog.reset();
+}
+
 void Drawing::btnfree_clicked()
 {
     // Mode1: Free Drawing
@@ -135,7 +176,15 @@ void Drawing::btnrectangle_clicked()
 
 void Drawing::btnclear_clicked()
 {
-    button_press(0, 0.0, 0.0);
+    if (surface)
+    {
+        // Clear the content in draw area
+        auto cr = Cairo::Context::create(surface);
+        cr->set_source_rgb(1, 1, 1);
+        cr->paint();
+        cr.clear();
+        draw_area.queue_draw();
+    }
 }
 
 // Signal Handlers
@@ -239,15 +288,7 @@ void Drawing::button_press(int n_press, double x, double y)
         }
         break;
     case 3:
-        if (surface)
-        {
-            // Clear the content in draw area
-            auto cr = Cairo::Context::create(surface);
-            cr->set_source_rgb(1, 1, 1);
-            cr->paint();
-            cr.clear();
-            draw_area.queue_draw();
-        }
+        btnclear_clicked();
         break;
     }
 }
