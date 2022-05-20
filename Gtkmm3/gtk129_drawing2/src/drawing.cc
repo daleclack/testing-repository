@@ -223,16 +223,19 @@ void Drawing::button_press(int n_press, double x, double y)
     switch (button)
     {
     case 1:
-        if (begin && drawing_mode != DrawMode::Default)
+        if (drawing_mode != DrawMode::Default)
         {
-            begin = !begin;
-            rel_x = x;
-            rel_y = y;
-        }
-        else
-        {
-            begin = !begin;
-            draw_brush(x, y, DrawProcess::End);
+            if (begin)
+            {
+                begin = !begin;
+                rel_x = x;
+                rel_y = y;
+            }
+            else
+            {
+                begin = !begin;
+                draw_brush(x, y, DrawProcess::End);
+            }
         }
         break;
     case 3:

@@ -50,7 +50,7 @@ add_custom_target(resource ALL DEPENDS ${RESOURCE_FILE})
 
 #For win32 platform,use rc resource and .ico icon
 if(WIN32)
-	SET(CMAKE_RC_COMPILER x86_64-w64-mingw32-windres)
+	SET(CMAKE_RC_COMPILER windres)
 	set(app_WINRC ../icon.rc)
 	set_property(SOURCE ../icon.rc APPEND PROPERTY
         OBJECT_DEPENDS ${PROJECT_SOURCE_DIR}/../icon.ico
