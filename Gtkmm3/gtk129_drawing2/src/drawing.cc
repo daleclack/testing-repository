@@ -1,11 +1,11 @@
 #include "drawing.hh"
+#include <algorithm>
 #include <iostream>
 
 Drawing::Drawing()
-    : main_label("Select a color"),
+    : fill_check("Enable Fill Color"),
+      main_label("Select a color"),
       size_label("Pen Size"),
-      pos_label("Mouse Position"),
-      pos_label1("(0,0)"),
       left_box(Gtk::ORIENTATION_VERTICAL, 5),
       main_box(Gtk::ORIENTATION_HORIZONTAL, 5),
       btn_box(Gtk::ORIENTATION_VERTICAL, 5),
@@ -53,8 +53,8 @@ Drawing::Drawing()
     size_adj = Gtk::Adjustment::create(3.0, 1.0, 20.0);
     scale.set_adjustment(size_adj);
     scale.set_value_pos(Gtk::POS_BOTTOM);
-    btn_box.pack_start(pos_label, Gtk::PACK_SHRINK);
-    btn_box.pack_start(pos_label1, Gtk::PACK_SHRINK);
+    btn_box.pack_start(fill_check, Gtk::PACK_SHRINK);
+    btn_box.pack_start(fill_btn, Gtk::PACK_SHRINK);
     btn_box.pack_start(main_label, Gtk::PACK_SHRINK);
     btn_box.pack_start(color_btn, Gtk::PACK_SHRINK);
     btn_box.pack_start(size_label, Gtk::PACK_SHRINK);
@@ -67,7 +67,7 @@ Drawing::Drawing()
 
     // Add Gesture
     btn_clear.signal_clicked().connect(sigc::mem_fun(*this, &Drawing::btnclear_clicked));
-    btn_save.signal_clicked().connect(sigc::mem_fun(*this,&Drawing::btnsave_clicked));
+    btn_save.signal_clicked().connect(sigc::mem_fun(*this, &Drawing::btnsave_clicked));
     btn_exit.signal_clicked().connect(sigc::mem_fun(*this, &Drawing::hide));
 
     drag = Gtk::GestureDrag::create(draw_area);
@@ -90,6 +90,9 @@ Drawing::Drawing()
     m_color.set_alpha(1);
     color_btn.set_rgba(m_color);
     color_btn.signal_color_set().connect(sigc::mem_fun(*this, &Drawing::color_set));
+    fill_color = m_color;
+    fill_btn.set_rgba(fill_color);
+    fill_btn.signal_color_set().connect(sigc::mem_fun(*this, &Drawing::color_set));
 
     // Initalial draw
     auto cr = Cairo::Context::create(surface);
@@ -112,13 +115,14 @@ Drawing::Drawing()
     show_all_children();
 }
 
-void Drawing::btnsave_clicked(){
+void Drawing::btnsave_clicked()
+{
     // Create a dialog
-    dialog = Gtk::FileChooserNative::create("Save to png file",*this,
-    Gtk::FILE_CHOOSER_ACTION_SAVE,"OK","Cancel");
+    dialog = Gtk::FileChooserNative::create("Save to png file", *this,
+                                            Gtk::FILE_CHOOSER_ACTION_SAVE, "OK", "Cancel");
 
     // Link Signal
-    dialog->signal_response().connect(sigc::mem_fun(*this,&Drawing::dialog_response));
+    dialog->signal_response().connect(sigc::mem_fun(*this, &Drawing::dialog_response));
 
     // Create Filters
 
@@ -135,16 +139,25 @@ void Drawing::btnsave_clicked(){
     dialog->show();
 }
 
-void Drawing::dialog_response(int response_id){
+void Drawing::dialog_response(int response_id)
+{
     // Save cairo surface to png file
-    if(response_id == Gtk::RESPONSE_ACCEPT){
-        // Write surface data to a png file
+    if (response_id == Gtk::RESPONSE_ACCEPT)
+    {
+        // Get file name
         std::string filename;
         auto file = dialog->get_file();
         filename = file->get_path();
 
         // Auto complete the extension of the image file
-        
+        size_t length = filename.length();
+        std::string extension = filename.substr(length-3,length-1);
+        std::transform(extension.begin(),extension.end(),extension.begin(),::tolower);
+        if(extension != "png"){
+            filename += ".png";
+        }
+
+        // Write surface data to the file
         surface->write_to_png(filename);
     }
     dialog.reset();
@@ -242,27 +255,45 @@ void Drawing::draw_brush(double x, double y, DrawProcess process)
         cr.clear();
         break;
     case DrawMode::Circle:
+        // Fill Color and Delete the brush
+        if (fill_check.get_active())
+        {
+            cr->arc(rel_x, rel_y, sqrt((x - rel_x) * (x - rel_x) + (y - rel_y) * (y - rel_y)), 0.0, 2 * G_PI);
+            // Fill Color
+            draw_fill_color(cr);
+        }
+
         cr->arc(rel_x, rel_y, sqrt((x - rel_x) * (x - rel_x) + (y - rel_y) * (y - rel_y)), 0.0, 2 * G_PI);
 
         cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
                             m_color.get_blue(), m_color.get_alpha());
-
-        // Fill Color and Delete the brush
         cr->stroke();
         cr.clear();
         break;
     case DrawMode::Rectangle:
+        // Fill Color and Delete the brush
+        if (fill_check.get_active())
+        {
+            // Fill Color
+            cr->rectangle(rel_x, rel_y, abs(x - rel_x), abs(y - rel_y));
+            draw_fill_color(cr);
+        }
         cr->rectangle(rel_x, rel_y, abs(x - rel_x), abs(y - rel_y));
 
         cr->set_source_rgba(m_color.get_red(), m_color.get_green(),
                             m_color.get_blue(), m_color.get_alpha());
-
-        // Fill Color and Delete the brush
         cr->stroke();
         cr.clear();
         break;
     }
     draw_area.queue_draw();
+}
+
+void Drawing::draw_fill_color(const Cairo::RefPtr<Cairo::Context> &cr)
+{
+    cr->set_source_rgba(fill_color.get_red(), fill_color.get_green(),
+                        fill_color.get_blue(), fill_color.get_alpha());
+    cr->fill();
 }
 
 void Drawing::button_press(int n_press, double x, double y)
@@ -315,4 +346,5 @@ void Drawing::drag_end(double x, double y)
 void Drawing::color_set()
 {
     m_color = color_btn.get_rgba();
+    fill_color = fill_btn.get_rgba();
 }

@@ -24,15 +24,16 @@ class Drawing : public Gtk::Window
 
     // Child Widgets
     Gtk::DrawingArea draw_area;
-    Gtk::ColorButton color_btn;
-    Gtk::Label main_label, size_label, pos_label, pos_label1;
+    Gtk::ColorButton color_btn, fill_btn;
+    Gtk::CheckButton fill_check;
+    Gtk::Label main_label, size_label;
     Gtk::Box left_box, main_box, btn_box;
     Gtk::Button btn_clear, btn_save, btn_exit;
     Gtk::RadioButton btn_free, btn_line, btn_circle, btn_rectangle;
     Gtk::Scale scale;
 
     // Color Setting
-    Gdk::RGBA m_color;
+    Gdk::RGBA m_color, fill_color;
     Cairo::RefPtr<Cairo::ImageSurface> surface;
 
     // Image Save Dialog
@@ -51,10 +52,15 @@ class Drawing : public Gtk::Window
     double start_x, start_y;
 
     // Signal Handlers
+
+    // Part 1: Drawing signal handlers
     bool draw_event(const Cairo::RefPtr<Cairo::Context> &context);
 
     void draw_brush(double x, double y, DrawProcess process = DrawProcess::Update);
 
+    void draw_fill_color(const Cairo::RefPtr<Cairo::Context> &cr);
+
+    // Part 2: Signal handler for gestures
     void button_press(int n_press, double x, double y);
 
     void drag_begin(double x, double y);
@@ -63,6 +69,7 @@ class Drawing : public Gtk::Window
 
     void drag_end(double x, double y);
 
+    // Part 3: Signal Hanlders for normal buttons on the UI
     void color_set();
 
     void btnfree_clicked();
