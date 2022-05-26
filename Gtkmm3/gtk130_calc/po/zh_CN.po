@@ -1,0 +1,67 @@
+#: src/MyWin.cc:8
+msgid "Open Image"
+msgstr "打开图像文件"
+
+#: src/MyWin.cc:11
+msgid "Position"
+msgstr "位置"
+
+#: src/MyWin.cc:12
+msgid "rgb()/rgba() for css3"
+msgstr "用于css3的rgb()/rgba()代码"
+
+#: src/MyWin.cc:13
+msgid "(A)RGB Code"
+msgstr "(A)RGB代码"
+
+#: src/MyWin.cc:16
+msgid "Color Settings And Position info"
+msgstr "颜色与位置信息"
+
+#: src/MyWin.cc:18
+msgid "Copy Css3 Code"
+msgstr "复制css3代码"
+
+#: src/MyWin.cc:19
+msgid "Copy (A)RGB String"
+msgstr "复制(A)RGB代码"
+
+#: src/MyWin.cc:20
+msgid "Pick Color"
+msgstr "拾取颜色"
+
+#: src/MyWin.cc:22
+msgid "Color Picker"
+msgstr "颜色拾取器"
+
+#: src/MyWin.cc:152
+msgid "Open a image file"
+msgstr "打开图像文件"
+
+#: src/MyWin.cc:153
+msgid "OK"
+msgstr "确定"
+
+#: src/MyWin.cc:153
+msgid "Cancel"
+msgstr "取消"
+
+#: src/MyWin.cc:157
+msgid "Image Files"
+msgstr "图像文件"
+
+#: src/MyWin.cc:172
+msgid "Any Files"
+msgstr "所有文件"
+
+msgid "Color Panel"
+msgstr "调色板"
+
+msgid "Color Reference"
+msgstr "颜色参考"
+
+msgid "Color:"
+msgstr "颜色:"
+
+msgid "Copy Color Code"
+msgstr "复制颜色代码"
