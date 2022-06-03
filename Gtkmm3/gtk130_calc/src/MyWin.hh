@@ -19,13 +19,12 @@ private:
 
     // Child widgets
     Gtk::Entry *entry_ans;
-    Gtk::Button *btns[16], *btnstart, *btnnext, *btncheck, *btnclear, *btnexit;
+    Gtk::Button *btns[16], *btnback, *btnclear, *btnanswer;
 
     // Signal Handlers
     void btns_clicked(Gtk::Button *button);
-    void btnstart_clicked();
-    void btnnext_clicked();
-    void btncheck_clicked();
     void btnclear_clicked();
+    void btnback_clicked();
+    void btnanswer_clicked();
     void entry_ans_focus();
 };

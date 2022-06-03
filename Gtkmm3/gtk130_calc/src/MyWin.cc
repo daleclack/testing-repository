@@ -1,20 +1,19 @@
 #include "MyWin.hh"
+#include <iostream>
 
 MyWin::MyWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glade)
     : Gtk::Window(cobject),
       ref_builder(ref_Glade),
       winned(true)
 {
-    set_icon_name("24game");
+    set_icon_name("Calculator");
 
     // Get Widgets
     //ref_builder->get_widget("label_numbers", label_numbers);
     ref_builder->get_widget("entry_ans", entry_ans);
-    ref_builder->get_widget("btnstart", btnstart);
-    ref_builder->get_widget("btnnext",btnnext);
-    ref_builder->get_widget("btncheck", btncheck);
+    ref_builder->get_widget("btnanswer", btnanswer);
+    ref_builder->get_widget("btnback",btnback);
     ref_builder->get_widget("btnclear",btnclear);
-    ref_builder->get_widget("btnexit", btnexit);
     ref_builder->get_widget("btn0", btns[0]);
     ref_builder->get_widget("btn1", btns[1]);
     ref_builder->get_widget("btn2", btns[2]);
@@ -33,11 +32,9 @@ MyWin::MyWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glad
     ref_builder->get_widget("btnright", btns[15]);
 
     // Link Signals
-    btnstart->signal_clicked().connect(sigc::mem_fun(*this, &MyWin::btnstart_clicked));
-    btnexit->signal_clicked().connect(sigc::mem_fun(*this, &MyWin::hide));
-    btnnext->signal_clicked().connect(sigc::mem_fun(*this, &MyWin::btnnext_clicked));
-    btncheck->signal_clicked().connect(sigc::mem_fun(*this, &MyWin::btncheck_clicked));
     btnclear->signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnclear_clicked));
+    btnback->signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnback_clicked));
+    btnanswer->signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnanswer_clicked));
     for (int i = 0; i < 16; i++)
     {
         btns[i]->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &MyWin::btns_clicked), btns[i]));
@@ -71,46 +68,32 @@ void MyWin::entry_ans_focus()
     focused = true;
 }
 
-void MyWin::btnstart_clicked()
-{
-    // Start Game
-    if (winned)
-    {
-        //label_numbers->set_label(main_game.numbers_char);
-    }
-    else
-    {
-        //label-numbers->set_label(tmp);
-    }
-
-    // Save the numbers
-    //tmp = label_numbers->get_label();
-}
-
-void MyWin::btncheck_clicked()
-{
-    // Check Answer
-    Glib::ustring answer = entry_ans->get_text();
-    //winned = main_game.startgame(std::string(answer.c_str()));
-    if (winned)
-    {
-        //label-numbers->set_label("You Winned!");
-    }
-    else
-    {
-        //label-numbers->set_label("You Lost!");
-    }
-}
-
-void MyWin::btnnext_clicked(){
-    //main_game.getnumbers();
-    //label_numbers->set_label(main_game.numbers_char);
-}
-
 void MyWin::btnclear_clicked(){
     // Clear the text
     entry_ans->set_text("");
 }
+
+void MyWin::btnback_clicked(){
+    // Get Original text and add number from button
+
+    // 1.Get text buffer for insert
+    auto buffer = entry_ans->get_buffer();
+
+    // 2.Get Position to delete
+    if (focused)
+    {
+        pos = entry_ans->get_position();
+    }
+
+    // std::cout<<pos<<std::endl;
+    pos--;
+
+    // 3.Delete text in the position of cursor
+    buffer->delete_text(pos,1);
+    focused = false;
+}
+
+void MyWin::btnanswer_clicked(){}
 
 MyWin *MyWin::create()
 {
