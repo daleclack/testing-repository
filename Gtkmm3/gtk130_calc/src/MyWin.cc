@@ -93,7 +93,11 @@ void MyWin::btnback_clicked(){
     focused = false;
 }
 
-void MyWin::btnanswer_clicked(){}
+void MyWin::btnanswer_clicked(){
+    // Print Expression before calculate
+    Glib::ustring text = entry_ans->get_text();
+    std::cout<<text<<std::endl;
+}
 
 MyWin *MyWin::create()
 {
