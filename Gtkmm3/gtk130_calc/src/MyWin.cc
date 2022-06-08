@@ -1,4 +1,5 @@
 #include "MyWin.hh"
+#include "calc.hh"
 #include <iostream>
 
 MyWin::MyWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glade)
@@ -94,9 +95,15 @@ void MyWin::btnback_clicked(){
 }
 
 void MyWin::btnanswer_clicked(){
-    // Print Expression before calculate
+    // Get expression
     Glib::ustring text = entry_ans->get_text();
-    std::cout<<text<<std::endl;
+    //std::cout<<text<<std::endl;
+
+    // Calculation
+    int result = calc_expression_value(text.c_str());
+    char result_str[40];
+    sprintf(result_str,"%d",result);
+    entry_ans->set_text(Glib::ustring(result_str));
 }
 
 MyWin *MyWin::create()
