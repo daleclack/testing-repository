@@ -7,7 +7,8 @@ MyWin::MyWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glad
       ref_builder(ref_Glade),
       winned(true)
 {
-    set_icon_name("Calculator");
+    set_icon_name("calcapp");
+    set_title("Calculator");
 
     // Get Widgets
     //ref_builder->get_widget("label_numbers", label_numbers);
