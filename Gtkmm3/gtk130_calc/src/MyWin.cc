@@ -101,6 +101,7 @@ void MyWin::btnanswer_clicked(){
     //std::cout<<text<<std::endl;
 
     // Calculation
+    calc_reset();
     int result = calc_expression_value(text.c_str());
     char result_str[40];
     sprintf(result_str,"%d",result);

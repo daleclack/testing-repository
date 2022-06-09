@@ -5,6 +5,9 @@
 
 static int pos = 0;
 
+void calc_reset(){
+    pos = 0;
+}
 
 int calc_factor_value(const char * factor){
     int result = 0;
