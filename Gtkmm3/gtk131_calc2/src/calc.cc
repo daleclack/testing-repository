@@ -9,8 +9,8 @@ void calc_reset(){
     pos = 0;
 }
 
-int calc_factor_value(const char * factor){
-    int result = 0;
+double calc_factor_value(const char * factor){
+    double result = 0;
     char c = factor[pos];
     if( c == '('){          // if expression has '(', calculate the expression in the '()'
         pos++;
@@ -26,14 +26,14 @@ int calc_factor_value(const char * factor){
     return result;
 }
 
-int calc_term_value(const char * term){
-    int result = calc_factor_value(term);   // Get the first number
+double calc_term_value(const char * term){
+    double result = calc_factor_value(term);   // Get the first number
     while(true){
         //pos++;    // Calc the multiplication and divide
         char op = term[pos];
         if(op == '*' || op == '/'){
             pos++;
-            int value = calc_factor_value(term);    // Get another value
+            double value = calc_factor_value(term);    // Get another value
             if(op == '*') result *= value;
             else result /= value;
         }else{
@@ -43,14 +43,14 @@ int calc_term_value(const char * term){
     return result;
 }
 
-int calc_expression_value(const char * expression){
-    int result = calc_term_value(expression);   // Calc the result of expression
+double calc_expression_value(const char * expression){
+    double result = calc_term_value(expression);   // Calc the result of expression
     //bool more = true;
     while(true){
         char op = expression[pos];
         if(op == '+' || op == '-'){         // Calculate for add and subb
             pos++;
-            int value = calc_term_value(expression);
+            double value = calc_term_value(expression);
             if( op == '+') result += value;
             else result -= value;
         }else{

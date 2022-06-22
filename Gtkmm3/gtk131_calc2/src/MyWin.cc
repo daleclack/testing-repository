@@ -102,9 +102,9 @@ void MyWin::btnanswer_clicked(){
 
     // Calculation
     calc_reset();
-    int result = calc_expression_value(text.c_str());
+    double result = calc_expression_value(text.c_str());
     char result_str[40];
-    sprintf(result_str,"%d",result);
+    sprintf(result_str,"%.2f",result);
     entry_ans->set_text(Glib::ustring(result_str));
 }
 
