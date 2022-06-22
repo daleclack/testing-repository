@@ -104,7 +104,7 @@ void MyWin::btnanswer_clicked(){
     calc_reset();
     double result = calc_expression_value(text.c_str());
     char result_str[40];
-    sprintf(result_str,"%.2f",result);
+    sprintf(result_str,"%f",result);
     entry_ans->set_text(Glib::ustring(result_str));
 }
 

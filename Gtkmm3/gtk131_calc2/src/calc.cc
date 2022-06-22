@@ -10,20 +10,29 @@ void calc_reset(){
 }
 
 double calc_factor_value(const char * factor){
-    double result = 0;
+    double result1 = 0.0, result2 = 0.0;
     char c = factor[pos];
     if( c == '('){          // if expression has '(', calculate the expression in the '()'
-        pos++;
-        result = calc_expression_value(factor);
-        pos++;
+        pos++;              // Pass the '('
+        result1 = calc_expression_value(factor);
+        pos++;              // Pass the ')'
     }else{
         while(isdigit(c)){  // Get the number to calculate
-            result = 10 * result + c - '0';
+            result1 = 10 * result1 + c - '0';
             pos++;
             c = factor[pos];
         }
+        if(c == '.'){                   // Get number between 0 to 1
+            pos++;                      // Pass the '.'
+            c = factor[pos];
+            while(isdigit(c)){
+                result2 = 0.1 * result2 + (c - '0') * 0.1;
+                pos++;
+                c = factor[pos];
+            }
+        }
     }
-    return result;
+    return result1+result2;
 }
 
 double calc_term_value(const char * term){

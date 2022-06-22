@@ -13,6 +13,9 @@ build*
 */Release/*
 */Testing/*
 
+#Binary Directory
+*/bin/*
+
 #cmake files for mingw
 *.cmake
 *.dir
