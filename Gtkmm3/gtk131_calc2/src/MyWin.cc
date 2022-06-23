@@ -32,11 +32,16 @@ MyWin::MyWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glad
     ref_builder->get_widget("btndiv", btns[13]);
     ref_builder->get_widget("btnleft", btns[14]);
     ref_builder->get_widget("btnright", btns[15]);
+    ref_builder->get_widget("btnpoint",btns[16]);
+    ref_builder->get_widget("btnsqrt",btnsqrt);
+    ref_builder->get_widget("btnpow",btnpow);
 
     // Link Signals
     btnclear->signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnclear_clicked));
     btnback->signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnback_clicked));
     btnanswer->signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnanswer_clicked));
+    btnpow->signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnpow_clicked));
+    btnsqrt->signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnsqrt_clicked));
     for (int i = 0; i < 16; i++)
     {
         btns[i]->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &MyWin::btns_clicked), btns[i]));
@@ -73,6 +78,18 @@ void MyWin::entry_ans_focus()
 void MyWin::btnclear_clicked(){
     // Clear the text
     entry_ans->set_text("");
+}
+
+void MyWin::btnpow_clicked(){
+    Glib::ustring string = entry_ans->get_text();
+    Glib::ustring string2 = string + "^2";
+    entry_ans->set_text(string2);
+}
+
+void MyWin::btnsqrt_clicked(){
+    Glib::ustring string = entry_ans->get_text();
+    Glib::ustring string2 = string + "^(1/2)";
+    entry_ans->set_text(string2);
 }
 
 void MyWin::btnback_clicked(){

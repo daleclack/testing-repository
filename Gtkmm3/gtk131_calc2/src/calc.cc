@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
+#include <cmath>
 #include "calc.hh"
 
 static int pos = 0;
@@ -37,14 +38,30 @@ double calc_factor_value(const char * factor){
 
 double calc_term_value(const char * term){
     double result = calc_factor_value(term);   // Get the first number
-    while(true){
+    double value = 0.0;
+    while(pos < strlen(term)){
         //pos++;    // Calc the multiplication and divide
         char op = term[pos];
-        if(op == '*' || op == '/'){
-            pos++;
-            double value = calc_factor_value(term);    // Get another value
-            if(op == '*') result *= value;
-            else result /= value;
+        if(op == '^' || op == '*' || op == '/'){
+            switch (op)
+            {
+            case '^':
+                pos++;
+                value = calc_factor_value(term);    // Pow
+                result = pow(result,value);
+                break;
+            case '*':
+                pos++;
+                value = calc_factor_value(term);    // Subb
+                result *= value;
+                break;
+            case '/':
+                pos++;
+                value = calc_factor_value(term);    // Get another value
+                result /= value;
+                break;
+            }
+            break;
         }else{
             break;
         }
@@ -55,7 +72,7 @@ double calc_term_value(const char * term){
 double calc_expression_value(const char * expression){
     double result = calc_term_value(expression);   // Calc the result of expression
     //bool more = true;
-    while(true){
+    while(pos < strlen(expression)){
         char op = expression[pos];
         if(op == '+' || op == '-'){         // Calculate for add and subb
             pos++;
