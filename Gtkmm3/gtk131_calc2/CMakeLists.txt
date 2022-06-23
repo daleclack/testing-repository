@@ -26,13 +26,13 @@ find_package (Gettext REQUIRED)
 set(PO_DIR ${CMAKE_BINARY_DIR}/po/zh_CN/LC_MESSAGES)
 
 #Source files
-set(SOURCE_FILE src/main.cc src/MyWin.cc src/calc.cc)
+set(SOURCE_FILE src/main.cc src/CalcApp.cc src/calc.cc)
 
 #Compile Resource
 
 set(RESOURCE_LIST
     icons/scalable/status/calcapp.svg
-    window.ui)
+    calcapp.ui)
 
 compile_gresources(RESOURCE_FILE
                    XML_OUT

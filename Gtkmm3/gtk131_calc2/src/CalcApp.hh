@@ -2,11 +2,11 @@
 
 #include <gtkmm.h>
 
-class MyWin : public Gtk::Window
+class CalcApp : public Gtk::Window
 {
 public:
-    static MyWin *create();
-    MyWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glade);
+    static CalcApp *create();
+    CalcApp(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glade);
 
 private:
     // Main GtkBuilder

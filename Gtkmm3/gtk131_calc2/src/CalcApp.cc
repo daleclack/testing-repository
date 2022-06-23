@@ -1,8 +1,8 @@
-#include "MyWin.hh"
+#include "CalcApp.hh"
 #include "calc.hh"
 #include <iostream>
 
-MyWin::MyWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glade)
+CalcApp::CalcApp(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glade)
     : Gtk::Window(cobject),
       ref_builder(ref_Glade),
       winned(true)
@@ -38,19 +38,19 @@ MyWin::MyWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glad
     ref_builder->get_widget("btnpow",btnpow);
 
     // Link Signals
-    btnclear->signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnclear_clicked));
-    btnback->signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnback_clicked));
-    btnanswer->signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnanswer_clicked));
-    btnpow->signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnpow_clicked));
-    btnsqrt->signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnsqrt_clicked));
+    btnclear->signal_clicked().connect(sigc::mem_fun(*this,&CalcApp::btnclear_clicked));
+    btnback->signal_clicked().connect(sigc::mem_fun(*this,&CalcApp::btnback_clicked));
+    btnanswer->signal_clicked().connect(sigc::mem_fun(*this,&CalcApp::btnanswer_clicked));
+    btnpow->signal_clicked().connect(sigc::mem_fun(*this,&CalcApp::btnpow_clicked));
+    btnsqrt->signal_clicked().connect(sigc::mem_fun(*this,&CalcApp::btnsqrt_clicked));
     for (int i = 0; i < 18; i++)
     {
-        btns[i]->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &MyWin::btns_clicked), btns[i]));
+        btns[i]->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &CalcApp::btns_clicked), btns[i]));
     }
-    entry_ans->signal_grab_focus().connect(sigc::mem_fun(*this, &MyWin::entry_ans_focus));
+    entry_ans->signal_grab_focus().connect(sigc::mem_fun(*this, &CalcApp::entry_ans_focus));
 }
 
-void MyWin::btns_clicked(Gtk::Button *button)
+void CalcApp::btns_clicked(Gtk::Button *button)
 {
     // Get Original text and add number from button
 
@@ -71,29 +71,29 @@ void MyWin::btns_clicked(Gtk::Button *button)
     focused = false;
 }
 
-void MyWin::entry_ans_focus()
+void CalcApp::entry_ans_focus()
 {
     focused = true;
 }
 
-void MyWin::btnclear_clicked(){
+void CalcApp::btnclear_clicked(){
     // Clear the text
     entry_ans->set_text("");
 }
 
-void MyWin::btnpow_clicked(){
+void CalcApp::btnpow_clicked(){
     Glib::ustring string = entry_ans->get_text();
     Glib::ustring string2 = string + "^2";
     entry_ans->set_text(string2);
 }
 
-void MyWin::btnsqrt_clicked(){
+void CalcApp::btnsqrt_clicked(){
     Glib::ustring string = entry_ans->get_text();
     Glib::ustring string2 = string + "^(1/2)";
     entry_ans->set_text(string2);
 }
 
-void MyWin::btnback_clicked(){
+void CalcApp::btnback_clicked(){
     // Get Original text and add number from button
 
     // 1.Get text buffer for insert
@@ -113,7 +113,7 @@ void MyWin::btnback_clicked(){
     focused = false;
 }
 
-void MyWin::btnanswer_clicked(){
+void CalcApp::btnanswer_clicked(){
     // Get expression
     Glib::ustring text = entry_ans->get_text();
     //std::cout<<text<<std::endl;
@@ -126,11 +126,11 @@ void MyWin::btnanswer_clicked(){
     entry_ans->set_text(Glib::ustring(result_str));
 }
 
-MyWin *MyWin::create()
+CalcApp *CalcApp::create()
 {
     // Create a new window
-    MyWin *window = nullptr;
-    auto builder = Gtk::Builder::create_from_resource("/org/gtk/daleclack/window.ui");
+    CalcApp *window = nullptr;
+    auto builder = Gtk::Builder::create_from_resource("/org/gtk/daleclack/calcapp.ui");
     builder->get_widget_derived("window", window);
 
     return window;
