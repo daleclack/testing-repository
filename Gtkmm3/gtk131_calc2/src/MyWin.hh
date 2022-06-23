@@ -19,7 +19,7 @@ private:
 
     // Child widgets
     Gtk::Entry *entry_ans;
-    Gtk::Button *btns[17], *btnback, *btnclear, *btnanswer, 
+    Gtk::Button *btns[18], *btnback, *btnclear, *btnanswer, 
                 *btnsqrt, *btnpow;
 
     // Signal Handlers

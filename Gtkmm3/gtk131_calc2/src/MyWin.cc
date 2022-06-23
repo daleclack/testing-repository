@@ -33,6 +33,7 @@ MyWin::MyWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glad
     ref_builder->get_widget("btnleft", btns[14]);
     ref_builder->get_widget("btnright", btns[15]);
     ref_builder->get_widget("btnpoint",btns[16]);
+    ref_builder->get_widget("btndiv100",btns[17]);
     ref_builder->get_widget("btnsqrt",btnsqrt);
     ref_builder->get_widget("btnpow",btnpow);
 
@@ -42,7 +43,7 @@ MyWin::MyWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glad
     btnanswer->signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnanswer_clicked));
     btnpow->signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnpow_clicked));
     btnsqrt->signal_clicked().connect(sigc::mem_fun(*this,&MyWin::btnsqrt_clicked));
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < 18; i++)
     {
         btns[i]->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &MyWin::btns_clicked), btns[i]));
     }

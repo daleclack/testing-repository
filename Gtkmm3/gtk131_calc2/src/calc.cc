@@ -11,7 +11,7 @@ void calc_reset(){
 }
 
 double calc_factor_value(const char * factor){
-    double result1 = 0.0, result2 = 0.0;
+    double result1 = 0.0, result2 = 0.0, final_result = 0.0;
     char c = factor[pos];
     if( c == '('){          // if expression has '(', calculate the expression in the '()'
         pos++;              // Pass the '('
@@ -32,8 +32,13 @@ double calc_factor_value(const char * factor){
                 c = factor[pos];
             }
         }
+        final_result = result1 + result2;
+        if(c == '%'){
+            final_result /= 100.0;      // Pass the '%'
+            pos++;
+        }
     }
-    return result1+result2;
+    return final_result;
 }
 
 double calc_term_value(const char * term){
