@@ -17,7 +17,9 @@ hbox(Gtk::ORIENTATION_HORIZONTAL,5)
     header.set_decoration_layout("close,minimize,maximize:menu");
     header.set_show_close_button();
     menubtn.set_image_from_icon_name("open-menu");
+    search_button.set_image_from_icon_name("find");
     header.pack_end(menubtn);
+    header.pack_end(search_button);
     header.set_title("Simple Text Editor");
     set_titlebar(header);
 
@@ -43,6 +45,16 @@ hbox(Gtk::ORIENTATION_HORIZONTAL,5)
     add_action("text_copy",sigc::mem_fun(*this,&TextEditor::btncopy_clicked));
     add_action("text_paste",sigc::mem_fun(*this,&TextEditor::btnpaste_clicked));
     add_action("text_clear",sigc::mem_fun(*this,&TextEditor::btnclear_clicked));
+
+    //Add searchbar
+    searchbar_builder = Gtk::Builder::create_from_resource("/org/gtk/daleclack/searchbar.ui");
+    searchbar_builder->get_widget("searchbar",searchbar);
+    searchbar_builder->get_widget("searchentry",search_entry);
+    searchbar_builder->get_widget("search_box",searchbox);
+    Glib::Binding::bind_property(search_button.property_active(),
+                                 searchbar->property_search_mode_enabled(),
+                                 Glib::BINDING_BIDIRECTIONAL);
+    vbox.pack_start(*searchbox);
 
     //A InfoBar
     infobar.add_button("OK",Gtk::RESPONSE_OK);
