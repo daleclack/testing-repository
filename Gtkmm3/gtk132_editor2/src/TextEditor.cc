@@ -7,18 +7,26 @@
 
 TextEditor::TextEditor()
 :vbox(Gtk::ORIENTATION_VERTICAL,5),
-hbox(Gtk::ORIENTATION_HORIZONTAL,5),
-btnbox(Gtk::ORIENTATION_VERTICAL,5),
-btn_copy("Copy"),
-btn_paste("Paste"),
-btn_open("Open"),
-btn_save("Save"),
-btn_clear("Clear")
+hbox(Gtk::ORIENTATION_HORIZONTAL,5)
 {
     //Initalize Window
     set_default_size(800,450);
     set_icon_name("my_textedit");
-    set_title("Simple Text Editor");
+
+    //Initalize HeaderBar
+    header.set_decoration_layout("close,minimize,maximize:menu");
+    header.set_show_close_button();
+    menubtn.set_image_from_icon_name("open-menu");
+    header.pack_end(menubtn);
+    header.set_title("Simple Text Editor");
+    set_titlebar(header);
+
+    //Add a menu
+    menu_builder = Gtk::Builder::create_from_resource("/org/gtk/daleclack/text_menu.xml");
+    auto object = menu_builder->get_object("text_menu");
+    auto gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(object);
+    popover.bind_model(gmenu);
+    menubtn.set_popover(popover);
     
     //Initalize Text Buffers
     buffer1=textview1.get_buffer();
@@ -27,20 +35,14 @@ btn_clear("Clear")
     //Pack Widgets
     sw1.set_policy(Gtk::POLICY_AUTOMATIC,Gtk::POLICY_AUTOMATIC);
     sw1.add(textview1);
-    btnbox.set_valign(Gtk::ALIGN_CENTER);
-    btnbox.pack_start(btn_copy,Gtk::PACK_SHRINK);
-    btnbox.pack_start(btn_paste,Gtk::PACK_SHRINK);
-    btnbox.pack_start(btn_open,Gtk::PACK_SHRINK);
-    btnbox.pack_start(btn_save,Gtk::PACK_SHRINK);
-    btnbox.pack_start(btn_clear,Gtk::PACK_SHRINK);
     hbox.pack_start(sw1);
-    hbox.pack_start(btnbox,Gtk::PACK_SHRINK);
     
-    btn_open.signal_clicked().connect(sigc::mem_fun(*this,&TextEditor::btnopen_clicked));
-    btn_save.signal_clicked().connect(sigc::mem_fun(*this,&TextEditor::btnsave_clicked));
-    btn_copy.signal_clicked().connect(sigc::mem_fun(*this,&TextEditor::btncopy_clicked));
-    btn_paste.signal_clicked().connect(sigc::mem_fun(*this,&TextEditor::btnpaste_clicked));
-    btn_clear.signal_clicked().connect(sigc::mem_fun(*this,&TextEditor::btnclear_clicked));
+    //Add actions and signal handlers
+    add_action("text_open",sigc::mem_fun(*this,&TextEditor::btnopen_clicked));
+    add_action("text_save",sigc::mem_fun(*this,&TextEditor::btnsave_clicked));
+    add_action("text_copy",sigc::mem_fun(*this,&TextEditor::btncopy_clicked));
+    add_action("text_paste",sigc::mem_fun(*this,&TextEditor::btnpaste_clicked));
+    add_action("text_clear",sigc::mem_fun(*this,&TextEditor::btnclear_clicked));
 
     //A InfoBar
     infobar.add_button("OK",Gtk::RESPONSE_OK);
@@ -48,9 +50,6 @@ btn_clear("Clear")
     infobox=dynamic_cast<Gtk::Box*>(infobar.get_content_area());
     infobox->pack_start(label1);
     vbox.pack_start(infobar,Gtk::PACK_SHRINK);
-
-    //Disable Copy button
-    btn_copy.set_sensitive(false);
 
     //Show everything
     vbox.pack_start(hbox);
@@ -147,7 +146,7 @@ void TextEditor::savedialog_response(int response){
 
 void TextEditor::buffer1_changed(){
     //When the text changed,enable the copy button
-    btn_copy.set_sensitive();
+    
 }
 
 void TextEditor::btncopy_clicked(){
