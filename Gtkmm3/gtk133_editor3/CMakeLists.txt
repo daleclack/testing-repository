@@ -1,6 +1,6 @@
 set(CMAKE_CXX_STANDARD 17)
 cmake_minimum_required(VERSION 3.0.0)
-project(gtk132_editor2 VERSION 1.0.0)
+project(gtk133_editor3 VERSION 1.0.0)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../../GCR_CMake/macros)
 include(GlibCompileResourcesSupport)
