@@ -51,6 +51,7 @@ hbox(Gtk::ORIENTATION_HORIZONTAL,5)
     search_binding = Glib::Binding::bind_property(search_button.property_active(),
                                  searchbar.property_search_mode_enabled(),
                                  Glib::BINDING_BIDIRECTIONAL);
+    search_entry.signal_changed().connect(sigc::mem_fun(*this, &TextEditor::search_entry_changed));
     vbox.pack_start(searchbar, Gtk::PACK_SHRINK);
 
     //A InfoBar
@@ -156,6 +157,15 @@ void TextEditor::savedialog_response(int response){
 void TextEditor::buffer1_changed(){
     //When the text changed,enable the copy button
     
+}
+
+void TextEditor::search_entry_changed(){
+    const Glib::ustring text = search_entry.get_text();
+    Gtk::TextIter start, end;
+    if(buffer1->begin().forward_search(text,Gtk::TEXT_SEARCH_CASE_INSENSITIVE,start,end)){
+        buffer1->select_range(start,end);
+        textview1.scroll_to(start);
+    }
 }
 
 void TextEditor::btncopy_clicked(){

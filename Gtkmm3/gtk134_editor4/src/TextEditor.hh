@@ -15,7 +15,6 @@ private:
     Gtk::SearchEntry search_entry;
     Glib::RefPtr<Gtk::Builder> menu_builder;
     Glib::RefPtr<Glib::Binding> search_binding;
-    Gtk::Box *searchbox;
 
     //Window widgets
     Gtk::Box vbox,hbox,*infobox;
@@ -38,6 +37,7 @@ private:
     void btnpaste_clicked();
     void btnclear_clicked();
     void buffer1_changed();
+    void search_entry_changed();
     void clipboard_receive(const Glib::ustring &text);
     void infobar_response(int response);
 };
