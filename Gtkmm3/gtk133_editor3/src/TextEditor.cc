@@ -5,30 +5,38 @@
 // Only for build in this repository
 #define text_globs supported_globs
 
-TextEditor::TextEditor()
-:vbox(Gtk::ORIENTATION_VERTICAL,5),
-hbox(Gtk::ORIENTATION_HORIZONTAL,5)
+TextEditor::TextEditor(BaseObjectType *cobject,const Glib::RefPtr<Gtk::Builder> &ref_builder)
+:Gtk::ApplicationWindow(cobject),
+main_builder(ref_builder)
 {
     //Initalize Window
-    set_default_size(800,450);
-    set_icon_name("my_textedit");
+    // set_default_size(800,450);
+    // set_icon_name("my_textedit");
 
     //Initalize HeaderBar
-    header.set_decoration_layout("close,minimize,maximize:menu");
-    header.set_show_close_button();
-    menubtn.set_image_from_icon_name("open-menu");
-    search_button.set_image_from_icon_name("find");
-    header.pack_end(menubtn);
-    header.pack_end(search_button);
-    header.set_title("Simple Text Editor");
-    set_titlebar(header);
+    // header.set_decoration_layout("close,minimize,maximize:menu");
+    // header.set_show_close_button();
+    // menubtn.set_image_from_icon_name("open-menu");
+    // search_button.set_image_from_icon_name("find");
+    // header.pack_end(menubtn);
+    // header.pack_end(search_button);
+    // header.set_title("Simple Text Editor");
+    // set_titlebar(header);
+
+    // Get Widgets
+    main_builder->get_widget("popover1",popover);
+    main_builder->get_widget("searchbar",searchbar);
+    main_builder->get_widget("searchentry",search_entry);
+    main_builder->get_widget("searchbtn",search_button);
 
     //Add a menu
     menu_builder = Gtk::Builder::create_from_resource("/org/gtk/daleclack/text_menu.xml");
     auto object = menu_builder->get_object("text_menu");
     auto gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(object);
-    popover.bind_model(gmenu);
-    menubtn.set_popover(popover);
+    popover->bind_model(gmenu);
+    // menubtn.set_popover(*popover);
+
+    m_binding = Glib::Binding::bind_property(search_button->property_active(),searchbar->property_search_mode_enabled(),Glib::BINDING_BIDIRECTIONAL);
     
     //Initalize Text Buffers
     buffer1=textview1.get_buffer();
@@ -47,14 +55,14 @@ hbox(Gtk::ORIENTATION_HORIZONTAL,5)
     add_action("text_clear",sigc::mem_fun(*this,&TextEditor::btnclear_clicked));
 
     //Add searchbar
-    searchbar_builder = Gtk::Builder::create_from_resource("/org/gtk/daleclack/searchbar.ui");
-    searchbar_builder->get_widget("searchbar",searchbar);
-    searchbar_builder->get_widget("searchentry",search_entry);
-    searchbar_builder->get_widget("search_box",searchbox);
-    Glib::Binding::bind_property(search_button.property_active(),
-                                 searchbar->property_search_mode_enabled(),
-                                 Glib::BINDING_BIDIRECTIONAL);
-    vbox.pack_start(*searchbox);
+    // searchbar_builder = Gtk::Builder::create_from_resource("/org/gtk/daleclack/searchbar.ui");
+    // searchbar_builder->get_widget("searchbar",searchbar);
+    // searchbar_builder->get_widget("searchentry",search_entry);
+    // searchbar_builder->get_widget("search_box",searchbox);
+    // Glib::Binding::bind_property(search_button.property_active(),
+    //                              searchbar->property_search_mode_enabled(),
+    //                              Glib::BINDING_BIDIRECTIONAL);
+    // vbox.pack_start(*searchbox);
 
     //A InfoBar
     infobar.add_button("OK",Gtk::RESPONSE_OK);
@@ -65,7 +73,7 @@ hbox(Gtk::ORIENTATION_HORIZONTAL,5)
 
     //Show everything
     vbox.pack_start(hbox);
-    add(vbox);
+    // add(vbox);
     show_all_children();
     infobar.hide();
 }
@@ -204,4 +212,12 @@ void TextEditor::btnclear_clicked(){
 
 void TextEditor::infobar_response(int response){
     infobar.hide();
+}
+
+TextEditor * TextEditor::create(){
+    auto builder = Gtk::Builder::create_from_resource("/org/gtk/daleclack/texteditor.ui");
+    TextEditor *win = nullptr;
+
+    builder->get_widget_derived("editor_win",win);
+    return win;
 }

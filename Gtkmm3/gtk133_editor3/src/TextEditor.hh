@@ -4,17 +4,19 @@
 
 class TextEditor : public Gtk::ApplicationWindow{
 public:
-    TextEditor();
+    TextEditor(BaseObjectType *cobject,const Glib::RefPtr<Gtk::Builder> &ref_builder);
+    static TextEditor * create();
 private:
     //Header widgets
-    Gtk::HeaderBar header;
-    Gtk::MenuButton menubtn;
-    Gtk::Popover popover;
-    Gtk::ToggleButton search_button;
+    // Gtk::HeaderBar header;
+    // Gtk::MenuButton menubtn;
+    Gtk::Popover *popover;
+    Gtk::ToggleButton *search_button;
     Gtk::SearchBar *searchbar;
     Gtk::SearchEntry *search_entry;
-    Glib::RefPtr<Gtk::Builder> menu_builder, searchbar_builder;
-    Gtk::Box *searchbox;
+    Glib::RefPtr<Gtk::Builder> menu_builder, main_builder;
+    Glib::RefPtr<Glib::Binding> m_binding;
+    // Gtk::Box *searchbox;
 
     //Window widgets
     Gtk::Box vbox,hbox,*infobox;

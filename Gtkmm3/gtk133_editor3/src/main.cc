@@ -2,6 +2,6 @@
 
 int main(int argc,char **argv){
     auto app = Gtk::Application::create(argc,argv,"org.gtk.daleclack");
-    TextEditor textwin;
-    return app->run(textwin);
+    auto textwin = TextEditor::create();
+    return app->run(*textwin);
 }

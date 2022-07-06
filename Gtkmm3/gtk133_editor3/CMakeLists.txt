@@ -31,7 +31,7 @@ set(SOURCE_FILE src/main.cc src/TextEditor.cc)
 #Compile Resource
 
 set(RESOURCE_LIST
-    searchbar.ui
+    texteditor.ui
     text_menu.xml)
 
 compile_gresources(RESOURCE_FILE
