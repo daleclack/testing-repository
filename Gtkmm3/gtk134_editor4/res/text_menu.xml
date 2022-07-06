@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <menu id="text_menu">
+        <section>
+            <item>
+                <attribute name="label">Open</attribute>
+                <attribute name="action">win.text_open</attribute>
+            </item>
+            <item>
+                <attribute name="label">Save As</attribute>
+                <attribute name="action">win.text_save</attribute>
+            </item>
+            <item>
+                <attribute name="label">Copy</attribute>
+                <attribute name="action">win.text_copy</attribute>
+            </item>
+            <item>
+                <attribute name="label">Paste</attribute>
+                <attribute name="action">win.text_paste</attribute>
+            </item>
+            <item>
+                <attribute name="label">Clear</attribute>
+                <attribute name="action">win.text_clear</attribute>
+            </item>
+            <item>
+                <attribute name="label">About</attribute>
+                <attribute name="action">win.text_about</attribute>
+            </item>
+        </section>
+    </menu>
+</interface>
