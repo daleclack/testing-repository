@@ -32,19 +32,27 @@ private:
     //File Dialog
     Glib::RefPtr<Gtk::FileChooserNative> dialog;
     Glib::ustring curr_filename;
+    bool file_opened;
 
     //Signal Handlers
+
+    // File Operation functions
     void btnopen_clicked();
     void opendialog_response(int response);
     void btnsave_clicked();
+    void btnsaveas_clicked();
     void savedialog_response(int response);
+
+    // Copy, Paste and text operations
     void btncopy_clicked();
     void btnpaste_clicked();
-    void btnclear_clicked();
+    void btnclose_clicked();
     void buffer1_changed();
+    void clipboard_receive(const Glib::ustring &text);
+    void infobar_response(int response);
+
+    // Search funtion
     void search_entry_changed();
     void search_forward();
     void search_backward();
-    void clipboard_receive(const Glib::ustring &text);
-    void infobar_response(int response);
 };

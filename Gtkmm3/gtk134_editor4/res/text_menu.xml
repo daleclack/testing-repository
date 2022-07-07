@@ -7,8 +7,12 @@
                 <attribute name="action">win.text_open</attribute>
             </item>
             <item>
-                <attribute name="label">Save As</attribute>
+                <attribute name="label">Save</attribute>
                 <attribute name="action">win.text_save</attribute>
+            </item>
+            <item>
+                <attribute name="label">Save As</attribute>
+                <attribute name="action">win.text_saveas</attribute>
             </item>
             <item>
                 <attribute name="label">Copy</attribute>
@@ -19,8 +23,8 @@
                 <attribute name="action">win.text_paste</attribute>
             </item>
             <item>
-                <attribute name="label">Clear</attribute>
-                <attribute name="action">win.text_clear</attribute>
+                <attribute name="label">Close</attribute>
+                <attribute name="action">win.text_close</attribute>
             </item>
             <item>
                 <attribute name="label">About</attribute>
