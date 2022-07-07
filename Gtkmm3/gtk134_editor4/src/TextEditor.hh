@@ -11,10 +11,15 @@ private:
     Gtk::MenuButton menubtn;
     Gtk::Popover popover;
     Gtk::ToggleButton search_button;
+    Glib::RefPtr<Gtk::Builder> menu_builder;
+
+    //SearchBar
     Gtk::SearchBar searchbar;
     Gtk::SearchEntry search_entry;
-    Glib::RefPtr<Gtk::Builder> menu_builder;
+    Gtk::Box searchbox;
+    Gtk::Button search_up, search_down;
     Glib::RefPtr<Glib::Binding> search_binding;
+    Gtk::TextIter curr_iter_up, curr_iter_down;
 
     //Window widgets
     Gtk::Box vbox,hbox,*infobox;
@@ -38,6 +43,8 @@ private:
     void btnclear_clicked();
     void buffer1_changed();
     void search_entry_changed();
+    void search_forward();
+    void search_backward();
     void clipboard_receive(const Glib::ustring &text);
     void infobar_response(int response);
 };

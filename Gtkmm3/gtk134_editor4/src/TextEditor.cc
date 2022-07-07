@@ -6,11 +6,12 @@
 #define text_globs supported_globs
 
 TextEditor::TextEditor()
-:vbox(Gtk::ORIENTATION_VERTICAL,5),
-hbox(Gtk::ORIENTATION_HORIZONTAL,5)
+:vbox(Gtk::ORIENTATION_VERTICAL, 5),
+hbox(Gtk::ORIENTATION_HORIZONTAL, 5),
+searchbox(Gtk::ORIENTATION_HORIZONTAL, 5)
 {
     //Initalize Window
-    set_default_size(800,450);
+    set_default_size(800, 450);
     set_icon_name("my_textedit");
 
     //Initalize HeaderBar
@@ -40,23 +41,34 @@ hbox(Gtk::ORIENTATION_HORIZONTAL,5)
     hbox.pack_start(sw1);
     
     //Add actions and signal handlers
-    add_action("text_open",sigc::mem_fun(*this,&TextEditor::btnopen_clicked));
-    add_action("text_save",sigc::mem_fun(*this,&TextEditor::btnsave_clicked));
-    add_action("text_copy",sigc::mem_fun(*this,&TextEditor::btncopy_clicked));
-    add_action("text_paste",sigc::mem_fun(*this,&TextEditor::btnpaste_clicked));
-    add_action("text_clear",sigc::mem_fun(*this,&TextEditor::btnclear_clicked));
+    add_action("text_open", sigc::mem_fun(*this,&TextEditor::btnopen_clicked));
+    add_action("text_save", sigc::mem_fun(*this,&TextEditor::btnsave_clicked));
+    add_action("text_copy", sigc::mem_fun(*this,&TextEditor::btncopy_clicked));
+    add_action("text_paste", sigc::mem_fun(*this,&TextEditor::btnpaste_clicked));
+    add_action("text_clear", sigc::mem_fun(*this,&TextEditor::btnclear_clicked));
 
-    //Add searchbar
-    searchbar.add(search_entry);
+    //Add searchbar and search up and down buttons
+    search_up.set_image_from_icon_name("up");
+    search_down.set_image_from_icon_name("down");
+    
+    // Bind property and signals
     search_binding = Glib::Binding::bind_property(search_button.property_active(),
                                  searchbar.property_search_mode_enabled(),
                                  Glib::BINDING_BIDIRECTIONAL);
     search_entry.signal_changed().connect(sigc::mem_fun(*this, &TextEditor::search_entry_changed));
+    search_up.signal_clicked().connect(sigc::mem_fun(*this, &TextEditor::search_backward));
+    search_down.signal_clicked().connect(sigc::mem_fun(*this, &TextEditor::search_forward));
+
+    // Pack widgets
+    searchbox.pack_start(search_entry, Gtk::PACK_SHRINK);
+    searchbox.pack_start(search_up, Gtk::PACK_SHRINK);
+    searchbox.pack_start(search_down, Gtk::PACK_SHRINK);
+    searchbar.add(searchbox);
     vbox.pack_start(searchbar, Gtk::PACK_SHRINK);
 
     //A InfoBar
     infobar.add_button("OK",Gtk::RESPONSE_OK);
-    infobar.signal_response().connect(sigc::mem_fun(*this,&TextEditor::infobar_response));
+    infobar.signal_response().connect(sigc::mem_fun(*this, &TextEditor::infobar_response));
     infobox = dynamic_cast<Gtk::Box*>(infobar.get_content_area());
     infobox->pack_start(label1);
     vbox.pack_start(infobar,Gtk::PACK_SHRINK);
@@ -160,10 +172,43 @@ void TextEditor::buffer1_changed(){
 }
 
 void TextEditor::search_entry_changed(){
+    // Get Text to search
     const Glib::ustring text = search_entry.get_text();
+
     Gtk::TextIter start, end;
-    if(buffer1->begin().forward_search(text,Gtk::TEXT_SEARCH_CASE_INSENSITIVE,start,end)){
-        buffer1->select_range(start,end);
+    // If get text to search, select the text and storage the position
+    if(buffer1->begin().forward_search(text, Gtk::TEXT_SEARCH_CASE_INSENSITIVE, start, end)){
+        curr_iter_up = start;
+        curr_iter_down = end;
+        buffer1->select_range(start, end);
+        textview1.scroll_to(start);
+    }
+}
+
+void TextEditor::search_forward(){
+    // Get Text to search
+    const Glib::ustring search_text = search_entry.get_text();
+
+    Gtk::TextIter start, end;
+    // Get Text to search, down to the end of text
+    if(curr_iter_down.forward_search(search_text, Gtk::TEXT_SEARCH_CASE_INSENSITIVE, start, end)){
+        curr_iter_up = start;
+        curr_iter_down = end;
+        buffer1->select_range(start, end);
+        textview1.scroll_to(start);
+    }
+}
+
+void TextEditor::search_backward(){
+    // Get Text to search, up to the start of text
+    const Glib::ustring search_text = search_entry.get_text();
+
+    Gtk::TextIter start, end;
+    // Get Text to search
+    if(curr_iter_up.backward_search(search_text, Gtk::TEXT_SEARCH_CASE_INSENSITIVE, start, end)){
+        curr_iter_up = start;
+        curr_iter_down = end;
+        buffer1->select_range(start, end);
         textview1.scroll_to(start);
     }
 }
