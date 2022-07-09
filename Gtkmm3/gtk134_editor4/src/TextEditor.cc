@@ -48,6 +48,7 @@ TextEditor::TextEditor()
     add_action("text_copy", sigc::mem_fun(*this, &TextEditor::btncopy_clicked));
     add_action("text_paste", sigc::mem_fun(*this, &TextEditor::btnpaste_clicked));
     add_action("text_close", sigc::mem_fun(*this, &TextEditor::btnclose_clicked));
+    add_action("text_about", sigc::mem_fun(*this, &TextEditor::about_activated));
 
     // Add searchbar and search up and down buttons
     search_up.set_image_from_icon_name("up");
@@ -310,4 +311,30 @@ void TextEditor::btnclose_clicked()
 void TextEditor::infobar_response(int response)
 {
     infobar.hide();
+}
+
+void TextEditor::about_activated(){
+    char *version, *copyright;
+    // The Gtkmm Version
+    version = g_strdup_printf("1.0\nRunning Against Gtkmm %d.%d.%d",
+                              GTKMM_MAJOR_VERSION,
+                              GTKMM_MINOR_VERSION,
+                              GTKMM_MICRO_VERSION);
+    const char *authors[] = {"Dale Clack", NULL};
+    // Copyright Informaion
+    copyright = g_strdup_printf("© 2019—2022 The Xe Project");
+    // Show the about dialog
+    gtk_show_about_dialog(GTK_WINDOW(this->gobj()),
+                          "program-name", "Text Editot",
+                          "version", version,
+                          "copyright", copyright,
+                          "comments", "A simple text editor",
+                          "authors", authors,
+                          "license-type", GTK_LICENSE_GPL_3_0,
+                          "logo-icon-name", "org.gtk.daleclack",
+                          "title", "About Simple text editor",
+                          NULL);
+    // Free memory
+    g_free(version);
+    g_free(copyright);
 }

@@ -55,4 +55,7 @@ private:
     void search_entry_changed();
     void search_forward();
     void search_backward();
+
+    // Other Signal Handlers
+    void about_activated();
 };
