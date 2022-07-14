@@ -1,23 +1,12 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
-#include <fstream>
 
 using namespace cv;
 
 int main(int argc, char ** argv){
-    std::fstream infile;
-    char filename[512];
+    std::string filename;
 
-    // Read image filename from file
-    infile.open("filename.txt", std::ios_base::in);
-    if(infile.is_open()){
-        infile.read(filename, sizeof(filename));
-    }else{
-        std::cout << "No filename.txt" << std::endl;
-        return -1;
-    }
-
-    std::cout << filename << std::endl;
+    std::cin >> filename;
 
     // Open the image
     Mat image, image_hsv, image_gray;
