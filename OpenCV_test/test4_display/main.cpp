@@ -33,7 +33,10 @@ int main(int argc, char **argv)
         }
 
         imshow("Video Capture", frame);
-        waitKey(1);
+        int c = waitKey(1);
+        if(c == 27){
+            break;
+        }
     }
 
     capture.release();
