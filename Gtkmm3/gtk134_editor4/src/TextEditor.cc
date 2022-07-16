@@ -1,6 +1,7 @@
 #include "TextEditor.hh"
 #include "text_types.hh"
 #include <fstream>
+#include <iostream>
 
 // Only for build in this repository
 #define text_globs supported_globs
@@ -215,12 +216,15 @@ void TextEditor::search_entry_changed()
 
     Gtk::TextIter start, end;
     // If get text to search, select the text and storage the position
-    if (buffer1->begin().forward_search(text, Gtk::TEXT_SEARCH_CASE_INSENSITIVE, start, end))
+    if (text.length() != 0)
     {
-        curr_iter_up = start;
-        curr_iter_down = end;
-        buffer1->select_range(start, end);
-        textview1.scroll_to(start);
+        if (buffer1->begin().forward_search(text, Gtk::TEXT_SEARCH_CASE_INSENSITIVE, start, end))
+        {
+            curr_iter_up = start;
+            curr_iter_down = end;
+            buffer1->select_range(start, end);
+            textview1.scroll_to(start);
+        }
     }
 }
 
@@ -231,12 +235,15 @@ void TextEditor::search_forward()
 
     Gtk::TextIter start, end;
     // Get Text to search, down to the end of text
-    if (curr_iter_down.forward_search(search_text, Gtk::TEXT_SEARCH_CASE_INSENSITIVE, start, end))
+    if (search_text.length() != 0)
     {
-        curr_iter_up = start;
-        curr_iter_down = end;
-        buffer1->select_range(start, end);
-        textview1.scroll_to(start);
+        if (curr_iter_down.forward_search(search_text, Gtk::TEXT_SEARCH_CASE_INSENSITIVE, start, end))
+        {
+            curr_iter_up = start;
+            curr_iter_down = end;
+            buffer1->select_range(start, end);
+            textview1.scroll_to(start);
+        }
     }
 }
 
@@ -247,12 +254,15 @@ void TextEditor::search_backward()
 
     Gtk::TextIter start, end;
     // Get Text to search
-    if (curr_iter_up.backward_search(search_text, Gtk::TEXT_SEARCH_CASE_INSENSITIVE, start, end))
+    if (search_text.length() != 0)
     {
-        curr_iter_up = start;
-        curr_iter_down = end;
-        buffer1->select_range(start, end);
-        textview1.scroll_to(start);
+        if (curr_iter_up.backward_search(search_text, Gtk::TEXT_SEARCH_CASE_INSENSITIVE, start, end))
+        {
+            curr_iter_up = start;
+            curr_iter_down = end;
+            buffer1->select_range(start, end);
+            textview1.scroll_to(start);
+        }
     }
 }
 
@@ -313,7 +323,8 @@ void TextEditor::infobar_response(int response)
     infobar.hide();
 }
 
-void TextEditor::about_activated(){
+void TextEditor::about_activated()
+{
     char *version, *copyright;
     // The Gtkmm Version
     version = g_strdup_printf("1.0\nRunning Against Gtkmm %d.%d.%d",
@@ -333,7 +344,7 @@ void TextEditor::about_activated(){
                           "license-type", GTK_LICENSE_GPL_3_0,
                           "logo-icon-name", "org.gtk.daleclack",
                           "title", "About Simple text editor",
-                          NULL);
+                          (char *)NULL);
     // Free memory
     g_free(version);
     g_free(copyright);
