@@ -42,10 +42,10 @@ int main(int argc, char **argv)
     meanStdDev(image, mean, stddev);
     std::cout << "mean:" << std::endl << mean << std::endl;
     std::cout << "stddev" << std::endl << stddev << std::endl;
-    inRange(hsv_image, Scalar(35, 43, 46), Scalar(77, 255, 255), mask);
+    inRange(hsv_image, Scalar(100, 43, 46), Scalar(124, 255, 255), mask);
     namedWindow("Image Mask", WINDOW_NORMAL);
     imshow("Image Mask", mask);
-
+    
     while (1)
     {
         int c = waitKey(1);
