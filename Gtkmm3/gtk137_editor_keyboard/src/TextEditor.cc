@@ -1,5 +1,6 @@
 #include "TextEditor.hh"
 #include "text_types.hh"
+#include "../json_nlohmann/json.hpp"
 #include <fstream>
 #include <iostream>
 
@@ -12,6 +13,10 @@ TextEditor::TextEditor()
       searchbox(Gtk::ORIENTATION_HORIZONTAL, 5),
       file_opened(false)
 {
+    // Load window config from json file
+
+    
+
     // Initalize Window
     set_default_size(800, 450);
     set_icon_name("my_textedit");
