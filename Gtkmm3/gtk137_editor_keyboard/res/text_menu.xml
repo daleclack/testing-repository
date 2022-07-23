@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <menu id="text_menu">
+        <section>
+            <item>
+                <attribute name="label">Open</attribute>
+                <attribute name="action">win.text_open</attribute>
+                <attribute name="accel">&lt;Control&gt;o</attribute>
+            </item>
+            <item>
+                <attribute name="label">Save</attribute>
+                <attribute name="action">win.text_save</attribute>
+                <attribute name="accel">&lt;Control&gt;s</attribute>
+            </item>
+            <item>
+                <attribute name="label">Save As</attribute>
+                <attribute name="action">win.text_saveas</attribute>
+                <attribute name="accel">&lt;Control&gt;&lt;Shift&gt;s</attribute>
+            </item>
+            <item>
+                <attribute name="label">Copy</attribute>
+                <attribute name="action">win.text_copy</attribute>
+                <attribute name="accel">&lt;Control&gt;c</attribute>
+            </item>
+            <item>
+                <attribute name="label">Paste</attribute>
+                <attribute name="action">win.text_paste</attribute>
+                <attribute name="accel">&lt;Control&gt;v</attribute>
+            </item>
+            <item>
+                <attribute name="label">Close</attribute>
+                <attribute name="action">win.text_close</attribute>
+            </item>
+            <item>
+                <attribute name="label">About</attribute>
+                <attribute name="action">win.text_about</attribute>
+            </item>
+        </section>
+    </menu>
+</interface>
