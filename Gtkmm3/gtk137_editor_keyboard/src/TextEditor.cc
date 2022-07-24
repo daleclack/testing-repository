@@ -18,7 +18,8 @@ TextEditor::TextEditor()
     // Load window config from json file
     int width = 800, height = 450;
     std::ifstream json_file("config.json");
-    if(json_file.is_open()){
+    if (json_file.is_open())
+    {
         json data = json::parse(json_file);
         width = data["width"];
         height = data["height"];
@@ -100,7 +101,8 @@ TextEditor::TextEditor()
     infobar.hide();
 }
 
-bool TextEditor::window_delete_event(GdkEventAny *event){
+bool TextEditor::window_delete_event(GdkEventAny *event)
+{
     // Create json raw data
     json data = json::parse(R"({
         "width":800,
@@ -114,7 +116,8 @@ bool TextEditor::window_delete_event(GdkEventAny *event){
     // Output json data to file
     std::fstream outfile;
     outfile.open("config.json", std::ios_base::out);
-    if(outfile.is_open()){
+    if (outfile.is_open())
+    {
         outfile << data;
     }
     outfile.close();
