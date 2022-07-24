@@ -35,6 +35,7 @@ private:
     bool file_opened;
 
     //Signal Handlers
+    bool window_delete_event(GdkEventAny *event);
 
     // File Operation functions
     void btnopen_clicked();

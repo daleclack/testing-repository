@@ -4,6 +4,8 @@
 #include <fstream>
 #include <iostream>
 
+using json = nlohmann::json;
+
 // Only for build in this repository
 #define text_globs supported_globs
 
@@ -14,11 +16,17 @@ TextEditor::TextEditor()
       file_opened(false)
 {
     // Load window config from json file
-
-    
+    int width = 800, height = 450;
+    std::ifstream json_file("config.json");
+    if(json_file.is_open()){
+        json data = json::parse(json_file);
+        width = data["width"];
+        height = data["height"];
+    }
+    json_file.close();
 
     // Initalize Window
-    set_default_size(800, 450);
+    vbox.set_size_request(width, height);
     set_icon_name("my_textedit");
 
     // Initalize HeaderBar
@@ -82,11 +90,35 @@ TextEditor::TextEditor()
     infobox->pack_start(label1);
     vbox.pack_start(infobar, Gtk::PACK_SHRINK);
 
+    // Save config when the window is closed
+    signal_delete_event().connect(sigc::mem_fun(*this, &TextEditor::window_delete_event));
+
     // Show everything
     vbox.pack_start(hbox);
     add(vbox);
     show_all_children();
     infobar.hide();
+}
+
+bool TextEditor::window_delete_event(GdkEventAny *event){
+    // Create json raw data
+    json data = json::parse(R"({
+        "width":800,
+        "height":450
+    })");
+
+    // Override config in json file
+    data["width"] = vbox.get_width();
+    data["height"] = vbox.get_height();
+
+    // Output json data to file
+    std::fstream outfile;
+    outfile.open("config.json", std::ios_base::out);
+    if(outfile.is_open()){
+        outfile << data;
+    }
+    outfile.close();
+    return false;
 }
 
 void TextEditor::btnopen_clicked()
