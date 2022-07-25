@@ -10,7 +10,8 @@ using json = nlohmann::json;
 int main(int argc, char **argv)
 {
     // Read Config from json file
-    std::string path;
+    std::string path, video_path;
+    bool save_video;
     std::ifstream config_file("config_collect.json");
     if (config_file.is_open())
     {
@@ -20,10 +21,13 @@ int main(int argc, char **argv)
         {
             path = path + "/";
         }
+        video_path = data["video_path"];
+        save_video = data["save_video"];
     }
     else
     {
         path = "./";
+        save_video = false;
     }
 
     // Start Video Capture
@@ -39,6 +43,13 @@ int main(int argc, char **argv)
     double rate = capture.get(CAP_PROP_FPS);
     double width = capture.get(CAP_PROP_FRAME_WIDTH);
     double height = capture.get(CAP_PROP_FRAME_HEIGHT);
+
+    // Save video
+    VideoWriter writer;
+    if (save_video)
+    {
+        writer = VideoWriter(video_path, VideoWriter::fourcc('m', 'p', '4', 'v'), rate, Size(width, height), true);
+    }
 
     // Information about the camera
     std::cout << "Frame Rate = " << rate << "width = " << width << "height = " << height << std::endl;
@@ -65,9 +76,14 @@ int main(int argc, char **argv)
             count++;
             std::string filename = path + std::to_string(count) + ".jpg";
             imwrite(filename, frame);
+            // write to video when it enabled
+            if (save_video)
+            {
+                writer.write(frame);
+            }
         }
 
-        int c = waitKey(10);
+        int c = waitKey(1000 / rate);
 
         if (c == 27)
         {
@@ -80,6 +96,7 @@ int main(int argc, char **argv)
     }
 
     capture.release();
+    writer.release();
     destroyAllWindows();
     return 0;
 }
