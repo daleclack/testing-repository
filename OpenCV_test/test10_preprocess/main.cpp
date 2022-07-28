@@ -43,6 +43,7 @@ int main(int argc, char **argv)
     namedWindow("Canny Image", WINDOW_AUTOSIZE);
     imshow("Canny Image", canny_image);
 
+
     std::fstream outfile;
     outfile.open("test.txt", std::ios_base::out);
     if (outfile.is_open())
