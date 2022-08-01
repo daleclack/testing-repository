@@ -13,7 +13,7 @@ private:
     Gtk::MenuButton menubtn;
     Gtk::Popover popover;
     Gtk::ToggleButton search_button;
-    Glib::RefPtr<Gtk::Builder> menu_builder;
+    Glib::RefPtr<Gtk::Builder> menu_builder, expend_builder;
 
     // SearchBar
     Gtk::SearchBar searchbar;
@@ -25,11 +25,14 @@ private:
 
     // Window widgets
     Gtk::Box vbox, hbox, *infobox;
-    Gtk::ScrolledWindow sw1, sw2;
+    Gtk::ScrolledWindow sw1;
     Glib::RefPtr<Gtk::TextBuffer> buffer1;
     Gtk::TextView textview1;
     Gtk::InfoBar infobar;
     Gtk::Label label1;
+    Gtk::Expander *expender;
+    Gtk::Button *btns[26], *btntab, *btnenter;
+    Gtk::ToggleButton *btnshift, *btncaps;
 
     // File Dialog
     Glib::RefPtr<Gtk::FileChooserNative> dialog;
@@ -58,6 +61,11 @@ private:
     void search_entry_changed();
     void search_forward();
     void search_backward();
+
+    // Keyboard press
+    void key_pressed(Gtk::Button *button);
+    void btntab_clicked();
+    void btnenter_clicked();
 
     // Other Signal Handlers
     void about_activated();

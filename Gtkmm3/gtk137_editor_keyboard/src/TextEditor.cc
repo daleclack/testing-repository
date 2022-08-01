@@ -3,6 +3,7 @@
 #include "../json_nlohmann/json.hpp"
 #include <fstream>
 #include <iostream>
+#include <string>
 
 using json = nlohmann::json;
 
@@ -27,7 +28,7 @@ TextEditor::TextEditor()
     json_file.close();
 
     // Initalize Window
-    vbox.set_size_request(width, height);
+    set_default_size(width, height);
     set_icon_name("my_textedit");
 
     // Initalize HeaderBar
@@ -90,15 +91,59 @@ TextEditor::TextEditor()
     infobox = dynamic_cast<Gtk::Box *>(infobar.get_content_area());
     infobox->pack_start(label1);
     vbox.pack_start(infobar, Gtk::PACK_SHRINK);
+    vbox.pack_start(hbox);
 
     // Save config when the window is closed
     signal_delete_event().connect(sigc::mem_fun(*this, &TextEditor::window_delete_event));
 
+    // Add Intergated keyboard
+    expend_builder = Gtk::Builder::create_from_resource("/org/gtk/daleclack/expender.ui");
+    expend_builder->get_widget("key_expend", expender);
+    expend_builder->get_widget("btnshift", btnshift);
+    expend_builder->get_widget("btn_caps", btncaps);
+    expend_builder->get_widget("btntab", btntab);
+    expend_builder->get_widget("btnenter", btnenter);
+    vbox.pack_start(*expender, Gtk::PACK_SHRINK);
+
+    // Get alphabet buttons
+    for(int i = 0; i < 26; i++){
+        char name[10];
+        sprintf(name, "btn%d", i);
+        expend_builder->get_widget(name, btns[i]);
+        btns[i]->signal_clicked().connect(sigc::bind(
+            sigc::mem_fun(*this, &TextEditor::key_pressed),
+            btns[i]
+        ));
+    }
+    btntab->signal_clicked().connect(sigc::mem_fun(*this, &TextEditor::btntab_clicked));
+    btnenter->signal_clicked().connect(sigc::mem_fun(*this, &TextEditor::btnenter_clicked));
+
     // Show everything
-    vbox.pack_start(hbox);
     add(vbox);
     show_all_children();
     infobar.hide();
+}
+
+void TextEditor::key_pressed(Gtk::Button *button){
+    auto label = button->get_label();
+    Glib::ustring::size_type pos = 0,len = 1;
+    char buf[2];
+    if(btncaps->get_active() || btnshift->get_active()){
+        btnshift->set_active(false);
+    }else{
+        sprintf(buf, "%c", label[0] + 32);
+        label.replace(pos, len, buf);
+    }
+    //std::cout << label << std::endl;
+    buffer1->insert_at_cursor(label);
+}
+
+void TextEditor::btntab_clicked(){
+    buffer1->insert_at_cursor("\t");
+}
+
+void TextEditor::btnenter_clicked(){
+    buffer1->insert_at_cursor("\n");
 }
 
 bool TextEditor::window_delete_event(GdkEventAny *event)
@@ -110,8 +155,8 @@ bool TextEditor::window_delete_event(GdkEventAny *event)
     })");
 
     // Override config in json file
-    data["width"] = vbox.get_width();
-    data["height"] = vbox.get_height();
+    data["width"] = sw1.get_width();
+    data["height"] = sw1.get_height();
 
     // Output json data to file
     std::fstream outfile;
