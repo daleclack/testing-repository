@@ -10,6 +10,8 @@
 
 Thanks for the project author https://github.com/Makman2/GCR_CMake
 
+and the author of json: https://github.com/nlohmann/json[GitHub - nlohmann/json: JSON for Modern C++](https://github.com/nlohmann/json)
+
 The test for Qt5 is starting, and some example from the Qt opensource example.
 
 (Actually, I forked the project for convenience)
