@@ -126,5 +126,33 @@ void MediaPlayer::btnload_clicked()
 
 void MediaPlayer::btnsave_clicked()
 {
-    
+    // Initalize Vectors
+    std::vector<std::string> name_tmp, path_tmp;
+    for (auto row : store->children())
+    {
+        name_tmp.push_back(row[n_columns.file_name]);
+        path_tmp.push_back(row[n_columns.file_path]);
+    }
+
+    // Save data to json file
+    std::fstream outfile;
+    outfile.open("playlist.json", std::ios::out);
+    if (outfile.is_open())
+    {
+        // Load json data
+        json data = json::parse(R"(
+            {
+                "name":[""],
+                "path":[""]
+            }
+        )");
+        data["name"] = name_tmp;
+        data["path"] = path_tmp;
+
+        // Save to file
+        outfile << data;
+    }else{
+        std::cout << "Failed to save file!" << std::endl;
+    }
+    outfile.close();
 }
