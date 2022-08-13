@@ -45,4 +45,5 @@ private:
     void btnremove_clicked();
     void btnload_clicked();
     void btnsave_clicked();
+    void item_activated(const Gtk::TreeModel::Path &path, Gtk::TreeViewColumn *column);
 };

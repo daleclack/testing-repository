@@ -45,6 +45,7 @@ MediaPlayer::MediaPlayer()
     treeview.set_model(store);
     treeview.append_column("File Name", n_columns.file_name);
     selection = treeview.get_selection();
+    treeview.signal_row_activated().connect(sigc::mem_fun(*this, &MediaPlayer::item_activated));
 
     // Add vbox to the window
     set_child(vbox);
@@ -122,6 +123,13 @@ void MediaPlayer::btnload_clicked()
             }
         }
     }
+}
+
+void MediaPlayer::item_activated(const Gtk::TreePath &path, Gtk::TreeViewColumn *column)
+{
+    auto row = *(store->get_iter(path));
+    auto filename = row[n_columns.file_path];
+    video1.set_filename(filename);
 }
 
 void MediaPlayer::btnsave_clicked()
