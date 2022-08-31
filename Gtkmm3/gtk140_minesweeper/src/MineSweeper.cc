@@ -1,8 +1,5 @@
 #include "MineSweeper.hh"
-#include <cstdlib>
-#include <ctime>
 #include <string>
-#include <fstream>
 
 MineSweeper::MineSweeper()
 :main_box(Gtk::ORIENTATION_VERTICAL, 5),
@@ -54,13 +51,10 @@ void MineSweeper::reset_game()
     // Reset mines
     while(mine_count < 9)
     {
-        srand((unsigned)time(NULL));
-        int index1 = rand() % 7;
-        srand((unsigned)time(NULL));
-        int index2 = rand() % 7;
-        if(!(cell[index1 * 7 + index2].has_mine)){
-            cell[index1 * 7 + index2].has_mine = true;
-            cell[index1 * 7 + index2].set_label("x");
+        int index = g_random_int_range(0, 49);
+        if(!(cell[index].has_mine)){
+            cell[index].has_mine = true;
+            cell[index].set_label("x");
             mine_count++;
         } 
     }
