@@ -5,7 +5,7 @@
 class MineCell : public Gtk::Button
 {
 public:
-    bool is_mine = false;
+    bool has_mine = false;
     int mines_around;
     MineCell(){
         // Set button style
@@ -21,7 +21,11 @@ public:
 private:
     // Child widgets
     Gtk::Grid mine_grid;
+    Gtk::Label status_label;
+    Gtk::Box main_box, btn_box;
     MineCell cell[49];
+    bool winned, game_ended;
+    int mines_clear, mine_count;
 
     // Timer
     sigc::connection mytimer;
