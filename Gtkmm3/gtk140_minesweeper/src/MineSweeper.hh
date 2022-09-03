@@ -10,6 +10,7 @@ public:
     MineCell(){
         // Set button style
         set_relief(Gtk::RELIEF_NONE);
+        mines_around = 0;
     }
 };
 
@@ -23,6 +24,7 @@ private:
     Gtk::Grid mine_grid;
     Gtk::Label status_label;
     Gtk::Box main_box, btn_box;
+    Gtk::Button btnstart, btnshow, btnexit;
     MineCell cell[49];
     bool winned, game_ended;
     int mines_clear, mine_count;
@@ -32,5 +34,7 @@ private:
 
     // Signal Handlers
     void reset_game();
+    void calc_mines();
+    void show_mines();
     void cell_clicked(MineCell *cell);
 };
