@@ -6,6 +6,7 @@ class MineCell : public Gtk::Button
 {
 public:
     bool has_mine = false;
+    bool cleared = false;
     int mines_around;
     MineCell(){
         // Set button style

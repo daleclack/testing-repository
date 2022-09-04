@@ -1,6 +1,7 @@
 #include "MineSweeper.hh"
 #include <string>
-#include <fstream>
+// #include <fstream>
+// #include <iostream>
 
 MineSweeper::MineSweeper()
     : main_box(Gtk::ORIENTATION_VERTICAL, 5),
@@ -58,6 +59,8 @@ void MineSweeper::reset_game()
         {
             cell[i * 7 + j].set_label("?");
             cell[i * 7 + j].mines_around = 0;
+            cell[i * 7 + j].has_mine = false;
+            cell[i * 7 + j].cleared = false;
         }
     }
 
@@ -72,8 +75,10 @@ void MineSweeper::reset_game()
             mine_count++;
         }
     }
+    // std::cout << mine_count << std::endl;
     game_ended = false;
     winned = true;
+    status_label.set_label(" ");
     calc_mines();
 }
 
@@ -128,8 +133,9 @@ void MineSweeper::show_mines(){
 
 void MineSweeper::cell_clicked(MineCell *cell)
 {
-    if (!game_ended)
+    if (!game_ended && !cell->cleared)
     {
+        cell->cleared = true;
         // If get mine, the game will end now
         if (cell->has_mine)
         {
@@ -141,6 +147,7 @@ void MineSweeper::cell_clicked(MineCell *cell)
         else
         {
             mines_clear++;
+            // std::cout << mines_clear << std::endl;
             if (cell->mines_around == 0)
             {
                 cell->set_label(" ");
