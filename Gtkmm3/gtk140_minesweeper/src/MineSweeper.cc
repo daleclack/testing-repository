@@ -1,7 +1,8 @@
 #include "MineSweeper.hh"
+#include "../json_nlohmann/json.hpp"
 #include <string>
-// #include <fstream>
-// #include <iostream>
+
+using json = nlohmann::json;
 
 MineSweeper::MineSweeper()
     : main_box(Gtk::ORIENTATION_VERTICAL, 5),
@@ -51,6 +52,11 @@ MineSweeper::MineSweeper()
 
 void MineSweeper::reset_game()
 {
+    // Reset timer
+    mytimer.disconnect();
+    timer_count = 0;
+    mytimer = Glib::signal_timeout().connect(sigc::mem_fun(*this, &MineSweeper::timer_func), 1000);
+
     mine_count = 0;
     // Reset all data
     for (int i = 0; i < 7; i++)
@@ -131,6 +137,15 @@ void MineSweeper::show_mines(){
     }
 }
 
+bool MineSweeper::timer_func(){
+    // Set timer
+    char tmp[50];
+    timer_count++;
+    sprintf(tmp, "Time:%d", timer_count);
+    status_label.set_label(tmp);
+    return true;
+}
+
 void MineSweeper::cell_clicked(MineCell *cell)
 {
     if (!game_ended && !cell->cleared)
@@ -139,10 +154,12 @@ void MineSweeper::cell_clicked(MineCell *cell)
         // If get mine, the game will end now
         if (cell->has_mine)
         {
+            // Set game to stop
             winned = false;
             show_mines();
             status_label.set_label("You lost!");
             game_ended = true;
+            mytimer.disconnect();
         }
         else
         {
@@ -166,6 +183,7 @@ void MineSweeper::cell_clicked(MineCell *cell)
             status_label.set_label("You winned!");
             winned = true;
             game_ended = true;
+            mytimer.disconnect();
         }
     }
 }

@@ -31,6 +31,7 @@ private:
     int mines_clear, mine_count;
 
     // Timer
+    int timer_count;
     sigc::connection mytimer;
 
     // Signal Handlers
@@ -38,4 +39,5 @@ private:
     void calc_mines();
     void show_mines();
     void cell_clicked(MineCell *cell);
+    bool timer_func();
 };
