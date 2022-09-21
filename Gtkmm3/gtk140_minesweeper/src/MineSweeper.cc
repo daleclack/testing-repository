@@ -1,8 +1,7 @@
 #include "MineSweeper.hh"
-#include "../json_nlohmann/json.hpp"
+#include "TimesWin.hh"
+#include "InputBox.hh"
 #include <string>
-
-using json = nlohmann::json;
 
 MineSweeper::MineSweeper()
     : main_box(Gtk::ORIENTATION_VERTICAL, 5),
