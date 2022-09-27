@@ -85,6 +85,9 @@ void MineSweeper::reset_game()
     winned = true;
     status_label.set_label(" ");
     calc_mines();
+
+    // Read scores
+    win_input.read_json_file();
 }
 
 void MineSweeper::calc_mines()
@@ -179,10 +182,14 @@ void MineSweeper::cell_clicked(MineCell *cell)
         // If all the mines has cleared, you has winned
         if (mines_clear == 40)
         {
+            // Stop the game
             status_label.set_label("You winned!");
             winned = true;
             game_ended = true;
             mytimer.disconnect();
+
+            // Save the time of game
+            
         }
     }
 }
