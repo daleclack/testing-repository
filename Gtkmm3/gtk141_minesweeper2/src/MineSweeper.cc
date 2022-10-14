@@ -60,7 +60,9 @@ void MineSweeper::reset_game()
     {
         for (int j = 0; j < 7; j++)
         {
-            cell[i * 7 + j].set_label("?");
+            //cell[i * 7 + j].set_label("?");
+            cell[i * 7 + j].set_image_from_icon_name("");
+            cell[i * 7 + j].set_always_show_image();
             cell[i * 7 + j].mines_around = 0;
             cell[i * 7 + j].has_mine = false;
             cell[i * 7 + j].cleared = false;
@@ -129,7 +131,7 @@ void MineSweeper::calc_mines()
 void MineSweeper::show_mines(){
     for(int i = 0; i < 49; i++){
         if(cell[i].has_mine){
-            cell[i].set_label("x");
+            cell[i].set_image_from_icon_name("mine");
         }
     }
 }
@@ -164,12 +166,13 @@ void MineSweeper::cell_clicked(MineCell *cell)
             // std::cout << mines_clear << std::endl;
             if (cell->mines_around == 0)
             {
-                cell->set_label(" ");
+                // cell->set_label(" ");
+                cell->set_image_from_icon_name("");
             }
             else
             {
-                char *label = g_strdup_printf("%d", cell->mines_around);
-                cell->set_label(label);
+                char *label = g_strdup_printf("%dmines", cell->mines_around);
+                cell->set_image_from_icon_name(label);
                 g_free(label);
             }
         }
