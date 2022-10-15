@@ -65,7 +65,7 @@ if(WIN32)
 	set_property(SOURCE ../icon.rc APPEND PROPERTY
         OBJECT_DEPENDS ${PROJECT_SOURCE_DIR}/../icon.ico
         )
-	add_executable(${PROJECT_NAME} WIN32 ${app_WINRC} ${SOURCE_FILE} ${RESOURCE_FILE})
+	add_executable(${PROJECT_NAME} ${app_WINRC} ${SOURCE_FILE} ${RESOURCE_FILE})
     add_custom_command( TARGET ${PROJECT_NAME} 
                         COMMAND echo * > ${CMAKE_BINARY_DIR}/.gitignore
                         COMMAND echo **/* > ${CMAKE_BINARY_DIR}/.hgignore)

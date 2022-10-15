@@ -5,9 +5,10 @@
 class MineCell : public Gtk::Button
 {
 public:
-    bool has_mine = false;
-    bool cleared = false;
-    int mines_around;
+    bool has_mine = false;  // Whether the grid has mine
+    bool cleared = false;   // Whether the mine is cleared
+    int mines_around;       // The number near the grid
+    int x, y;               // The Position of the grid
     MineCell(){
         // Set button style
         set_relief(Gtk::RELIEF_NONE);
@@ -38,6 +39,8 @@ private:
     void reset_game();
     void calc_mines();
     void show_mines();
-    void cell_clicked(MineCell *cell);
+    void game_lost(int explode_index);
+    void cell_clicked(MineCell *cell1);
     bool timer_func();
+    void check_mines(int pos_x, int pos_y);
 };
