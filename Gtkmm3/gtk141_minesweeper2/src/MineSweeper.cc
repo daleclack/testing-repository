@@ -195,6 +195,7 @@ void MineSweeper::cell_clicked(MineCell *cell1)
 
 void MineSweeper::check_mines(int pos_x, int pos_y)
 {
+    std::cout << pos_y << " " << pos_x << "," << std::endl;
     if (pos_x >= 0 && pos_x <= 6 &&
         pos_y >= 0 && pos_y <= 6)
     {
@@ -203,7 +204,7 @@ void MineSweeper::check_mines(int pos_x, int pos_y)
         {
             mines_clear++;
             // std::cout << mines_clear << std::endl;
-            // std::cout << pos_y << " " << pos_x << std::endl;
+            
             if (cell[pos_y * 7 + pos_x].mines_around == 0)
             {
                 // cell->set_label(" ");
@@ -220,14 +221,22 @@ void MineSweeper::check_mines(int pos_x, int pos_y)
             cell[pos_y * 7 + pos_x].cleared = true;
             if (cell[pos_y * 7 + pos_x].mines_around == 0)
             {
-                check_mines(pos_y - 1, pos_x - 1);
-                check_mines(pos_y + 1, pos_x + 1);
-                check_mines(pos_y - 1, pos_x + 1);
-                check_mines(pos_y + 1, pos_x - 1);
-                check_mines(pos_y, pos_x - 1);
-                check_mines(pos_y, pos_x + 1);
-                check_mines(pos_y + 1, pos_x);
-                check_mines(pos_y - 1, pos_x);
+                check_mines((pos_x - 1), (pos_y - 1));
+                check_mines((pos_x + 1), (pos_y + 1));
+                check_mines((pos_x - 1), (pos_y + 1));
+                check_mines((pos_x + 1), (pos_y - 1));
+                check_mines(pos_x, (pos_y - 1));
+                check_mines(pos_x, (pos_y + 1));
+                check_mines((pos_x + 1), pos_y);
+                check_mines((pos_x - 1), pos_y);
+                // std::cout << pos_y - 1 << " " << pos_x - 1 << "," << std::endl;
+                // std::cout << pos_y - 1 << " " << pos_x << "," << std::endl;
+                // std::cout << pos_y - 1 << " " << pos_x + 1 << "," << std::endl;
+                // std::cout << pos_y << " " << pos_x - 1 << "," << std::endl;
+                // std::cout << pos_y << " " << pos_x + 1 << "," << std::endl;
+                // std::cout << pos_y + 1 << " " << pos_x - 1 << "," << std::endl;
+                // std::cout << pos_y + 1 << " " << pos_x << "," << std::endl;
+                // std::cout << pos_y + 1 << " " << pos_x + 1 << "," << std::endl;
             }
         }
     }
