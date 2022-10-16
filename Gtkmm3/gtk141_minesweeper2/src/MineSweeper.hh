@@ -27,7 +27,7 @@ private:
     Gtk::Label status_label;
     Gtk::Box main_box, btn_box;
     Gtk::Button btnstart, btnshow, btnexit;
-    MineCell cell[49];
+    MineCell *cell;
     bool winned, game_ended;
     int mines_clear, mine_count;
 

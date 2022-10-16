@@ -4,27 +4,12 @@
 
 MineSweeper::MineSweeper()
     : main_box(Gtk::ORIENTATION_VERTICAL, 5),
-      btn_box(Gtk::ORIENTATION_HORIZONTAL, 5)
+      btn_box(Gtk::ORIENTATION_HORIZONTAL, 5),
+      cell(nullptr)
 {
     // Initalize Window
     set_title("Gtkmm MineSweeper");
     set_icon_name("org.gtk.daleclack");
-
-    // Append buttons to grid
-    for (int i = 0; i < 7; i++)
-    {
-        for (int j = 0; j < 7; j++)
-        {
-            // cell[i * 7 + j].set_label("?");
-            cell[i * 7 + j].signal_clicked().connect(sigc::bind(
-                sigc::mem_fun(*this, &MineSweeper::cell_clicked), &cell[i * 7 + j]));
-            mine_grid.attach(cell[i * 7 + j], j, i);
-            cell[i * 7 + j].set_relief(Gtk::RELIEF_HALF);
-            cell[i * 7 + j].x = j;
-            cell[i * 7 + j].y = i;
-            cell[i * 7 + j].cleared = false;
-        }
-    }
 
     // Default setting
     reset_game();
@@ -55,6 +40,10 @@ MineSweeper::MineSweeper()
 
 void MineSweeper::reset_game()
 {
+    if(cell != nullptr){
+        delete[] cell;
+    }
+    cell = new MineCell[49];
     // Reset timer
     mytimer.disconnect();
     timer_count = 0;
@@ -62,15 +51,17 @@ void MineSweeper::reset_game()
 
     mine_count = 0;
     mines_clear = 0;
+    mine_grid.set_sensitive();
     // Reset all data
     for (int i = 0; i < 7; i++)
     {
         for (int j = 0; j < 7; j++)
         {
-            // cell[i * 7 + j].set_label("?");
+            // Initalize cell
             cell[i * 7 + j].set_relief(Gtk::RELIEF_HALF);
-            cell[i * 7 + j].set_image_from_icon_name("");
+            cell[i * 7 + j].set_image_from_icon_name("", Gtk::ICON_SIZE_LARGE_TOOLBAR);
             cell[i * 7 + j].set_always_show_image();
+            cell[i * 7 + j].set_size_request(40, 40);
             cell[i * 7 + j].mines_around = 0;
             cell[i * 7 + j].has_mine = false;
             cell[i * 7 + j].cleared = false;
@@ -93,67 +84,68 @@ void MineSweeper::reset_game()
     winned = true;
     status_label.set_label(" ");
     calc_mines();
+
+    // Append buttons to grid
+    for (int i = 0; i < 7; i++)
+    {
+        for (int j = 0; j < 7; j++)
+        {
+            // cell[i * 7 + j].set_label("?");
+            cell[i * 7 + j].signal_clicked().connect(sigc::bind(
+                sigc::mem_fun(*this, &MineSweeper::cell_clicked), &cell[i * 7 + j]));
+            mine_grid.attach(cell[i * 7 + j], j, i);
+            cell[i * 7 + j].set_relief(Gtk::RELIEF_HALF);
+            cell[i * 7 + j].x = j;
+            cell[i * 7 + j].y = i;
+            cell[i * 7 + j].cleared = false;
+        }
+    }
+
+    mine_grid.show_all();
 }
 
 void MineSweeper::calc_mines()
 {
+    // Calculate the mines around a cell
     for (int i = 0; i < 7; i++)
     {
         for (int j = 0; j < 7; j++)
         {
             int index1, index2;
+            // The Search cell should not over the grids
             for (index1 = MAX(0, i - 1); index1 < MIN(i + 1, 6) + 1; index1++)
             {
                 for (index2 = MAX(0, j - 1); index2 < MIN(j + 1, 6) + 1; index2++)
                 {
                     if ((cell[index1 * 7 + index2].has_mine))
                     {
-                        // std::fstream outfile;
-                        // outfile.open("test.txt", std::ios_base::app);
-                        // if (outfile.is_open())
-                        // {
-                        //     outfile << index1 << " " << index2 << "Has mine!" << std::endl;
-                        // }
-                        // outfile.close();
                         cell[i * 7 + j].mines_around++;
                     }
                 }
             }
-            // std::fstream outfile;
-            // outfile.open("test.txt", std::ios_base::app);
-            // if (outfile.is_open())
-            // {
-            //     outfile << "Start:" << j << " " << i << std::endl;
-            //     outfile << "index1:" << MAX(0, i - 1) << " " << MIN(i + 1, 6) << std::endl;
-            //     outfile << "index2:" << MAX(0, j - 1) << " " << MIN(j + 1, 6) << std::endl;
-            //     outfile << "Mines" << cell[i * 7 + j].mines_around << std::endl;
-            // }
-            // outfile.close();
-            // if (!cell[i * 7 + j].has_mine)
-            // {
-            //
-            // }
         }
     }
 }
 
 void MineSweeper::show_mines()
 {
+    // Show all cell with a mine
     for (int i = 0; i < 49; i++)
     {
         if (cell[i].has_mine)
         {
-            cell[i].set_image_from_icon_name("mine");
+            cell[i].set_image_from_icon_name("mine", Gtk::ICON_SIZE_LARGE_TOOLBAR);
         }
     }
 }
 
 void MineSweeper::game_lost(int explode_index){
+    // When a cell with mine is clicked, show other mines
     for (int i = 0; i < 49; i++)
     {
         if (cell[i].has_mine && i != explode_index)
         {
-            cell[i].set_image_from_icon_name("mine");
+            cell[i].set_image_from_icon_name("mine", Gtk::ICON_SIZE_LARGE_TOOLBAR);
         }
     }
 }
@@ -180,14 +172,16 @@ void MineSweeper::cell_clicked(MineCell *cell1)
             // Set game to stop
             winned = false;
             cell1->cleared = true;
-            cell1->set_image_from_icon_name("exploded");
+            cell1->set_image_from_icon_name("exploded", Gtk::ICON_SIZE_LARGE_TOOLBAR);
             game_lost(cell1->y * 7 + cell1->x);
             status_label.set_label("You lost!");
             game_ended = true;
             mytimer.disconnect();
+            mine_grid.set_sensitive(false);
         }
         else
         {
+            // If no mines, check the cell around
             check_mines(cell1->x, cell1->y);
         }
     }
@@ -195,7 +189,6 @@ void MineSweeper::cell_clicked(MineCell *cell1)
 
 void MineSweeper::check_mines(int pos_x, int pos_y)
 {
-    std::cout << pos_y << " " << pos_x << "," << std::endl;
     if (pos_x >= 0 && pos_x <= 6 &&
         pos_y >= 0 && pos_y <= 6)
     {
@@ -203,22 +196,24 @@ void MineSweeper::check_mines(int pos_x, int pos_y)
             !cell[pos_y * 7 + pos_x].cleared)
         {
             mines_clear++;
-            // std::cout << mines_clear << std::endl;
-            
+            // Show the cell has no mines around
             if (cell[pos_y * 7 + pos_x].mines_around == 0)
             {
-                // cell->set_label(" ");
-                cell[pos_y * 7 + pos_x].set_image_from_icon_name("");
+                cell[pos_y * 7 + pos_x].set_image_from_icon_name("", Gtk::ICON_SIZE_LARGE_TOOLBAR);
             }
             else
             {
+                // Show the numbers of mines around a cell
                 char *label = g_strdup_printf("%dmines", cell[pos_y * 7 + pos_x].mines_around);
-                // status_label.set_label(label);
-                cell[pos_y * 7 + pos_x].set_image_from_icon_name(label);
+                cell[pos_y * 7 + pos_x].set_image_from_icon_name(label, Gtk::ICON_SIZE_LARGE_TOOLBAR);
                 g_free(label);
             }
+
+            // make the cell without mines cleared
             cell[pos_y * 7 + pos_x].set_relief(Gtk::RELIEF_NONE);
             cell[pos_y * 7 + pos_x].cleared = true;
+            
+            // Check the cells around a cell that has no mines
             if (cell[pos_y * 7 + pos_x].mines_around == 0)
             {
                 check_mines((pos_x - 1), (pos_y - 1));
@@ -229,14 +224,6 @@ void MineSweeper::check_mines(int pos_x, int pos_y)
                 check_mines(pos_x, (pos_y + 1));
                 check_mines((pos_x + 1), pos_y);
                 check_mines((pos_x - 1), pos_y);
-                // std::cout << pos_y - 1 << " " << pos_x - 1 << "," << std::endl;
-                // std::cout << pos_y - 1 << " " << pos_x << "," << std::endl;
-                // std::cout << pos_y - 1 << " " << pos_x + 1 << "," << std::endl;
-                // std::cout << pos_y << " " << pos_x - 1 << "," << std::endl;
-                // std::cout << pos_y << " " << pos_x + 1 << "," << std::endl;
-                // std::cout << pos_y + 1 << " " << pos_x - 1 << "," << std::endl;
-                // std::cout << pos_y + 1 << " " << pos_x << "," << std::endl;
-                // std::cout << pos_y + 1 << " " << pos_x + 1 << "," << std::endl;
             }
         }
     }
