@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gtkmm.h>
+#include "InputBox.hh"
 
 class MineCell : public Gtk::Button
 {
@@ -34,6 +35,9 @@ private:
     // Timer
     int timer_count;
     sigc::connection mytimer;
+
+    // Input dialog
+    InputBox *input_dialog;
 
     // Signal Handlers
     void reset_game();

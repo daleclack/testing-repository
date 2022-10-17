@@ -33,6 +33,9 @@ MineSweeper::MineSweeper()
     main_box.pack_start(mine_grid);
     main_box.pack_start(btn_box, Gtk::PACK_SHRINK);
 
+    // Create a dialog
+    input_dialog = InputBox::create(*this);
+
     // Show everything
     add(main_box);
     show_all_children();
@@ -238,6 +241,7 @@ void MineSweeper::check_mines(int pos_x, int pos_y)
         mytimer.disconnect();
 
         // Save the time of game
-        
+        input_dialog->set_game_time(timer_count);
+        input_dialog->show_all();
     }
 }
