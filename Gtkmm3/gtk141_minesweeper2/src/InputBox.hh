@@ -28,4 +28,7 @@ class InputBox : public Gtk::Dialog{
 
         // Child widget
         Gtk::Entry *entry_name;
+
+        // Signal Handlers
+        void entry_activated();
 };

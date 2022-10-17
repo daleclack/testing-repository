@@ -7,6 +7,7 @@ InputBox::InputBox(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &re
 {
     // Get Widgets
     ref_builder->get_widget("entry_name", entry_name);
+    entry_name->signal_activate().connect(sigc::mem_fun(*this, &InputBox::entry_activated));
 }
 
 void InputBox::on_response(int response_id){
@@ -55,6 +56,11 @@ void InputBox::set_game_time(int time){
 
     // Initalize time
     game_time = time;
+}
+
+void InputBox::entry_activated(){
+    // Default response
+    response(Gtk::RESPONSE_OK);
 }
 
 InputBox *InputBox::create(Gtk::Window &parent)
