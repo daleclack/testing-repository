@@ -238,5 +238,6 @@ void MineSweeper::check_mines(int pos_x, int pos_y)
         mytimer.disconnect();
 
         // Save the time of game
+        
     }
 }

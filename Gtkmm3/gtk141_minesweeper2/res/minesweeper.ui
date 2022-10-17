@@ -7,15 +7,29 @@
     <property name="default-height">400</property>
     <property name="default-width">700</property>
     <property name="resize-mode">queue</property>
+    <child type="titlebar">
+      <object class="GtkStackSwitcher"/>
+    </child>
     <child>
       <object class="GtkStack" id="main_stack">
         <property name="halign">baseline</property>
         <property name="transition-type">slide-right</property>
         <child>
-          <object class="GtkGrid" id="start_page"/>
+          <object class="GtkGrid" id="start_page">
+            <property name="column-homogeneous">True</property>
+            <property name="column-spacing">2</property>
+            <property name="halign">center</property>
+            <property name="row-homogeneous">True</property>
+            <property name="valign">center</property>
+          </object>
         </child>
         <child>
-          <object class="GtkBox" id="main_page"/>
+          <object class="GtkBox" id="main_page">
+            <property name="orientation">vertical</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkGrid" id="custom_page"/>
         </child>
       </object>
     </child>
