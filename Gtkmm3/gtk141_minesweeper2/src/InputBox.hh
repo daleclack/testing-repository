@@ -2,15 +2,15 @@
 
 #include <gtkmm.h>
 #include <vector>
-#include "../json_nlohmann/json.hpp"
-
-using json = nlohmann::json;
+#include "jsonfile.hh"
+#include "ScoresWin.hh"
 
 class InputBox : public Gtk::Dialog{
     public:
-        static InputBox *create(Gtk::Window &parent);
+        static InputBox *create();
         InputBox(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glade);
         void set_game_time(int time);
+        void set_scores_window(ScoresWin *win1);
     
     protected:
         void on_response(int response_id) override;
@@ -28,6 +28,10 @@ class InputBox : public Gtk::Dialog{
 
         // Child widget
         Gtk::Entry *entry_name;
+        Gtk::CheckButton *check_scores;
+
+        // Scores Window
+        ScoresWin *scores_win1;
 
         // Signal Handlers
         void entry_activated();

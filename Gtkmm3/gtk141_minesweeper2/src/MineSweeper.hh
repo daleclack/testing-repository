@@ -2,6 +2,7 @@
 
 #include <gtkmm.h>
 #include "InputBox.hh"
+#include "ScoresWin.hh"
 
 class MineCell : public Gtk::Button
 {
@@ -21,6 +22,7 @@ class MineSweeper : public Gtk::ApplicationWindow
 {
 public:
     MineSweeper();
+    ~MineSweeper();
 
 private:
     // Child widgets
@@ -38,6 +40,9 @@ private:
 
     // Input dialog
     InputBox *input_dialog;
+
+    // Scores Window
+    ScoresWin *scores_win;
 
     // Signal Handlers
     void reset_game();

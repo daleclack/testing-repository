@@ -34,11 +34,21 @@ MineSweeper::MineSweeper()
     main_box.pack_start(btn_box, Gtk::PACK_SHRINK);
 
     // Create a dialog
-    input_dialog = InputBox::create(*this);
+    input_dialog = InputBox::create();
+
+    // Create Scores Window
+    scores_win = ScoresWin::create();
 
     // Show everything
     add(main_box);
     show_all_children();
+}
+
+MineSweeper::~MineSweeper(){
+    delete input_dialog;
+    if(cell != nullptr){
+        delete[] cell;
+    }
 }
 
 void MineSweeper::reset_game()
@@ -241,6 +251,9 @@ void MineSweeper::check_mines(int pos_x, int pos_y)
         mytimer.disconnect();
 
         // Save the time of game
+        input_dialog->set_transient_for(*this);
+        scores_win->set_transient_for(*this);
+        input_dialog->set_scores_window(scores_win);
         input_dialog->set_game_time(timer_count);
         input_dialog->show_all();
     }

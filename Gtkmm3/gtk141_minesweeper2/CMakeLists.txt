@@ -26,7 +26,7 @@ find_package (Gettext REQUIRED)
 set(PO_DIR ${CMAKE_BINARY_DIR}/po/zh_CN/LC_MESSAGES)
 
 #Source files
-set(SOURCE_FILE src/main.cc src/MineSweeper.cc src/InputBox.cc)
+set(SOURCE_FILE src/main.cc src/MineSweeper.cc src/InputBox.cc src/ScoresWin.cc)
 
 #Compile Resource
 
@@ -45,7 +45,8 @@ set(RESOURCE_LIST
     icons/scalable/status/maybe.svg
     icons/scalable/status/mine.svg
     STRIPBLANKS minesweeper.ui
-    STRIPBLANKS win_input.ui)
+    STRIPBLANKS win_input.ui
+    STRIPBLANKS scoreswin.ui)
 
 compile_gresources(RESOURCE_FILE
                    XML_OUT
