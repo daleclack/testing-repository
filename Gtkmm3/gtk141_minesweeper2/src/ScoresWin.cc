@@ -4,7 +4,9 @@ ScoresWin::ScoresWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &
     : Gtk::Window(cobject),
       ref_builder(ref_Glade)
 {
-    
+    // Get Widgets
+    ref_builder->get_widget("btnclose", btnclose);
+    btnclose->signal_clicked().connect(sigc::mem_fun(*this, &ScoresWin::hide));
 }
 
 ScoresWin *ScoresWin::create()

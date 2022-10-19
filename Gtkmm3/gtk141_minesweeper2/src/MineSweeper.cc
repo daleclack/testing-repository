@@ -39,6 +39,11 @@ MineSweeper::MineSweeper()
     // Create Scores Window
     scores_win = ScoresWin::create();
 
+    // Bind windows
+    input_dialog->set_transient_for(*this);
+    scores_win->set_transient_for(*this);
+    input_dialog->set_scores_window(scores_win);
+
     // Show everything
     add(main_box);
     show_all_children();
@@ -251,9 +256,6 @@ void MineSweeper::check_mines(int pos_x, int pos_y)
         mytimer.disconnect();
 
         // Save the time of game
-        input_dialog->set_transient_for(*this);
-        scores_win->set_transient_for(*this);
-        input_dialog->set_scores_window(scores_win);
         input_dialog->set_game_time(timer_count);
         input_dialog->show_all();
     }

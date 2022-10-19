@@ -10,4 +10,8 @@ class ScoresWin : public Gtk::Window{
     
     private:
         Glib::RefPtr<Gtk::Builder> ref_builder;
+
+        // Child widgets
+        Gtk::Button *btnclose;
+        Gtk::TreeView *tree_view;
 };
