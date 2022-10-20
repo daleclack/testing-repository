@@ -1,7 +1,6 @@
 #pragma once
 
 #include <gtkmm.h>
-#include <vector>
 #include "jsonfile.hh"
 #include "ScoresWin.hh"
 

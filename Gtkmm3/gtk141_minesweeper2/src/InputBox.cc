@@ -1,5 +1,4 @@
 #include "InputBox.hh"
-#include <fstream>
 
 InputBox::InputBox(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glade)
     : Gtk::Dialog(cobject),
@@ -34,7 +33,7 @@ void InputBox::on_response(int response_id)
         
         // If show scores checkbutton is checked, show scores window
         if(check_scores->get_active()){
-            scores_win1->show_all();
+            scores_win1->show_with_vectors(names, times);
         }
     }
     hide();
