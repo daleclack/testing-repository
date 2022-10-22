@@ -47,7 +47,7 @@ set(RESOURCE_LIST
     STRIPBLANKS minesweeper.ui
     STRIPBLANKS win_input.ui
     STRIPBLANKS scoreswin.ui
-    STRIPBLANKS mine_menu.ui)
+    STRIPBLANKS mine_menu.xml)
 
 compile_gresources(RESOURCE_FILE
                    XML_OUT

@@ -8,8 +8,25 @@ MineSweeper::MineSweeper()
       cell(nullptr)
 {
     // Initalize Window
-    set_title("Gtkmm MineSweeper");
+    header.set_title("Gtkmm MineSweeper");
+    set_titlebar(header);
+    header.set_show_close_button();
+    header.set_decoration_layout("close,minimize,maximize:menu");
+    header.pack_end(menu_btn);
     set_icon_name("org.gtk.daleclack");
+
+    // Initalize Menu
+    menu_builder = Gtk::Builder::create_from_resource("/org/gtk/daleclack/mine_menu.xml");
+    auto object = menu_builder->get_object("mine_menu");
+    auto gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(object);
+    popover1.bind_model(gmenu);
+    menu_btn.set_popover(popover1);
+
+    // Add Actions
+    add_action("new_game", sigc::mem_fun(*this, &MineSweeper::reset_game));
+    add_action("scores", sigc::mem_fun(*this, &MineSweeper::show_scores));
+    add_action("show_mines", sigc::mem_fun(*this, &MineSweeper::show_mines));
+    add_action("quit", sigc::mem_fun(*this, &MineSweeper::hide));
 
     // Default setting
     reset_game();
@@ -155,6 +172,11 @@ void MineSweeper::show_mines()
             cell[i].set_image_from_icon_name("mine", Gtk::ICON_SIZE_LARGE_TOOLBAR);
         }
     }
+}
+
+void MineSweeper::show_scores(){
+    // Show Scores Window
+    input_dialog->read_scores();
 }
 
 void MineSweeper::game_lost(int explode_index){

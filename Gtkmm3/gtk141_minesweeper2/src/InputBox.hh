@@ -8,6 +8,7 @@ class InputBox : public Gtk::Dialog{
     public:
         static InputBox *create();
         InputBox(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glade);
+        void read_scores(bool show_scores_win = true);
         void set_game_time(int time);
         void set_scores_window(ScoresWin *win1);
     

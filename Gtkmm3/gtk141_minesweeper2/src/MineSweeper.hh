@@ -25,6 +25,11 @@ public:
     ~MineSweeper();
 
 private:
+    // HeaderBar
+    Gtk::HeaderBar header;
+    Gtk::MenuButton menu_btn;
+    Gtk::Popover popover1;
+
     // Child widgets
     Gtk::Grid mine_grid;
     Gtk::Label status_label;
@@ -33,6 +38,9 @@ private:
     MineCell *cell;
     bool winned, game_ended;
     int mines_clear, mine_count;
+
+    // Menu
+    Glib::RefPtr<Gtk::Builder> menu_builder;
 
     // Timer
     int timer_count;
@@ -48,6 +56,7 @@ private:
     void reset_game();
     void calc_mines();
     void show_mines();
+    void show_scores();
     void game_lost(int explode_index);
     void cell_clicked(MineCell *cell1);
     bool timer_func();

@@ -14,7 +14,13 @@ void InputBox::on_response(int response_id)
 {
     if (response_id == Gtk::RESPONSE_OK)
     {
-        // Open a file to save json data
+        read_scores(check_scores->get_active());
+    }
+    hide();
+}
+
+void InputBox::read_scores(bool show_scores_win){
+    // Open a file to save json data
         std::fstream outfile;
         outfile.open("scores.json", std::ios_base::out);
         if (outfile.is_open())
@@ -32,11 +38,9 @@ void InputBox::on_response(int response_id)
         outfile.close();
         
         // If show scores checkbutton is checked, show scores window
-        if(check_scores->get_active()){
+        if(show_scores_win){
             scores_win1->show_with_vectors(names, times);
         }
-    }
-    hide();
 }
 
 void InputBox::set_game_time(int time)
