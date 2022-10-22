@@ -46,7 +46,8 @@ set(RESOURCE_LIST
     icons/scalable/status/mine.svg
     STRIPBLANKS minesweeper.ui
     STRIPBLANKS win_input.ui
-    STRIPBLANKS scoreswin.ui)
+    STRIPBLANKS scoreswin.ui
+    STRIPBLANKS mine_menu.ui)
 
 compile_gresources(RESOURCE_FILE
                    XML_OUT

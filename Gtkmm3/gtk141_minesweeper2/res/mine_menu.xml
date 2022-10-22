@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <menu id = "mine_menu">
+        <section>
+            <item>
+                <attribute name="label">New Game</attribute>
+                <attribute name="action">win.new_game</attribute>
+            </item>
+            <item>
+                <attribute name="label">Custom Game</attribute>
+                <attribute name="action">win.custom_game</attribute>
+            </item>
+            <item>
+                <attribute name="label">Show Scores</attribute>
+                <attribute name="action">win.scores</attribute>
+            </item>
+            <item>
+                <attribute name="label">Show all mines</attribute>
+                <attribute name="action">win.show_mines</attribute>
+            </item>
+            <item>
+                <attribute name="label">Quit</attribute>
+                <attribute name="action">win.quit</attribute>
+            </item>
+        </section>
+    </menu>
+</interface>

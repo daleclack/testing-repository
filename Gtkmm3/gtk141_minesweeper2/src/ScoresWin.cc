@@ -11,6 +11,8 @@ ScoresWin::ScoresWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &
 
     // Create the list store
     store = Gtk::ListStore::create(column1);
+    store->set_sort_func(column1.win_time, sigc::mem_fun(*this, &ScoresWin::sort_func));
+    store->set_sort_column(column1.win_time, Gtk::SortType::SORT_ASCENDING);
     tree_view->set_model(store);
     tree_view->append_column("name", column1.player_name);
     tree_view->append_column("time", column1.win_time);
@@ -26,7 +28,6 @@ void ScoresWin::show_with_vectors(std::vector<std::string> &name_vec, std::vecto
         row[column1.player_name] = name_vec[i];
         row[column1.win_time] = time_vec[i];
     }
-    store->set_sort_func(column1.win_time, sigc::mem_fun(*this, &ScoresWin::sort_func));
 
     show_all();
 }
