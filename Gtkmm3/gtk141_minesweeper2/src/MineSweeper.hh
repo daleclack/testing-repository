@@ -36,9 +36,11 @@ private:
     Gtk::Label status_label;
     Gtk::Box main_box, btn_box;
     Gtk::Button btnstart, btnshow, btnexit;
+
+    // The cell to place mines
     MineCell *cell;
-    bool winned, game_ended;
-    int mines_clear, mine_count;
+    bool winned, game_ended;     // The status of game(win/end)
+    int mines_clear, mine_count; // Whether the mine is cleared
 
     // Menu
     Glib::RefPtr<Gtk::Builder> menu_builder;

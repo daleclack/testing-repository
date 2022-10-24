@@ -76,6 +76,7 @@ MineSweeper::~MineSweeper(){
 }
 
 void MineSweeper::new_game(){
+    // New game = reset game
     reset_game();
 }
 
@@ -86,7 +87,7 @@ void MineSweeper::reset_game(int width, int height, int mines)
         delete[] cell;
     }
 
-    cell = new MineCell[49];
+    cell = new MineCell[width * height];
     // Reset timer
     mytimer.disconnect();
     timer_count = 0;
@@ -114,7 +115,7 @@ void MineSweeper::reset_game(int width, int height, int mines)
     // Reset mines
     while (mine_count < mines)
     {
-        int index = g_random_int_range(0, 49);
+        int index = g_random_int_range(0, width * height);
         if (!(cell[index].has_mine))
         {
             cell[index].has_mine = true;
@@ -129,18 +130,18 @@ void MineSweeper::reset_game(int width, int height, int mines)
     calc_mines();
 
     // Append buttons to grid
-    for (int i = 0; i < 7; i++)
+    for (int i = 0; i < height; i++)
     {
-        for (int j = 0; j < 7; j++)
+        for (int j = 0; j < width; j++)
         {
             // cell[i * 7 + j].set_label("?");
-            cell[i * 7 + j].signal_clicked().connect(sigc::bind(
-                sigc::mem_fun(*this, &MineSweeper::cell_clicked), &cell[i * 7 + j]));
-            mine_grid.attach(cell[i * 7 + j], j, i);
-            cell[i * 7 + j].set_relief(Gtk::RELIEF_HALF);
-            cell[i * 7 + j].x = j;
-            cell[i * 7 + j].y = i;
-            cell[i * 7 + j].cleared = false;
+            cell[i * width + j].signal_clicked().connect(sigc::bind(
+                sigc::mem_fun(*this, &MineSweeper::cell_clicked), &cell[i * width + j]));
+            mine_grid.attach(cell[i * width + j], j, i);
+            cell[i * width + j].set_relief(Gtk::RELIEF_HALF);
+            cell[i * width + j].x = j;
+            cell[i * width + j].y = i;
+            cell[i * width + j].cleared = false;
         }
     }
 
