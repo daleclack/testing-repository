@@ -213,6 +213,8 @@ void MineSweeper::cell_clicked(MineCell *cell1)
             winned = false;
             cell1->cleared = true;
             cell1->set_image_from_icon_name("exploded", Gtk::ICON_SIZE_LARGE_TOOLBAR);
+
+            // End the game
             game_lost(cell1->y * 7 + cell1->x);
             status_label.set_label("You lost!");
             game_ended = true;

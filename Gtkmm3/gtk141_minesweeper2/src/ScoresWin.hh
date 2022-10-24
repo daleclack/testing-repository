@@ -7,7 +7,7 @@ class ScoresWin : public Gtk::Window{
     public:
         static ScoresWin *create();
         ScoresWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_Glade);
-        void show_with_vectors(std::vector<std::string> &name_vec, std::vector<int> &time_vec);
+        void update_and_show();
 
     private:
         Glib::RefPtr<Gtk::Builder> ref_builder;

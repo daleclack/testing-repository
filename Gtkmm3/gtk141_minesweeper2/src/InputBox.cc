@@ -12,6 +12,22 @@ InputBox::InputBox(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &re
 
 void InputBox::on_response(int response_id)
 {
+    // Open a file to save json data
+    std::fstream outfile;
+    outfile.open("scores.json", std::ios_base::out);
+    if (outfile.is_open())
+    {
+        // Insert data to json
+        std::string name = std::string((entry_name->get_text()).c_str());
+        names.push_back(name);
+        times.push_back(game_time);
+        data["name"] = names;
+        data["time"] = times;
+
+        // Output data
+        outfile << data;
+    }
+    outfile.close();
     if (response_id == Gtk::RESPONSE_OK)
     {
         read_scores(check_scores->get_active());
@@ -19,28 +35,13 @@ void InputBox::on_response(int response_id)
     hide();
 }
 
-void InputBox::read_scores(bool show_scores_win){
-    // Open a file to save json data
-        std::fstream outfile;
-        outfile.open("scores.json", std::ios_base::out);
-        if (outfile.is_open())
-        {
-            // Insert data to json
-            std::string name = std::string((entry_name->get_text()).c_str());
-            names.push_back(name);
-            times.push_back(game_time);
-            data["name"] = names;
-            data["time"] = times;
-
-            // Output data
-            outfile << data;
-        }
-        outfile.close();
-        
-        // If show scores checkbutton is checked, show scores window
-        if(show_scores_win){
-            scores_win1->show_with_vectors(names, times);
-        }
+void InputBox::read_scores(bool show_scores_win)
+{
+    // If show scores checkbutton is checked, show scores window
+    if (show_scores_win)
+    {
+        scores_win1->update_and_show();
+    }
 }
 
 void InputBox::set_game_time(int time)

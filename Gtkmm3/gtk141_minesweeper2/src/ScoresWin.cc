@@ -18,29 +18,48 @@ ScoresWin::ScoresWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &
     tree_view->append_column("time", column1.win_time);
 }
 
-void ScoresWin::show_with_vectors(std::vector<std::string> &name_vec, std::vector<int> &time_vec){
-    // Clear the store
-    store->clear();
+void ScoresWin::update_and_show()
+{
+    std::fstream infile;
+    infile.open("scores.json", std::ios_base::in);
 
-    // Append data to the store
-    for(int i = 0; i < name_vec.size(); i++){
-        auto row = *(store->append());
-        row[column1.player_name] = name_vec[i];
-        row[column1.win_time] = time_vec[i];
+    if (infile.is_open())
+    {
+        // Read data from json file
+        json data = json::parse(infile);
+        std::vector<std::string> name_vec = data["name"];
+        std::vector<int> time_vec = data["time"];
+        
+        // Clear the store
+        store->clear();
+
+        // Append data to the store
+        for (int i = 0; i < name_vec.size(); i++)
+        {
+            auto row = *(store->append());
+            row[column1.player_name] = name_vec[i];
+            row[column1.win_time] = time_vec[i];
+        }
     }
 
     show_all();
 }
 
-int ScoresWin::sort_func(const Gtk::TreeModel::iterator &iter1, const Gtk::TreeModel::iterator &iter2){
+int ScoresWin::sort_func(const Gtk::TreeModel::iterator &iter1, const Gtk::TreeModel::iterator &iter2)
+{
+    // Sort by the game time
     auto row1 = *iter1;
     auto row2 = *iter2;
-    if(row1[column1.win_time] < row2[column1.win_time]){
+    if (row1[column1.win_time] < row2[column1.win_time])
+    {
         return -1;
     }
-    if(row1[column1.win_time] == row2[column1.win_time]){
+    if (row1[column1.win_time] == row2[column1.win_time])
+    {
         return 0;
-    }else{
+    }
+    else
+    {
         return 1;
     }
 }
