@@ -8,7 +8,7 @@ MineSweeper::MineSweeper()
       cell(nullptr)
 {
     // Initalize Window
-    header.set_title("Gtkmm MineSweeper");
+    header.set_title("MineSweeper");
     set_titlebar(header);
     header.set_show_close_button();
     header.set_decoration_layout("close,minimize,maximize:menu");
@@ -23,7 +23,7 @@ MineSweeper::MineSweeper()
     menu_btn.set_popover(popover1);
 
     // Add Actions
-    add_action("new_game", sigc::mem_fun(*this, &MineSweeper::reset_game));
+    add_action("new_game", sigc::mem_fun(*this, &MineSweeper::new_game));
     add_action("scores", sigc::mem_fun(*this, &MineSweeper::show_scores));
     add_action("show_mines", sigc::mem_fun(*this, &MineSweeper::show_mines));
     add_action("quit", sigc::mem_fun(*this, &MineSweeper::hide));
@@ -38,7 +38,7 @@ MineSweeper::MineSweeper()
     btn_box.pack_start(btnstart, Gtk::PACK_SHRINK);
     btn_box.pack_start(btnshow, Gtk::PACK_SHRINK);
     btn_box.pack_start(btnexit, Gtk::PACK_SHRINK);
-    btnstart.signal_clicked().connect(sigc::mem_fun(*this, &MineSweeper::reset_game));
+    btnstart.signal_clicked().connect(sigc::mem_fun(*this, &MineSweeper::new_game));
     btnshow.signal_clicked().connect(sigc::mem_fun(*this, &MineSweeper::show_mines));
     btnexit.signal_clicked().connect(sigc::mem_fun(*this, &MineSweeper::hide));
 
@@ -67,17 +67,25 @@ MineSweeper::MineSweeper()
 }
 
 MineSweeper::~MineSweeper(){
+    // Delete all resources
     delete input_dialog;
+    delete scores_win;
     if(cell != nullptr){
         delete[] cell;
     }
 }
 
-void MineSweeper::reset_game()
+void MineSweeper::new_game(){
+    reset_game();
+}
+
+void MineSweeper::reset_game(int width, int height, int mines)
 {
+    // Clear the cells
     if(cell != nullptr){
         delete[] cell;
     }
+
     cell = new MineCell[49];
     // Reset timer
     mytimer.disconnect();
@@ -88,9 +96,9 @@ void MineSweeper::reset_game()
     mines_clear = 0;
     mine_grid.set_sensitive();
     // Reset all data
-    for (int i = 0; i < 7; i++)
+    for (int i = 0; i < width; i++)
     {
-        for (int j = 0; j < 7; j++)
+        for (int j = 0; j < height; j++)
         {
             // Initalize cell
             cell[i * 7 + j].set_relief(Gtk::RELIEF_HALF);
@@ -104,7 +112,7 @@ void MineSweeper::reset_game()
     }
 
     // Reset mines
-    while (mine_count < 9)
+    while (mine_count < mines)
     {
         int index = g_random_int_range(0, 49);
         if (!(cell[index].has_mine))

@@ -7,11 +7,12 @@
 class MineCell : public Gtk::Button
 {
 public:
-    bool has_mine = false;  // Whether the grid has mine
-    bool cleared = false;   // Whether the mine is cleared
-    int mines_around;       // The number near the grid
-    int x, y;               // The Position of the grid
-    MineCell(){
+    bool has_mine = false; // Whether the grid has mine
+    bool cleared = false;  // Whether the mine is cleared
+    int mines_around;      // The number near the grid
+    int x, y;              // The Position of the grid
+    MineCell()
+    {
         // Set button style
         set_relief(Gtk::RELIEF_NONE);
         mines_around = 0;
@@ -53,12 +54,13 @@ private:
     ScoresWin *scores_win;
 
     // Signal Handlers
-    void reset_game();
-    void calc_mines();
-    void show_mines();
-    void show_scores();
-    void game_lost(int explode_index);
-    void cell_clicked(MineCell *cell1);
-    bool timer_func();
-    void check_mines(int pos_x, int pos_y);
+    void new_game();                                               // "New Game" handler
+    void reset_game(int width = 7, int height = 7, int mines = 9); // Reset all mines
+    void calc_mines();                                             // Get the mines around
+    void show_mines();                                             // Show all mines
+    void show_scores();                                            // Show all scores
+    void game_lost(int explode_index);                             // You lost the game
+    void cell_clicked(MineCell *cell1);                            // Open a cell
+    bool timer_func();                                             // Timer
+    void check_mines(int pos_x, int pos_y);                        // Check if there is a mine
 };
