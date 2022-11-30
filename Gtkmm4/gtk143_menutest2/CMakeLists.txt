@@ -26,7 +26,7 @@ link_directories (${GTKMM4_LIBRARY_DIRS})
 # set(PO_DIR ${CMAKE_BINARY_DIR}/po/zh_CN/LC_MESSAGES)
 
 #Source files
-set(SOURCE_FILE src/main.cc src/MenuWin.cc src/Win1.cc src/Win2.cc)
+set(SOURCE_FILE src/main.cc src/MenuWin.cc src/Win1.cc src/Win2.cc src/MenuBar.cc)
 
 #Compile Resource
 

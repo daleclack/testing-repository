@@ -16,14 +16,6 @@ MenuWin::MenuWin()
     set_icon_name("org.gtk.daleclack");
     set_default_size(300, 200);
 
-    // Create models
-    builder_def = Gtk::Builder::create_from_resource("/org/gtk/daleclack/default_menu.xml");
-    model_default = builder_def->get_object<Gio::MenuModel>("default_menu");
-    builder_win1 = Gtk::Builder::create_from_resource("/org/gtk/daleclack/win1_menu.xml");
-    model_win1 = builder_win1->get_object<Gio::MenuModel>("win1_menu");
-    builder_win2 = Gtk::Builder::create_from_resource("/org/gtk/daleclack/win2_menu.xml");
-    model_win2 = builder_win2->get_object<Gio::MenuModel>("win2_menu");
-
     // Add actions
     add_action("new_win1", sigc::mem_fun(*this, &MenuWin::new_win1));
     add_action("quit_win1", sigc::mem_fun(*this, &MenuWin::quit_win1));
@@ -31,8 +23,9 @@ MenuWin::MenuWin()
     add_action("quit_win2", sigc::mem_fun(*this, &MenuWin::quit_win2));
 
     // Add popover menu bar
-    menu_bar = new Gtk::PopoverMenuBar(model_default);
-    main_box.append(*menu_bar);
+    //menu_bar = new Gtk::PopoverMenuBar(model_default);
+    main_box.append(*(menu_bar.menubar));
+    // (menu_bar.menubar)->show();
 
     // Add a label
     label1.set_expand();
@@ -52,6 +45,8 @@ MenuWin::MenuWin()
     btn_main.signal_clicked().connect(sigc::mem_fun(*this, &MenuWin::btnmain_clicked));
     btn_win1.signal_clicked().connect(sigc::mem_fun(*this, &MenuWin::btnwin1_clicked));
     btn_win2.signal_clicked().connect(sigc::mem_fun(*this, &MenuWin::btnwin2_clicked));
+    window1.signal_close_request().connect(sigc::mem_fun(*this, &MenuWin::win1_closed),true);
+    window2.signal_close_request().connect(sigc::mem_fun(*this, &MenuWin::win2_closed),true);
 
     window1.set_transient_for(*this);
     window2.set_transient_for(*this);
@@ -64,20 +59,20 @@ void MenuWin::btnmain_clicked()
 {
     window1.hide();
     window2.hide();
-    menu_bar->set_menu_model(model_default);
+    menu_bar.change_menu(WinShown::DEFAULT);
 }
 
 // Launch Window1
 void MenuWin::btnwin1_clicked()
 {
-    menu_bar->set_menu_model(model_win1);
+    menu_bar.change_menu(WinShown::WIN_1);
     window1.show();
 }
 
 // Launch Window2
 void MenuWin::btnwin2_clicked()
 {
-    menu_bar->set_menu_model(model_win2);
+    menu_bar.change_menu(WinShown::WIN_2);
     window2.show();
 }
 
@@ -85,31 +80,40 @@ void MenuWin::btnwin2_clicked()
 void MenuWin::new_win1()
 {
     window1.show();
-    menu_bar->set_menu_model(model_win1);
+    menu_bar.change_menu(WinShown::WIN_1);
 }
 
 // Quit a window
 void MenuWin::quit_win1()
 {
     window1.hide();
-    menu_bar->set_menu_model(model_default);
+    menu_bar.change_menu(WinShown::DEFAULT);
+}
+
+// 
+bool MenuWin::win1_closed(){
+    window1.hide();
+    menu_bar.change_menu(WinShown::DEFAULT);
+    return true;
 }
 
 // New a window
 void MenuWin::new_win2()
 {
     window2.show();
-    menu_bar->set_menu_model(model_win2);
+    menu_bar.change_menu(WinShown::WIN_2);
 }
 
 // Quit a window
 void MenuWin::quit_win2()
 {
     window2.hide();
-    menu_bar->set_menu_model(model_default);
+    menu_bar.change_menu(WinShown::DEFAULT);
 }
 
-MenuWin::~MenuWin()
-{
-    delete menu_bar;
+//
+bool MenuWin::win2_closed(){
+    window2.hide();
+    menu_bar.change_menu(WinShown::DEFAULT);
+    return true;
 }
