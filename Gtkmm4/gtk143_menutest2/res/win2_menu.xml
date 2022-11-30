@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <menu id = "win2_menu">
+        <submenu>
+            <attribute name="label">Win2</attribute>
+            <item>
+                <attribute name="label">New Window</attribute>
+                <attribute name="action">win.new_win2</attribute>
+            </item>
+            <item>
+                <attribute name="label">About</attribute>
+                <attribute name="action">win.quit_win2</attribute>
+            </item>
+        </submenu>
+        <submenu>
+            <attribute name="label">Test3</attribute>
+            <item>
+                <attribute name="label">Cut</attribute>
+            </item>
+        </submenu>
+    </menu>
+</interface>
