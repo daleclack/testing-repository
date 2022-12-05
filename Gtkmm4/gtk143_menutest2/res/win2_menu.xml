@@ -8,8 +8,12 @@
                 <attribute name="action">win.new_win2</attribute>
             </item>
             <item>
-                <attribute name="label">About</attribute>
+                <attribute name="label">Quit</attribute>
                 <attribute name="action">win.quit_win2</attribute>
+            </item>
+            <item>
+                <attribute name="label">About</attribute>
+                <attribute name="action">win.about_win2</attribute>
             </item>
         </submenu>
         <submenu>

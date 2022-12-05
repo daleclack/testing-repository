@@ -13,6 +13,7 @@
             </item>
             <item>
                 <attribute name="label">About</attribute>
+                <attribute name="action">win.about_win1</attribute>
             </item>
         </submenu>
         <submenu>

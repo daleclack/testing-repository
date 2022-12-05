@@ -21,6 +21,8 @@ MenuWin::MenuWin()
     add_action("quit_win1", sigc::mem_fun(*this, &MenuWin::quit_win1));
     add_action("new_win2", sigc::mem_fun(*this, &MenuWin::new_win2));
     add_action("quit_win2", sigc::mem_fun(*this, &MenuWin::quit_win2));
+    add_action("about_win1", sigc::mem_fun(*this, &MenuWin::show_about_win1));
+    add_action("about_win2", sigc::mem_fun(*this, &MenuWin::show_about_win2));
 
     // Add popover menu bar
     //menu_bar = new Gtk::PopoverMenuBar(model_default);
@@ -116,4 +118,13 @@ bool MenuWin::win2_closed(){
     window2.hide();
     menu_bar.change_menu(WinShown::DEFAULT);
     return true;
+}
+
+// Test to interact to the child class by global menu
+void MenuWin::show_about_win1(){
+    window1.about_win1();
+}
+
+void MenuWin::show_about_win2(){
+    window2.about_win2();
 }

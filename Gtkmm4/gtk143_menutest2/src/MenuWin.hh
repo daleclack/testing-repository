@@ -31,4 +31,6 @@ private:
     void new_win2();
     void quit_win2();
     bool win2_closed();
+    void show_about_win1();
+    void show_about_win2();
 };
