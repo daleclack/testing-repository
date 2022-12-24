@@ -8,7 +8,7 @@ fn main() {
     // Get current time
     let now = Utc::now();
     let local = Local::now();
-    let naive_time = NaiveDate::from_ymd(2017, 5, 19).and_hms(0, 0, 0);
+    let naive_time = NaiveDate::from_ymd_opt(2017, 5, 19).unwrap().and_hms_opt(0, 0, 0).unwrap();
     let build_version = DateTime::<Utc>::from_utc(naive_time, Utc);
 
     // Calculate the duration time
