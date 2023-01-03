@@ -1,6 +1,7 @@
 #include "MenuWin.hh"
 #include "Win1.hh"
 #include "Win2.hh"
+#include "jsonfile.hh"
 
 WinShown curr_win;
 
@@ -14,7 +15,7 @@ MenuWin::MenuWin()
 {
     // Initalize window
     set_icon_name("org.gtk.daleclack");
-    set_default_size(300, 200);
+    set_default_size(1024, 576);
 
     // Add actions
     add_action("new_win1", sigc::mem_fun(*this, &MenuWin::new_win1));

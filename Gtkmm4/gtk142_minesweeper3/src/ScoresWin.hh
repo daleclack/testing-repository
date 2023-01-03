@@ -31,5 +31,5 @@ class ScoresWin : public Gtk::Window{
         Glib::RefPtr<Gtk::ListStore> store;
 
         // Sort function
-        int sort_func(const Gtk::TreeModel::iterator &iter1, const Gtk::TreeModel::iterator &iter2);
+        int sort_func(const Gtk::TreeModel::const_iterator &iter1, const Gtk::TreeModel::const_iterator &iter2);
 };

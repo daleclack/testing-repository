@@ -16,6 +16,7 @@ private:
     Gtk::Box main_box, btn_box;
     Gtk::Button btn_main, btn_win1, btn_win2;
     Gtk::Label label1;
+    Gtk::Overlay overlay1;
 
     // Windows
     Win1 window1;

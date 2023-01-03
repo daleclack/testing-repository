@@ -11,7 +11,8 @@ ScoresWin::ScoresWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &
 
     // Create the list store
     store = Gtk::ListStore::create(column1);
-    store->set_sort_column(column1.win_time, Gtk::SortType::DESCENDING);
+    store->set_sort_column(column1.win_time, Gtk::SortType::ASCENDING);
+    store->set_sort_func(column1.win_time, sigc::mem_fun(*this, &ScoresWin::sort_func));
     // store->set_default_sort_func(sigc::mem_fun(*this, &ScoresWin::sort_func));
     tree_view->set_model(store);
     tree_view->append_column("name", column1.player_name);
@@ -45,17 +46,19 @@ void ScoresWin::update_and_show()
     show();
 }
 
-int ScoresWin::sort_func(const Gtk::TreeModel::iterator &iter1, const Gtk::TreeModel::iterator &iter2)
+int ScoresWin::sort_func(const Gtk::TreeModel::const_iterator &iter1, const Gtk::TreeModel::const_iterator &iter2)
 {
     // Sort by the game time
     auto row1 = *iter1;
     auto row2 = *iter2;
     if (row1[column1.win_time] < row2[column1.win_time])
     {
+        // g_print("test1\n");
         return -1;
     }
     if (row1[column1.win_time] == row2[column1.win_time])
     {
+        // g_print("test2\n");
         return 0;
     }
     else
