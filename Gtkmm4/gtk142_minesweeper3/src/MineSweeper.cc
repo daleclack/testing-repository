@@ -33,9 +33,11 @@ MineSweeper::MineSweeper()
 
     // Buttons
     btnstart.set_label("Start/Reset");
+    btnpause.set_label("Pause");
     btnshow.set_label("Show All");
     btnexit.set_label("Exit");
     btn_box.append(btnstart);
+    btn_box.append(btnpause);
     btn_box.append(btnshow);
     btn_box.append(btnexit);
     btnstart.signal_clicked().connect(sigc::mem_fun(*this, &MineSweeper::new_game));
@@ -124,8 +126,9 @@ void MineSweeper::reset_game(int width, int height, int mines)
         }
     }
     // std::cout << mine_count << std::endl;
-    game_ended = false;
-    winned = true;
+    // game_ended = false;
+    // winned = true;
+    game_status = GameStatus::Running;
     status_label.set_label(" ");
     calc_mines();
 
@@ -146,6 +149,10 @@ void MineSweeper::reset_game(int width, int height, int mines)
     }
 
     mine_grid.show();
+}
+
+void MineSweeper::pause_game(){
+    
 }
 
 void MineSweeper::calc_mines()
@@ -212,21 +219,22 @@ bool MineSweeper::timer_func()
 void MineSweeper::cell_clicked(MineCell *cell1)
 {
     cell1->set_has_frame(false);
-    if (!game_ended && !cell1->cleared)
+    if (game_status == GameStatus::Running && !cell1->cleared)
     {
         //
         // If get mine, the game will end now
         if (cell1->has_mine)
         {
             // Set game to stop
-            winned = false;
+            // winned = false;
+            game_status = GameStatus::Ended;
             cell1->cleared = true;
             cell1->set_image_from_icon_name("exploded", Gtk::IconSize::LARGE);
 
             // End the game
             game_lost(cell1->y * 7 + cell1->x);
             status_label.set_label("You lost!");
-            game_ended = true;
+            // game_ended = true;
             mytimer.disconnect();
             mine_grid.set_sensitive(false);
         }
@@ -284,8 +292,7 @@ void MineSweeper::check_mines(int pos_x, int pos_y)
     {
         // Stop the game
         status_label.set_label("You winned!");
-        winned = true;
-        game_ended = true;
+        game_status = GameStatus::Winned;
         mytimer.disconnect();
 
         // Save the time of game
