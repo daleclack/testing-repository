@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <menu id = "default_menu">
+        <submenu>
+            <attribute name="label">Test</attribute>
+            <item>
+                <attribute name="label">About</attribute>
+                <attribute name="action">win.main_about</attribute>
+            </item>
+        </submenu>
+        <submenu>
+            <attribute name="label">Test1</attribute>
+            <item>
+                <attribute name="label">Cut</attribute>
+            </item>
+        </submenu>
+    </menu>
+</interface>

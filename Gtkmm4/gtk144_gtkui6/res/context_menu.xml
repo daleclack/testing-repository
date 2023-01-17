@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <menu id="context_menu">
+        <section>
+            <item>
+                <attribute name="label">About</attribute>
+            </item>
+            <item>
+                <attribute name="label">Customize</attribute>
+            </item>
+        </section>
+    </menu>
+</interface>
