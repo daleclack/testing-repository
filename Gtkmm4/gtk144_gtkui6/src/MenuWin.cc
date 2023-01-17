@@ -93,15 +93,15 @@ void MenuWin::btnmain_clicked()
 // Launch Window1
 void MenuWin::btnwin1_clicked()
 {
-    menu_bar.change_menu(WinShown::WIN_1);
     window1.show();
+    menu_bar.change_menu(WinShown::WIN_1);
 }
 
 // Launch Window2
 void MenuWin::btnwin2_clicked()
 {
-    menu_bar.change_menu(WinShown::WIN_2);
     window2.show();
+    menu_bar.change_menu(WinShown::WIN_2);
 }
 
 // New a window
