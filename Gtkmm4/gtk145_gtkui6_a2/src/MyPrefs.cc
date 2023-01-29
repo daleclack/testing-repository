@@ -8,6 +8,7 @@ MyPrefs::MyPrefs(){
     ref_builder = Gtk::Builder::create_from_resource("/org/gtk/daleclack/prefs_stack.ui");
 
     // Initalize title widget
+    // Add stack switcher to the titlebar
     stack_switcher = ref_builder->get_widget<Gtk::StackSwitcher>("stack_switch");
     header.set_title_widget(*stack_switcher);
     header.set_decoration_layout("close:menu");
