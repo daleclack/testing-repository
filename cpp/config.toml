@@ -1,0 +1,6 @@
+[main]
+height = 720
+width = 1280
+
+[others]
+backgrounds = [ 'test1.png', 'test2.png', 'test3.png' ]

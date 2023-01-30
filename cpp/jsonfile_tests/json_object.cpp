@@ -19,22 +19,30 @@ void read_json_file()
 void create_json_file()
 {
     // Create json data
-    json data = json::parse(R"(
-        {
-            data1 : {},
-            data2 : {}
-        }
-    )");
+    json data = json::parse(R"({
+        "error": {
+            "code": 101,
+            "message": "operation failed!"
+        },
+        "result": {
+            "backgrounds": ["test1.png", "test2.png", "test3.png"]
+        },
+        "data2": {}
+	})");
 
     // Create json object for a key
-    // json data2 = json::parse(R"(
-    //     {
-    //         test1:2,
-    //         test2:3
-    //     }
-    // )");
+    json data2 = json::parse(R"({
+        "error": {
+            "code": 101,
+            "message": "operation failed!"
+        },
+        "result": {
+            "backgrounds": ["test1.png", "test2.png", "test3.png"]
+        },
+        "data2": {}
+	})");
 
-    // data["data2"] = data;
+    data["data2"] = data2;
     // auto data2 = data["data2"];
     // std::cout << data2 << std::endl;
 

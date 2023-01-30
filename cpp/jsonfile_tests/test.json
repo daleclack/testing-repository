@@ -1,0 +1,27 @@
+{
+    "data2": {
+        "data2": {},
+        "error": {
+            "code": 101,
+            "message": "operation failed!"
+        },
+        "result": {
+            "backgrounds": [
+                "test1.png",
+                "test2.png",
+                "test3.png"
+            ]
+        }
+    },
+    "error": {
+        "code": 101,
+        "message": "operation failed!"
+    },
+    "result": {
+        "backgrounds": [
+            "test1.png",
+            "test2.png",
+            "test3.png"
+        ]
+    }
+}
