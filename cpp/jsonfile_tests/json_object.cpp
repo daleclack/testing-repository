@@ -38,8 +38,7 @@ void create_json_file()
         },
         "result": {
             "backgrounds": ["test1.png", "test2.png", "test3.png"]
-        },
-        "data2": {}
+        }
 	})");
 
     data["data2"] = data2;
