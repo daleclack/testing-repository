@@ -1,8 +1,12 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <sstream>
 #include "../toml/toml.hpp"
 using namespace std::string_view_literals;
+
+// Function pointer
+typedef void(*pfun)();
 
 void save_toml_file()
 {
@@ -45,9 +49,29 @@ void save_toml_file()
     }
 }
 
+void read_toml_file()
+{
+    std::fstream toml_file;
+    toml_file.open("config.toml", std::ios_base::in);
+    if(toml_file.is_open()){
+        toml::table tbl = toml::parse(toml_file);
+        std::cout << tbl["main"]["width"] << std::endl;
+        std::cout << tbl["main"]["height"] << std::endl;
+        auto test1 = tbl["others"]["backgrounds"][0].as_string()->get();
+        std::cout << test1 << std::endl;
+    }
+    toml_file.close();
+}
+
 int main()
 {
-    save_toml_file();
+    pfun funcs[] = {save_toml_file, read_toml_file};
+    // Input mode
+    int mode;
+    std::cin >> mode;
+
+    // Execute function
+    funcs[mode]();
 
     return 0;
 }
