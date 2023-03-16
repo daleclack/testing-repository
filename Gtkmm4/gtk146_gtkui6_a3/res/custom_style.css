@@ -1,0 +1,18 @@
+/*
+You can type here any CSS rule recognized by GTK.
+You can temporarily disable this custom CSS by clicking on the “Pause” button above.
+
+Changes are applied instantly and globally, for the whole application.
+*/
+
+.accdoration {
+    background:rgba(255, 255, 255, 0.5);
+}
+
+.accdoration menubar{
+	background: rgba(255, 255, 255, 0.5);
+}
+
+.accdoration box{
+	background: rgba(255, 255, 255, 0.5);
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <menu id="context_menu">
+        <section>
+            <item>
+                <attribute name="label">About</attribute>
+                <attribute name="action">win.main_about</attribute>
+            </item>
+            <item>
+                <attribute name="label">Customize</attribute>
+                <attribute name="action">win.custom</attribute>
+            </item>
+        </section>
+    </menu>
+</interface>
