@@ -7,12 +7,21 @@ Changes are applied instantly and globally, for the whole application.
 
 .accdoration {
     background:rgba(255, 255, 255, 0.5);
+    color:black;
 }
 
 .accdoration menubar{
 	background: rgba(255, 255, 255, 0.5);
 }
 
+.accdoration popover{
+    color: black;
+}
+
 .accdoration box{
 	background: rgba(255, 255, 255, 0.5);
+}
+
+.accdoration button{
+    color:black;
 }
