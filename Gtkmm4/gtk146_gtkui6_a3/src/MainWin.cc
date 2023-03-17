@@ -59,8 +59,10 @@ MainWin::MainWin()
     label1.set_valign(Gtk::Align::FILL);
     main_box.append(label1);
 
-    // Add buttons]
+    // Background color for btn_box
     btn_box.add_css_class("accdoration");
+
+    // Add buttons
     btn_main.set_has_frame(false);
     btn_win1.set_has_frame(false);
     btn_win2.set_has_frame(false);
