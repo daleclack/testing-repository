@@ -1,4 +1,4 @@
-#include "MainWin.hh"
+#include "MainWin.h"
 
 static void gtkmain(GtkApplication *app, gpointer data){
     MainWin *window = main_win_new(app);
