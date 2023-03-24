@@ -6,6 +6,7 @@ struct _MainWin{
     GListModel *model;
     GtkWidget *view;
     GtkListItemFactory *factory;
+    GtkSingleSelection *selection;
 };
 
 G_DEFINE_TYPE(MainWin, main_win, GTK_TYPE_APPLICATION_WINDOW)
@@ -44,6 +45,11 @@ static GListModel *create_list_model()
     return G_LIST_MODEL(store);
 }
 
+static void main_win_dispose(GObject *object){
+    // Clear List Model
+    G_OBJECT_CLASS(main_win_parent_class)->dispose(object);
+}
+
 static void main_win_init(MainWin *self){
     // Initalize window
     gtk_window_set_icon_name(GTK_WINDOW(self), "org.gtk.daleclack");
@@ -58,12 +64,13 @@ static void main_win_init(MainWin *self){
     g_signal_connect(self->factory, "bind", G_CALLBACK(bind_list_item), NULL);
 
     // Create view
-    self->view = gtk_list_view_new(GTK_SELECTION_MODEL(gtk_single_selection_new(self->model)),  
-                                   self->factory);
+    self->selection = gtk_single_selection_new(self->model);
+    self->view = gtk_list_view_new(GTK_SELECTION_MODEL(self->selection), self->factory);
     gtk_window_set_child(GTK_WINDOW(self), self->view);
 }
 
 static void main_win_class_init(MainWinClass *klass){
+    G_OBJECT_CLASS(klass)->dispose = main_win_dispose;
 }
 
 MainWin *main_win_new(GtkApplication *app){

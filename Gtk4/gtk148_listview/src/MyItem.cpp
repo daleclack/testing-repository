@@ -10,6 +10,7 @@ G_DEFINE_TYPE(MyItem, my_item, G_TYPE_OBJECT)
 static void my_item_dispose(GObject *object){
     // Free the memory
     g_string_free(MY_ITEM(object)->string, TRUE);
+    G_OBJECT_CLASS(my_item_parent_class)->dispose(object);
 }
 
 static void my_item_init(MyItem *self){
