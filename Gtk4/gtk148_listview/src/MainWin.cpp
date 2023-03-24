@@ -24,7 +24,11 @@ static GListModel *create_list_model()
 }
 
 static void main_win_init(MainWin *self){
+    // Create list model
+    GListModel *model = create_list_model();
 
+    // Create Factory
+    
 }
 
 static void main_win_class_init(MainWinClass *klass){
