@@ -108,7 +108,7 @@ GtkWidget *create_column_view(GListModel *model)
     GtkListItemFactory *factory = gtk_signal_list_item_factory_new();
     g_signal_connect(factory, "setup", G_CALLBACK(setup_fileicon_item), NULL);
     g_signal_connect(factory, "bind", G_CALLBACK(bind_fileicon_item), NULL);
-    GtkColumnViewColumn *column = gtk_column_view_column_new("Name", factory);
+    GtkColumnViewColumn *column = gtk_column_view_column_new(" ", factory);
     gtk_column_view_append_column(GTK_COLUMN_VIEW(view), column);
     g_object_unref(column);
 

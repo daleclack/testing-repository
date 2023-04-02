@@ -49,6 +49,20 @@ static void bind_grid_item(GtkListItemFactory *factory, GtkListItem *item)
     gtk_label_set_label(GTK_LABEL(label_filesize), g_format_size(g_file_info_get_size(info)));
 }
 
+static void gridview_activate(GtkGridView *view, guint position, GtkDirectoryList *list){
+    // Get the model
+    GtkSelectionModel *model = gtk_grid_view_get_model(view);
+    GFileInfo *info = G_FILE_INFO(g_list_model_get_item(G_LIST_MODEL(model), position));
+
+    // if the file type is directory, open the directory
+    if (g_file_info_get_file_type(info) == G_FILE_TYPE_DIRECTORY)
+    {
+        gtk_directory_list_set_file(list,
+                                    G_FILE(g_file_info_get_attribute_object(info, "standard::file")));
+    }
+    g_object_unref(info);
+}
+
 GtkWidget *create_grid_view(GListModel *model)
 {
     // Create factory
@@ -59,6 +73,9 @@ GtkWidget *create_grid_view(GListModel *model)
     // Create view
     GtkSingleSelection *selection = gtk_single_selection_new(model);
     GtkWidget *grid_view = gtk_grid_view_new(GTK_SELECTION_MODEL(selection), factory);
+
+    // Link Signal
+    g_signal_connect(grid_view, "activate", G_CALLBACK(gridview_activate), model);
 
     return grid_view;
 }
