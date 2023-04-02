@@ -26,7 +26,7 @@ link_directories (${GTK4_LIBRARY_DIRS})
 # set(PO_DIR ${CMAKE_BINARY_DIR}/po/zh_CN/LC_MESSAGES)
 
 #Source files
-set(SOURCE_FILE src/main.cpp src/MainWin.cpp)
+set(SOURCE_FILE src/main.cpp src/FileWindow.cpp src/FileColumnView.cpp src/FileGridView.cpp)
 
 #Compile Resource
 

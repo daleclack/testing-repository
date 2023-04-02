@@ -1,7 +1,7 @@
-#include "MainWin.h"
+#include "FileWindow.h"
 
 static void gtkmain(GtkApplication *app, gpointer data){
-    MainWin *window = main_win_new(app);
+    FileWindow *window = file_window_new(app);
     gtk_window_present(GTK_WINDOW(window));
 }
 
