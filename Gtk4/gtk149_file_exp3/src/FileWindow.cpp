@@ -61,6 +61,18 @@ static void btnview_clicked(GtkButton *button, FileWindow *win){
     }
 }
 
+static void btnup_clicked(GtkWidget *widget, FileWindow *win){
+
+}
+
+static void btnnew_clicked(GtkWidget *widget, FileWindow *win){
+
+}
+
+static void btndel_clicked(GtkWidget *widget, FileWindow *win){
+    
+}
+
 static void file_window_dispose(GObject *object)
 {
     // Clear List Model
