@@ -36,6 +36,25 @@ static void bind_filename_item(GtkListItemFactory *factory, GtkListItem *item)
     gtk_label_set_label(GTK_LABEL(label), display_name);
 }
 
+static void setup_filetype_item(GtkListItemFactory *factory, GtkListItem *item){
+    // Create label to show list item
+    GtkWidget *label;
+    label = gtk_label_new(" ");
+    gtk_widget_set_halign(label, GTK_ALIGN_START);
+    gtk_list_item_set_child(item, label);
+}
+
+static void bind_filetype_item(GtkListItemFactory *factory, GtkListItem *item){
+    // Get child for list item
+    GtkWidget *label;
+    label = gtk_list_item_get_child(item);
+
+    // Get string and set it to the label
+    GFileInfo *info = G_FILE_INFO(gtk_list_item_get_item(item));
+    const char *type_str = g_file_info_get_content_type(info);
+    gtk_label_set_label(GTK_LABEL(label), type_str);
+}
+
 static void setup_filesize_item(GtkListItemFactory *factory, GtkListItem *item){
     // Create label to show list item
     GtkWidget *label;
@@ -83,6 +102,14 @@ static void main_win_init(MainWin *self)
     g_signal_connect(self->factory, "setup", G_CALLBACK(setup_filename_item), NULL);
     g_signal_connect(self->factory, "bind", G_CALLBACK(bind_filename_item), NULL);
     column = gtk_column_view_column_new("Name", self->factory);
+    gtk_column_view_append_column(GTK_COLUMN_VIEW(self->view), column);
+    g_object_unref(column);
+
+    // Create Factory for file type
+    self->factory = gtk_signal_list_item_factory_new();
+    g_signal_connect(self->factory, "setup", G_CALLBACK(setup_filetype_item), NULL);
+    g_signal_connect(self->factory, "bind", G_CALLBACK(bind_filetype_item), NULL);
+    column = gtk_column_view_column_new("Type", self->factory);
     gtk_column_view_append_column(GTK_COLUMN_VIEW(self->view), column);
     g_object_unref(column);
 
