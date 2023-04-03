@@ -9,3 +9,5 @@ FileWindow *file_window_new(GtkApplication *app);
 GListModel *file_window_get_grid_model(FileWindow *self);
 
 GListModel *file_window_get_column_model(FileWindow *self);
+
+GtkWidget *file_window_get_folder_entry(FileWindow *self);

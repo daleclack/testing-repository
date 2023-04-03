@@ -22,6 +22,7 @@ struct _FileWindow
     GtkWidget *main_box, *btn_box;
     GtkWidget *scrolled_window_column, *scrolled_window_grid;
     GtkWidget *stack;
+    GtkWidget *folder_entry;
     GtkWidget *btn_up, *btn_home, *btn_new, *btn_del, *btn_view;
     GtkWidget *separator;
     ViewMode view_mode;
@@ -78,7 +79,7 @@ static void btnview_clicked(GtkButton *button, FileWindow *win)
 
         // Change view mode from list to grid
         gtk_stack_set_visible_child(GTK_STACK(win->stack), win->scrolled_window_grid);
-        gtk_button_set_icon_name(button, "view-grid");
+        gtk_button_set_icon_name(button, "filewin-view-grid");
         win->view_mode = ViewMode::MODE_GRID;
     }
     else
@@ -88,7 +89,7 @@ static void btnview_clicked(GtkButton *button, FileWindow *win)
 
         // Change view mode from grid to list
         gtk_stack_set_visible_child(GTK_STACK(win->stack), win->scrolled_window_column);
-        gtk_button_set_icon_name(button, "view-list");
+        gtk_button_set_icon_name(button, "filewin-view-list");
         win->view_mode = ViewMode::MODE_LIST;
     }
 }
@@ -100,17 +101,31 @@ static void btnup_clicked(GtkWidget *widget, FileWindow *win)
     if (!g_str_equal(g_file_get_path(file), "/"))
     {
         GFile *file1 = g_file_get_parent(file);
+
         // Set the directory of models
         gtk_directory_list_set_file(GTK_DIRECTORY_LIST(win->model_column), file1);
         gtk_directory_list_set_file(GTK_DIRECTORY_LIST(win->model_grid), file1);
+
+        // Update string in the entry for path
+        char *path = g_file_get_path(file1);
+        gtk_editable_set_text(GTK_EDITABLE(win->folder_entry), path);
+        g_free(path);
+
         g_object_unref(file1);
     }
     else
     {
         GFile *file1 = g_file_new_for_path("/");
+
         // Set the directory of models
         gtk_directory_list_set_file(GTK_DIRECTORY_LIST(win->model_column), file1);
         gtk_directory_list_set_file(GTK_DIRECTORY_LIST(win->model_grid), file1);
+
+        // Update string in the entry for path
+        char *path = g_file_get_path(file1);
+        gtk_editable_set_text(GTK_EDITABLE(win->folder_entry), path);
+        g_free(path);
+
         g_object_unref(file1);
     }
 }
@@ -178,6 +193,12 @@ static void btnhome_clicked(GtkWidget *widget, FileWindow *win)
 {
     // Set Current dir to home dir
     GFile *file = g_file_new_for_path(g_get_home_dir());
+
+    // Update string in the entry for path
+    char *path = g_file_get_path(file);
+    gtk_editable_set_text(GTK_EDITABLE(win->folder_entry), path);
+    g_free(path);
+
     gtk_directory_list_set_file(GTK_DIRECTORY_LIST(win->model_column), file);
     gtk_directory_list_set_file(GTK_DIRECTORY_LIST(win->model_grid), file);
     g_object_unref(file);
@@ -217,14 +238,33 @@ static void btndel_clicked(GtkWidget *widget, FileWindow *win)
     gtk_window_present(GTK_WINDOW(error_dialog));
 }
 
-GListModel *file_window_get_grid_model(FileWindow *self){
+static void folder_entry_activated(GtkWidget *widget, FileWindow *win)
+{
+    // Get Path and create a associated file
+    const char *path = gtk_editable_get_text(GTK_EDITABLE(widget));
+    GFile *file = g_file_new_for_path(path);
+
+    // Set the directory of models
+    gtk_directory_list_set_file(GTK_DIRECTORY_LIST(win->model_column), file);
+    gtk_directory_list_set_file(GTK_DIRECTORY_LIST(win->model_grid), file);
+}
+
+GListModel *file_window_get_grid_model(FileWindow *self)
+{
     // Get Model for grid view
     return self->model_grid;
 }
 
-GListModel *file_window_get_column_model(FileWindow *self){
+GListModel *file_window_get_column_model(FileWindow *self)
+{
     // Get Model for list column view
     return self->model_column;
+}
+
+GtkWidget *file_window_get_folder_entry(FileWindow *self)
+{
+    // Get the entry widget
+    return self->folder_entry;
 }
 
 static void file_window_dispose(GObject *object)
@@ -237,6 +277,7 @@ static void file_window_init(FileWindow *self)
 {
     GtkColumnViewColumn *column;
     // Initalize window
+    gtk_window_set_title(GTK_WINDOW(self), "My Finder");
     gtk_window_set_icon_name(GTK_WINDOW(self), "org.gtk.daleclack");
     gtk_window_set_default_size(GTK_WINDOW(self), 640, 400);
 
@@ -255,11 +296,15 @@ static void file_window_init(FileWindow *self)
     self->grid_view = create_grid_view(self);
 
     // Create buttons
-    self->btn_up = gtk_button_new_from_icon_name("go-up");
-    self->btn_home = gtk_button_new_from_icon_name("go-home");
-    self->btn_new = gtk_button_new_from_icon_name("folder-new");
-    self->btn_del = gtk_button_new_from_icon_name("edit-delete");
-    self->btn_view = gtk_button_new_from_icon_name("view-list");
+    self->btn_up = gtk_button_new_from_icon_name("filewin-go-up");
+    self->btn_home = gtk_button_new_from_icon_name("filewin-go-home");
+    self->btn_new = gtk_button_new_from_icon_name("filewin-new");
+    self->btn_del = gtk_button_new_from_icon_name("filewin-delete");
+    self->btn_view = gtk_button_new_from_icon_name("filewin-view-list");
+
+    // Create entry for show and change the current folder
+    self->folder_entry = gtk_entry_new();
+    gtk_editable_set_text(GTK_EDITABLE(self->folder_entry), g_get_home_dir());
 
     // Create widgets for layout
     self->scrolled_window_column = gtk_scrolled_window_new();
@@ -286,6 +331,7 @@ static void file_window_init(FileWindow *self)
     g_signal_connect(self->btn_home, "clicked", G_CALLBACK(btnhome_clicked), self);
     g_signal_connect(self->btn_del, "clicked", G_CALLBACK(btndel_clicked), self);
     g_signal_connect(self->btn_new, "clicked", G_CALLBACK(btnnew_clicked), self);
+    g_signal_connect(self->folder_entry, "activate", G_CALLBACK(folder_entry_activated), self);
 
     // Add scrolled window for columns view
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(self->scrolled_window_column),
@@ -302,8 +348,10 @@ static void file_window_init(FileWindow *self)
     gtk_widget_set_vexpand(self->scrolled_window_grid, TRUE);
     gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(self->scrolled_window_grid), self->grid_view);
     gtk_stack_add_named(GTK_STACK(self->stack), self->scrolled_window_grid, "Grid View");
-    gtk_box_append(GTK_BOX(self->main_box), self->btn_box);
-    gtk_box_append(GTK_BOX(self->main_box), self->stack);
+
+    gtk_box_append(GTK_BOX(self->main_box), self->btn_box);      // Box for control buttons
+    gtk_box_append(GTK_BOX(self->main_box), self->folder_entry); // Box for folder switcher
+    gtk_box_append(GTK_BOX(self->main_box), self->stack);        // Box for main area
     // gtk_stack_set_visible_child(GTK_STACK(self->stack), self->scrolled_window_grid);
     gtk_window_set_child(GTK_WINDOW(self), self->main_box);
 }

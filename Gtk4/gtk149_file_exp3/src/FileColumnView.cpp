@@ -95,17 +95,24 @@ static void bind_filesize_item(GtkListItemFactory *factory, GtkListItem *item)
     gtk_label_set_label(GTK_LABEL(label), size_str);
 }
 
-static void listview_activated(GtkColumnView *view, guint position, GtkDirectoryList *list)
+static void listview_activated(GtkColumnView *view, guint position, FileWindow *win)
 {
     // Get the model
     GtkSelectionModel *model = gtk_column_view_get_model(view);
     GFileInfo *info = G_FILE_INFO(g_list_model_get_item(G_LIST_MODEL(model), position));
+    GtkDirectoryList *list = GTK_DIRECTORY_LIST(file_window_get_column_model(win));
 
     // if the file type is directory, open the directory
     if (g_file_info_get_file_type(info) == G_FILE_TYPE_DIRECTORY)
     {
-        gtk_directory_list_set_file(list,
-                                    G_FILE(g_file_info_get_attribute_object(info, "standard::file")));
+        // Get the file and set it to the GtkDirectoryList
+        GFile *file = G_FILE(g_file_info_get_attribute_object(info, "standard::file"));
+        gtk_directory_list_set_file(list, file);
+
+        // Update string in the entry for path
+        char *path = g_file_get_path(file);
+        gtk_editable_set_text(GTK_EDITABLE(file_window_get_folder_entry(win)), path);
+        g_free(path);
     }
     g_object_unref(info);
 }
@@ -150,7 +157,7 @@ GtkWidget *create_column_view(FileWindow *win)
     g_object_unref(column);
 
     // Link signals
-    g_signal_connect(view, "activate", G_CALLBACK(listview_activated), model);
+    g_signal_connect(view, "activate", G_CALLBACK(listview_activated), win);
 
     return view;
 }

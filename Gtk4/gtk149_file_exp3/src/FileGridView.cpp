@@ -12,7 +12,7 @@ static void setup_grid_item(GtkListItemFactory *factory, GtkListItem *item)
     label_filename = gtk_label_new(" ");
     label_filetype = gtk_label_new(" ");
     label_filesize = gtk_label_new(" ");
-    
+
     // Make labels support ellipsize
     gtk_label_set_ellipsize(GTK_LABEL(label_filename), PANGO_ELLIPSIZE_END);
     gtk_label_set_ellipsize(GTK_LABEL(label_filetype), PANGO_ELLIPSIZE_END);
@@ -55,16 +55,24 @@ static void bind_grid_item(GtkListItemFactory *factory, GtkListItem *item)
     gtk_label_set_label(GTK_LABEL(label_filesize), g_format_size(g_file_info_get_size(info)));
 }
 
-static void gridview_activate(GtkGridView *view, guint position, GtkDirectoryList *list){
+static void gridview_activate(GtkGridView *view, guint position, FileWindow *win)
+{
     // Get the model
     GtkSelectionModel *model = gtk_grid_view_get_model(view);
     GFileInfo *info = G_FILE_INFO(g_list_model_get_item(G_LIST_MODEL(model), position));
+    GtkDirectoryList *list = GTK_DIRECTORY_LIST(file_window_get_grid_model(win));
 
     // if the file type is directory, open the directory
     if (g_file_info_get_file_type(info) == G_FILE_TYPE_DIRECTORY)
     {
-        gtk_directory_list_set_file(list,
-                                    G_FILE(g_file_info_get_attribute_object(info, "standard::file")));
+        // Get the file and set it to the GtkDirectoryList
+        GFile *file = G_FILE(g_file_info_get_attribute_object(info, "standard::file"));
+        gtk_directory_list_set_file(list, file);
+
+        // Update string in the entry for path
+        char *path = g_file_get_path(file);
+        gtk_editable_set_text(GTK_EDITABLE(file_window_get_folder_entry(win)), path);
+        g_free(path);
     }
     g_object_unref(info);
 }
@@ -84,7 +92,7 @@ GtkWidget *create_grid_view(FileWindow *win)
     GtkWidget *grid_view = gtk_grid_view_new(GTK_SELECTION_MODEL(selection), factory);
 
     // Link Signal
-    g_signal_connect(grid_view, "activate", G_CALLBACK(gridview_activate), model);
+    g_signal_connect(grid_view, "activate", G_CALLBACK(gridview_activate), win);
 
     return grid_view;
 }

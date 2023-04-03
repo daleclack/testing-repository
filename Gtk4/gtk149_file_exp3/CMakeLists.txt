@@ -32,6 +32,12 @@ set(SOURCE_FILE src/main.cpp src/FileWindow.cpp src/FileColumnView.cpp src/FileG
 
 set(RESOURCE_LIST
     dialog-error.png
+    icons/scalable/status/filewin-delete.svg
+    icons/scalable/status/filewin-go-home.svg
+    icons/scalable/status/filewin-go-up.svg
+    icons/scalable/status/filewin-new.svg
+    icons/scalable/status/filewin-view-grid.svg
+    icons/scalable/status/filewin-view-list.svg
     )
 
 compile_gresources(RESOURCE_FILE
