@@ -12,6 +12,12 @@ static void setup_grid_item(GtkListItemFactory *factory, GtkListItem *item)
     label_filename = gtk_label_new(" ");
     label_filetype = gtk_label_new(" ");
     label_filesize = gtk_label_new(" ");
+    
+    // Make labels support ellipsize
+    gtk_label_set_ellipsize(GTK_LABEL(label_filename), PANGO_ELLIPSIZE_END);
+    gtk_label_set_ellipsize(GTK_LABEL(label_filetype), PANGO_ELLIPSIZE_END);
+    gtk_label_set_ellipsize(GTK_LABEL(label_filesize), PANGO_ELLIPSIZE_END);
+    gtk_label_set_width_chars(GTK_LABEL(label_filename), 20);
 
     // Pack widgets
     gtk_image_set_pixel_size(GTK_IMAGE(image), 48);
@@ -63,8 +69,11 @@ static void gridview_activate(GtkGridView *view, guint position, GtkDirectoryLis
     g_object_unref(info);
 }
 
-GtkWidget *create_grid_view(GListModel *model)
+GtkWidget *create_grid_view(FileWindow *win)
 {
+    // Get model for grid view
+    GListModel *model = file_window_get_grid_model(win);
+
     // Create factory
     GtkListItemFactory *factory = gtk_signal_list_item_factory_new();
     g_signal_connect(factory, "setup", G_CALLBACK(setup_grid_item), NULL);

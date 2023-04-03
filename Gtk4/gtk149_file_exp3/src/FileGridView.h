@@ -1,5 +1,5 @@
 #pragma once
 
-#include <gtk/gtk.h>
+#include "FileWindow.h"
 
-GtkWidget *create_grid_view(GListModel *model);
+GtkWidget *create_grid_view(FileWindow *win);

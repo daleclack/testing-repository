@@ -25,6 +25,12 @@ static void setup_filename_item(GtkListItemFactory *factory, GtkListItem *item)
     // Create label to show list item
     GtkWidget *label;
     label = gtk_label_new(" ");
+
+    // Set the mode for ellipsize
+    gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_END);
+    gtk_label_set_width_chars(GTK_LABEL(label), 20);
+
+    // Add the label to the item
     gtk_widget_set_halign(label, GTK_ALIGN_START);
     gtk_list_item_set_child(item, label);
 }
@@ -46,6 +52,12 @@ static void setup_filetype_item(GtkListItemFactory *factory, GtkListItem *item)
     // Create label to show list item
     GtkWidget *label;
     label = gtk_label_new(" ");
+
+    // Set the mode for ellipsize
+    gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_END);
+    gtk_label_set_width_chars(GTK_LABEL(label), 10);
+
+    // Add the label to the item
     gtk_widget_set_halign(label, GTK_ALIGN_START);
     gtk_list_item_set_child(item, label);
 }
@@ -98,9 +110,10 @@ static void listview_activated(GtkColumnView *view, guint position, GtkDirectory
     g_object_unref(info);
 }
 
-GtkWidget *create_column_view(GListModel *model)
+GtkWidget *create_column_view(FileWindow *win)
 {
     // Create view
+    GListModel *model = file_window_get_column_model(win);
     GtkSingleSelection *selection = gtk_single_selection_new(model);
     GtkWidget *view = gtk_column_view_new(GTK_SELECTION_MODEL(selection));
 

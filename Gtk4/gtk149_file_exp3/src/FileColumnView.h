@@ -1,6 +1,6 @@
 #pragma once
 
-#include <gtk/gtk.h>
+#include "FileWindow.h"
 
 // Create column view widget
-GtkWidget *create_column_view(GListModel *model);
+GtkWidget *create_column_view(FileWindow *win);
