@@ -98,7 +98,8 @@ static void btnup_clicked(GtkWidget *widget, FileWindow *win)
 {
     // Get current directory and set to the new list
     GFile *file = file_window_get_file(win);
-    if (!g_str_equal(g_file_get_path(file), "/"))
+    char *path_str = g_file_get_path(file);
+    if (!(g_str_equal(path_str, "/") || (path_str[2] = '\\' && strlen(path_str) == 3)))
     {
         GFile *file1 = g_file_get_parent(file);
 

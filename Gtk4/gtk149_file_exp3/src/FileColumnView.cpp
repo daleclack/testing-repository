@@ -112,6 +112,7 @@ static void listview_activated(GtkColumnView *view, guint position, FileWindow *
         // Update string in the entry for path
         char *path = g_file_get_path(file);
         gtk_editable_set_text(GTK_EDITABLE(file_window_get_folder_entry(win)), path);
+        // g_print("%s\n", path);
         g_free(path);
     }
     g_object_unref(info);
