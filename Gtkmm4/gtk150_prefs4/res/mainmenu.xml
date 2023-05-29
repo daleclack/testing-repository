@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <menu id="model">
+        <section>
+            <item>
+                <attribute name="label">New Folder</attribute>
+            </item>
+        </section>
+        <section>
+            <item>
+                <attribute name="label">Show Info</attribute>
+            </item>
+            <item>
+                <attribute name="label">Customization</attribute>
+                <attribute name="action">win.back</attribute>
+            </item>
+            <item>
+                <attribute name="label">Refresh</attribute>
+                <attribute name="action">win.refresh</attribute>
+            </item>
+        </section>
+        <section>
+            <item>
+                <attribute name="label">Automater</attribute>
+            </item>
+            <submenu>
+                <attribute name="label">Automater method</attribute>
+                <item>
+                    <attribute name="label">Name</attribute>
+                </item>
+                <item>
+                    <attribute name="label">Date Modified</attribute>
+                </item>
+                <item>
+                    <attribute name="label">Date Created</attribute>
+                </item>
+                <item>
+                    <attribute name="label">Size</attribute>
+                </item>
+                <item>
+                    <attribute name="label">Kind</attribute>
+                </item>
+                <item>
+                    <attribute name="label">Label</attribute>
+                </item>
+            </submenu>
+            <item>
+                <attribute name="label">Show View Options</attribute>
+            </item>  
+        </section>
+    </menu>
+</interface>

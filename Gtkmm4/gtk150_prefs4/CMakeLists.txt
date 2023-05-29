@@ -21,20 +21,18 @@ pkg_check_modules (GTKMM4 REQUIRED gtkmm-4.0)
 include_directories (${GTKMM4_INCLUDE_DIRS})
 link_directories (${GTKMM4_LIBRARY_DIRS})
 
-#Find Gettext
+# Find Gettext
 # find_package (Gettext REQUIRED)
 # set(PO_DIR ${CMAKE_BINARY_DIR}/po/zh_CN/LC_MESSAGES)
 
-#Source files
+# Source files
 set(SOURCE_FILE src/main.cc src/MainWin.cc src/MyPrefs.cc)
 
-#Compile Resource
+# Compile Resource
 
 set(RESOURCE_LIST
-    custom_style.css
-    STRIPBLANKS context_menu.xml
-    STRIPBLANKS default_menu.xml
     STRIPBLANKS prefs_stack.ui
+    STRIPBLANKS mainmenu.xml
     )
 
 compile_gresources(RESOURCE_FILE
