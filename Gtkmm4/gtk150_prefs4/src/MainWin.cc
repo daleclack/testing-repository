@@ -27,6 +27,9 @@ MainWin::MainWin(){
     context_menu.set_menu_model(model);
     context_menu.set_parent(m_overlay);
     context_menu.set_has_arrow(false);
+    
+    // Add actions
+    add_action("back", sigc::mem_fun(*this, &MainWin::back_activated));
 
     // Add widgets
     m_overlay.set_child(m_background);
@@ -37,5 +40,9 @@ void MainWin::pressed(int n_click, double x, double y){
     // Show the context menu on the position of mouse
     context_menu.set_pointing_to(Gdk::Rectangle(x, y, 1, 1));
     context_menu.popup();
+}
+
+void MainWin::back_activated(){
+    prefs_win.present();
 }
 

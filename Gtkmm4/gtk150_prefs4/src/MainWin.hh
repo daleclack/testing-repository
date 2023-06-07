@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gtkmm.h>
+#include "MyPrefs.hh"
 
 class MainWin : public Gtk::ApplicationWindow
 {
@@ -19,6 +20,10 @@ private:
     // Gesture for right click
     Glib::RefPtr<Gtk::GestureClick> right_click;
 
+    // Prefs Window
+    MyPrefs prefs_win;
+
     // Signal Handler
     void pressed(int n_click, double x, double y);
+    void back_activated();
 };

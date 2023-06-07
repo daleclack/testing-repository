@@ -65,7 +65,8 @@ static void btnadd_clicked(GtkWidget *widget, MainWin *win)
     g_list_store_append(G_LIST_STORE(model), my_item_new(str));
 }
 
-static void btnremove_clicked(GtkWidget *widget, MainWin *win){
+static void btnremove_clicked(GtkWidget *widget, MainWin *win)
+{
     // Get the position of selected item
     GtkSingleSelection *selection = win->selection;
     guint position = gtk_single_selection_get_selected(selection);
@@ -75,10 +76,19 @@ static void btnremove_clicked(GtkWidget *widget, MainWin *win){
     g_list_store_remove(store, position);
 }
 
-static void btnremove_all_clicked(GtkWidget *widget, MainWin *win){
+static void btnremove_all_clicked(GtkWidget *widget, MainWin *win)
+{
     // Remove all data from store
     GListModel *model = win->model;
     g_list_store_remove_all(G_LIST_STORE(model));
+}
+
+static void selection_changed(GtkSelectionModel *model,
+                              guint position,
+                              guint n_data,
+                              MainWin *win)
+{
+    
 }
 
 static void main_win_dispose(GObject *object)
