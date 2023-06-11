@@ -199,7 +199,7 @@ static void update_images_list(GListStore *image_store, GListModel *dir_list, GF
             // Get file info
             GFileInfo *info = G_FILE_INFO(g_list_model_get_item(dir_list, i));
             const char *content_type = g_file_info_get_content_type(info);
-            g_print("%s\n", content_type);
+            // g_print("%s\n", content_type);
             if (strncmp(content_type, "image/", 6) == 0)
             {
                 g_print("%s\n", content_type);
@@ -286,11 +286,10 @@ static gboolean scan_func(gpointer data)
         else
         {
             // Update image list by the folder selection
-            g_object_unref(prefs->file);
-            // g_print("%s\n", folder_name);
             prefs->file = g_file_new_for_path(folder_name);
             gtk_directory_list_set_file(prefs->file_list, prefs->file);
             update_images_list(prefs->images_list, G_LIST_MODEL(prefs->file_list), prefs->file);
+            g_object_unref(prefs->file);
         }
         strncpy(prefs->current_folder, folder_name, path_max_length);
     }
@@ -406,6 +405,7 @@ static void my_prefs_init(MyPrefs *self)
     self->file = g_file_new_for_path(g_get_home_dir());
     self->file_list = gtk_directory_list_new(
         "standard::name,standard::display-name,standard::icon,standard::size,standard::content-type", self->file);
+    g_object_unref(self->file);
 
     // Add a dropdown for default sizes config
     self->sizes_drop = gtk_drop_down_new_from_strings(strings);
@@ -423,7 +423,7 @@ static void my_prefs_init(MyPrefs *self)
     gtk_window_set_child(GTK_WINDOW(self), self->stack_box);
 
     // Add timer to scan the list
-    g_timeout_add(16, scan_func, self);
+    g_timeout_add(10, scan_func, self);
 
     // Close request for this window
     g_signal_connect(self, "close-request", G_CALLBACK(my_prefs_close_request), NULL);
