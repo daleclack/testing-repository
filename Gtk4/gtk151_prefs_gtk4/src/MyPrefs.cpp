@@ -2,7 +2,12 @@
 #include "MyItem.h"
 #include "winpe.xpm"
 #include "img7.xpm"
+#include "image_types.h"
 #include <string>
+
+// File name and path limits
+static const int name_max_length = 256;
+static const int path_max_length = 4096;
 
 struct _MyPrefs
 {
@@ -45,7 +50,7 @@ struct _MyPrefs
     // Pixbufs
     GdkPixbuf *pixbuf, *sized;
     int width, height;
-    char current_image[256];
+    char current_folder[path_max_length], current_image[name_max_length];
 };
 
 G_DEFINE_TYPE(MyPrefs, my_prefs, GTK_TYPE_WINDOW)
@@ -91,7 +96,7 @@ static void folder_view_init(MyPrefs *self)
     // Create store for folders column view
     self->folders_list = g_list_store_new(my_item_get_type());
     g_list_store_append(self->folders_list,
-                        my_item_new("Default Backgrounds", "", TRUE));
+                        my_item_new("Default Backgrounds", ":0", TRUE));
     g_list_store_append(self->folders_list,
                         my_item_new("User's Home directory", g_get_home_dir(), FALSE));
     g_list_store_append(self->folders_list,
@@ -163,14 +168,60 @@ static void factory_pics_string_bind(GtkListItemFactory *factory, GtkListItem *i
                         my_item_get_display_name(item1));
 }
 
+static void images_list_default(GListStore *store1)
+{
+    // if the store is not empty, clear it
+    if (g_list_model_get_n_items(G_LIST_MODEL(store1)))
+    {
+        g_list_store_remove_all(store1);
+    }
+
+    // Append default items
+    g_list_store_append(store1,
+                        my_item_new("img7.xpm", ":1", TRUE));
+    g_list_store_append(store1,
+                        my_item_new("winpe.xpm", ":2", TRUE));
+}
+
+static void update_images_list(GListStore *image_store, GListModel *dir_list, GFile *file1)
+{
+    // if the store is not empty, clear it
+    if (g_list_model_get_n_items(G_LIST_MODEL(image_store)))
+    {
+        g_list_store_remove_all(image_store);
+    }
+
+    // Iterate the objects and add to the list
+    for (int i = 0; i < g_list_model_get_n_items(dir_list); i++)
+    {
+        if (mime_type_supported())
+        {
+            // Get file info
+            GFileInfo *info = G_FILE_INFO(g_list_model_get_item(dir_list, i));
+            const char *content_type = g_file_info_get_content_type(info);
+            g_print("%s\n", content_type);
+            if (strncmp(content_type, "image/", 6) == 0)
+            {
+                g_print("%s\n", content_type);
+                const char *name = g_file_info_get_display_name(info);
+                char *path = g_file_get_path(file1);
+                char *image_path = g_strdup_printf("%s/%s", path, name);
+                g_list_store_append(image_store,
+                                    my_item_new(name, image_path, FALSE));
+                g_free(path);
+            }
+        }
+        else
+        {
+        }
+    }
+}
+
 static void pics_view_init(MyPrefs *self)
 {
     // Create store for pictures view
     self->images_list = g_list_store_new(my_item_get_type());
-    g_list_store_append(self->images_list,
-                        my_item_new("img7.xpm", ":1", TRUE));
-    g_list_store_append(self->images_list,
-                        my_item_new("winpe.xpm", ":2", TRUE));
+    images_list_default(self->images_list);
 
     // Create selection model for view
     self->image_select = gtk_single_selection_new(G_LIST_MODEL(self->images_list));
@@ -215,16 +266,57 @@ static void update_internal_image(GtkWidget *background1, const char **id)
 static gboolean scan_func(gpointer data)
 {
     MyPrefs *prefs = MY_PREFS(data);
-    // Get the seletion of images view
+    // Get the selection of folders view
+    // The model and item of folders view
+    auto folder_model = gtk_column_view_get_model(GTK_COLUMN_VIEW(prefs->folders_view));
+    auto folder_item = gtk_single_selection_get_selected_item(GTK_SINGLE_SELECTION(folder_model));
+
+    // File name and properties
+    const char *folder_name = my_item_get_path(MY_ITEM(folder_item));
+    gboolean is_internal = my_item_get_internal(MY_ITEM(folder_item));
+
+    // Check weather the selection changed
+    if (strncmp(prefs->current_folder, folder_name, strlen(folder_name)) != 0)
+    {
+        if (is_internal)
+        {
+            // Update image list to default
+            images_list_default(prefs->images_list);
+        }
+        else
+        {
+            // Update image list by the folder selection
+            g_object_unref(prefs->file);
+            // g_print("%s\n", folder_name);
+            prefs->file = g_file_new_for_path(folder_name);
+            gtk_directory_list_set_file(prefs->file_list, prefs->file);
+            update_images_list(prefs->images_list, G_LIST_MODEL(prefs->file_list), prefs->file);
+        }
+        strncpy(prefs->current_folder, folder_name, path_max_length);
+    }
+
+    // Get the selection of images view
+    // The model and item of images view
     auto model = gtk_column_view_get_model(GTK_COLUMN_VIEW(prefs->images_view));
     auto item = gtk_single_selection_get_selected_item(GTK_SINGLE_SELECTION(model));
+
+    // Check weather the list of images is empty
+    if (g_list_model_get_n_items(G_LIST_MODEL(prefs->images_list)) == 0)
+    {
+        return TRUE;
+    }
+
+    // File name and properties
     const char *file_name = my_item_get_path(MY_ITEM(item));
-    gboolean is_internal = my_item_get_internal(MY_ITEM(item));
+    is_internal = my_item_get_internal(MY_ITEM(item));
+
+    // Check weather the selection changed
     if (strncmp(prefs->current_image, file_name, strlen(file_name)) != 0)
     {
         // Update image
         if (is_internal)
         {
+            // For image which is internal
             switch (file_name[1])
             {
             case '1':
@@ -234,16 +326,18 @@ static gboolean scan_func(gpointer data)
                 update_internal_image(prefs->background, winpe);
                 break;
             }
-            strncpy(prefs->current_image, file_name, 256);
+            strncpy(prefs->current_image, file_name, name_max_length);
         }
         else
         {
+            // For image which is outside
         }
     }
     return TRUE;
 }
 
-static void my_prefs_close_request(GtkWindow *self, gpointer user_data){
+static void my_prefs_close_request(GtkWindow *self, gpointer user_data)
+{
     gtk_widget_set_visible(GTK_WIDGET(self), FALSE);
 }
 
@@ -259,7 +353,8 @@ static void my_prefs_init(MyPrefs *self)
         NULL};
     self->width = 1024;
     self->height = 576;
-    strncpy(self->current_image, ":0", 256);
+    strncpy(self->current_image, ":0", name_max_length);
+    strncpy(self->current_folder, ":0", path_max_length);
 
     // Initalize window
     gtk_window_set_default_size(GTK_WINDOW(self), 800, 450);
