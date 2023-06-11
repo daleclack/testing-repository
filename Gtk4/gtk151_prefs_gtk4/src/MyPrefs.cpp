@@ -99,6 +99,7 @@ static void folder_view_init(MyPrefs *self)
                                     g_get_user_special_dir(G_USER_DIRECTORY_PICTURES),
                                     FALSE));
     self->folders_select = gtk_single_selection_new(G_LIST_MODEL(self->folders_list));
+    gtk_single_selection_set_selected(self->folders_select, 0);
 
     // Create factories to renderer the list
     self->folders_view = gtk_column_view_new(GTK_SELECTION_MODEL(self->folders_select));
@@ -173,6 +174,7 @@ static void pics_view_init(MyPrefs *self)
 
     // Create selection model for view
     self->image_select = gtk_single_selection_new(G_LIST_MODEL(self->images_list));
+    gtk_single_selection_set_selected(self->image_select, 0);
 
     // Create column view
     self->images_view = gtk_column_view_new(GTK_SELECTION_MODEL(self->image_select));
@@ -257,7 +259,7 @@ static void my_prefs_init(MyPrefs *self)
         NULL};
     self->width = 1024;
     self->height = 576;
-    strncpy(self->current_image, ":1", 256);
+    strncpy(self->current_image, ":0", 256);
 
     // Initalize window
     gtk_window_set_default_size(GTK_WINDOW(self), 800, 450);
@@ -274,6 +276,10 @@ static void my_prefs_init(MyPrefs *self)
     self->label_size = GTK_WIDGET(gtk_builder_get_object(self->prefs_builder, "label_size"));
 
     // Initalize folder and image views and append to the box
+    gtk_widget_set_margin_bottom(self->back_page, 20);
+    gtk_widget_set_margin_end(self->back_page, 20);
+    gtk_widget_set_margin_start(self->back_page, 20);
+    gtk_widget_set_margin_top(self->back_page, 20);
     folder_view_init(self);
     pics_view_init(self);
     self->views_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
