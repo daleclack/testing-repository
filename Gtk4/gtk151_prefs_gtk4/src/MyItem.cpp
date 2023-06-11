@@ -15,6 +15,18 @@ const char *my_item_get_display_name(MyItem *item)
     return item->col_name;
 }
 
+// Get Path
+const char *my_item_get_path(MyItem *item)
+{
+    return item->col_path;
+}
+
+// Get whether the image is internal
+gboolean my_item_get_internal(MyItem *item)
+{
+    return item->internal;
+}
+
 static void my_item_init(MyItem *self)
 {
 }

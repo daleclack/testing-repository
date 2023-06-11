@@ -10,3 +10,9 @@ MyItem *my_item_new(const char *disp_name, const char *path,
 
 // Get display name
 const char *my_item_get_display_name(MyItem *item);
+
+// Get Path
+const char *my_item_get_path(MyItem *item);
+
+// Get whether the image is internal
+gboolean my_item_get_internal(MyItem *item);

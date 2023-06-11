@@ -1,5 +1,8 @@
 #include "MyPrefs.h"
 #include "MyItem.h"
+#include "winpe.xpm"
+#include "img7.xpm"
+#include <string>
 
 struct _MyPrefs
 {
@@ -38,7 +41,11 @@ struct _MyPrefs
     GtkColumnViewColumn *pics_string_column;
     GtkListItemFactory *factory_pics_image;
     GtkListItemFactory *factory_pics_string;
+
+    // Pixbufs
+    GdkPixbuf *pixbuf, *sized;
     int width, height;
+    char current_image[256];
 };
 
 G_DEFINE_TYPE(MyPrefs, my_prefs, GTK_TYPE_WINDOW)
@@ -193,10 +200,49 @@ static void pics_view_init(MyPrefs *self)
                                   self->pics_string_column);
 }
 
-// Scan the selection of two column views
-gboolean scan_func(gpointer data)
+static void update_internal_image(GtkWidget *background1, const char **id)
 {
+    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_xpm_data(id);
+    GdkPixbuf *sized = gdk_pixbuf_scale_simple(pixbuf, 1024, 576, GDK_INTERP_BILINEAR);
+    gtk_picture_set_pixbuf(GTK_PICTURE(background1), pixbuf);
+    g_object_unref(pixbuf);
+    g_object_unref(sized);
+}
+
+// Scan the selection of two column views
+static gboolean scan_func(gpointer data)
+{
+    MyPrefs *prefs = MY_PREFS(data);
+    // Get the seletion of images view
+    auto model = gtk_column_view_get_model(GTK_COLUMN_VIEW(prefs->images_view));
+    auto item = gtk_single_selection_get_selected_item(GTK_SINGLE_SELECTION(model));
+    const char *file_name = my_item_get_path(MY_ITEM(item));
+    gboolean is_internal = my_item_get_internal(MY_ITEM(item));
+    if (strncmp(prefs->current_image, file_name, strlen(file_name)) != 0)
+    {
+        // Update image
+        if (is_internal)
+        {
+            switch (file_name[1])
+            {
+            case '1':
+                update_internal_image(prefs->background, img7);
+                break;
+            case '2':
+                update_internal_image(prefs->background, winpe);
+                break;
+            }
+            strncpy(prefs->current_image, file_name, 256);
+        }
+        else
+        {
+        }
+    }
     return TRUE;
+}
+
+static void my_prefs_close_request(GtkWindow *self, gpointer user_data){
+    gtk_widget_set_visible(GTK_WIDGET(self), FALSE);
 }
 
 static void my_prefs_init(MyPrefs *self)
@@ -211,6 +257,7 @@ static void my_prefs_init(MyPrefs *self)
         NULL};
     self->width = 1024;
     self->height = 576;
+    strncpy(self->current_image, ":1", 256);
 
     // Initalize window
     gtk_window_set_default_size(GTK_WINDOW(self), 800, 450);
@@ -273,6 +320,12 @@ static void my_prefs_init(MyPrefs *self)
 
     // Set Child
     gtk_window_set_child(GTK_WINDOW(self), self->stack_box);
+
+    // Add timer to scan the list
+    g_timeout_add(16, scan_func, self);
+
+    // Close request for this window
+    g_signal_connect(self, "close-request", G_CALLBACK(my_prefs_close_request), NULL);
 }
 
 static void my_prefs_class_init(MyPrefsClass *klass)
