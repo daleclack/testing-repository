@@ -26,13 +26,18 @@ link_directories (${GTK4_LIBRARY_DIRS})
 # set(PO_DIR ${CMAKE_BINARY_DIR}/po/zh_CN/LC_MESSAGES)
 
 #Source files
-set(SOURCE_FILE src/main.cpp src/MyPrefs.cpp)
+set(SOURCE_FILE src/main.cpp src/MyPrefs.cpp src/MyItem.cpp)
 
 #Compile Resource
 
 set(RESOURCE_LIST
+    icons/16x16/actions/folder-images.svg
     icons/16x16/actions/list-add.svg
     icons/16x16/actions/list-remove.svg
+    icons/16x16/actions/My_GtkUI.png
+    icons/16x16/actions/prefs_folder.svg
+    icons/48x48/actions/dialog-error.png
+    icons/48x48/actions/My_GtkUI.png
     icons/scalable/status/display_prefs.svg
     prefs_stack.ui
     )
