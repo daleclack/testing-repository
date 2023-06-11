@@ -50,7 +50,7 @@ struct _MyPrefs
     // Pixbufs
     GdkPixbuf *pixbuf, *sized;
     int width, height;
-    char current_folder[path_max_length], current_image[name_max_length];
+    int current_folder_index, current_image_index;
 };
 
 G_DEFINE_TYPE(MyPrefs, my_prefs, GTK_TYPE_WINDOW)
@@ -183,32 +183,39 @@ static void images_list_default(GListStore *store1)
                         my_item_new("winpe.xpm", ":2", TRUE));
 }
 
-static void update_images_list(GListStore *image_store, GListModel *dir_list, GFile *file1)
+static void update_images_list(MyPrefs *prefs1)
 {
     // if the store is not empty, clear it
-    if (g_list_model_get_n_items(G_LIST_MODEL(image_store)))
+    if (g_list_model_get_n_items(G_LIST_MODEL(prefs1->images_list)))
     {
-        g_list_store_remove_all(image_store);
+        g_list_store_remove_all(prefs1->images_list);
     }
 
     // Iterate the objects and add to the list
-    for (int i = 0; i < g_list_model_get_n_items(dir_list); i++)
+    for (int i = 0; i < g_list_model_get_n_items(G_LIST_MODEL(prefs1->file_list)); i++)
     {
         if (mime_type_supported())
         {
             // Get file info
-            GFileInfo *info = G_FILE_INFO(g_list_model_get_item(dir_list, i));
+            GFileInfo *info = G_FILE_INFO(g_list_model_get_item(
+                G_LIST_MODEL(prefs1->file_list), i));
             const char *content_type = g_file_info_get_content_type(info);
-            // g_print("%s\n", content_type);
+
+            // Append image file info to the list
             if (strncmp(content_type, "image/", 6) == 0)
             {
-                g_print("%s\n", content_type);
                 const char *name = g_file_info_get_display_name(info);
-                char *path = g_file_get_path(file1);
+                char *path = g_file_get_path(prefs1->file);
                 char *image_path = g_strdup_printf("%s/%s", path, name);
-                g_list_store_append(image_store,
+                g_list_store_append(prefs1->images_list,
                                     my_item_new(name, image_path, FALSE));
                 g_free(path);
+            }
+
+            // Check weather list is updated
+            if (g_list_model_get_n_items(G_LIST_MODEL(prefs1->images_list)) == 0)
+            {
+                prefs1->current_folder_index = -1;
             }
         }
         else
@@ -269,6 +276,7 @@ static gboolean scan_func(gpointer data)
     // Get the selection of folders view
     // The model and item of folders view
     auto folder_model = gtk_column_view_get_model(GTK_COLUMN_VIEW(prefs->folders_view));
+    guint folder_item_index = gtk_single_selection_get_selected(GTK_SINGLE_SELECTION(folder_model));
     auto folder_item = gtk_single_selection_get_selected_item(GTK_SINGLE_SELECTION(folder_model));
 
     // File name and properties
@@ -276,7 +284,7 @@ static gboolean scan_func(gpointer data)
     gboolean is_internal = my_item_get_internal(MY_ITEM(folder_item));
 
     // Check weather the selection changed
-    if (strncmp(prefs->current_folder, folder_name, strlen(folder_name)) != 0)
+    if (folder_item_index != prefs->current_folder_index || g_list_model_get_n_items(G_LIST_MODEL(prefs->images_list)) == 0)
     {
         if (is_internal)
         {
@@ -288,29 +296,30 @@ static gboolean scan_func(gpointer data)
             // Update image list by the folder selection
             prefs->file = g_file_new_for_path(folder_name);
             gtk_directory_list_set_file(prefs->file_list, prefs->file);
-            update_images_list(prefs->images_list, G_LIST_MODEL(prefs->file_list), prefs->file);
+            update_images_list(prefs);
             g_object_unref(prefs->file);
         }
-        strncpy(prefs->current_folder, folder_name, path_max_length);
+        prefs->current_folder_index = folder_item_index;
     }
 
     // Get the selection of images view
-    // The model and item of images view
-    auto model = gtk_column_view_get_model(GTK_COLUMN_VIEW(prefs->images_view));
-    auto item = gtk_single_selection_get_selected_item(GTK_SINGLE_SELECTION(model));
-
     // Check weather the list of images is empty
     if (g_list_model_get_n_items(G_LIST_MODEL(prefs->images_list)) == 0)
     {
         return TRUE;
     }
 
+    // The model and item of images view
+    auto model = gtk_column_view_get_model(GTK_COLUMN_VIEW(prefs->images_view));
+    auto item = gtk_single_selection_get_selected_item(GTK_SINGLE_SELECTION(model));
+    guint image_item_index = gtk_single_selection_get_selected(GTK_SINGLE_SELECTION(model));
+
     // File name and properties
     const char *file_name = my_item_get_path(MY_ITEM(item));
     is_internal = my_item_get_internal(MY_ITEM(item));
 
     // Check weather the selection changed
-    if (strncmp(prefs->current_image, file_name, strlen(file_name)) != 0)
+    if (image_item_index != prefs->current_image_index)
     {
         // Update image
         if (is_internal)
@@ -325,7 +334,7 @@ static gboolean scan_func(gpointer data)
                 update_internal_image(prefs->background, winpe);
                 break;
             }
-            strncpy(prefs->current_image, file_name, name_max_length);
+            prefs->current_image_index = image_item_index;
         }
         else
         {
@@ -350,10 +359,14 @@ static void my_prefs_init(MyPrefs *self)
         "1280x720",
         "1366x768",
         NULL};
+    
+    // Default window size
     self->width = 1024;
     self->height = 576;
-    strncpy(self->current_image, ":0", name_max_length);
-    strncpy(self->current_folder, ":0", path_max_length);
+
+    // Default values to load the internal image
+    self->current_folder_index = -1;
+    self->current_image_index = -1;
 
     // Initalize window
     gtk_window_set_default_size(GTK_WINDOW(self), 800, 450);
@@ -423,7 +436,7 @@ static void my_prefs_init(MyPrefs *self)
     gtk_window_set_child(GTK_WINDOW(self), self->stack_box);
 
     // Add timer to scan the list
-    g_timeout_add(10, scan_func, self);
+    g_timeout_add(1, scan_func, self);
 
     // Close request for this window
     g_signal_connect(self, "close-request", G_CALLBACK(my_prefs_close_request), NULL);
