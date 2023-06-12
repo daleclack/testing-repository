@@ -5,10 +5,6 @@
 #include "image_types.h"
 #include <string>
 
-// File name and path limits
-static const int name_max_length = 256;
-static const int path_max_length = 4096;
-
 struct _MyPrefs
 {
     GtkWindow parent_instance;
@@ -204,8 +200,10 @@ static void update_images_list(MyPrefs *prefs1)
             const char *content_type = g_file_info_get_content_type(info);
 
             // Append image file info to the list
+            // Check content type
             if (strncmp(content_type, "image/", 6) == 0)
             {
+                // Add properties to the list
                 const char *name = g_file_info_get_display_name(info);
                 char *path = g_file_get_path(prefs1->file);
                 char *image_path = g_strdup_printf("%s/%s", path, name);
@@ -213,16 +211,39 @@ static void update_images_list(MyPrefs *prefs1)
                                     my_item_new(name, image_path, FALSE));
                 g_free(path);
             }
-
-            // Check weather list is updated
-            if (g_list_model_get_n_items(G_LIST_MODEL(prefs1->images_list)) == 0)
-            {
-                prefs1->current_folder_index = -1;
-            }
         }
         else
         {
+            // Get file info
+            GFileInfo *info = G_FILE_INFO(g_list_model_get_item(
+                G_LIST_MODEL(prefs1->file_list), i));
+            const char *content_type = g_file_info_get_content_type(info);
+            char *pattern = g_strdup_printf("*%s", content_type);
+
+            // Append image file info to the list
+            for (int i = 0; supported_globs[i] != NULL; i++)
+            {
+                // Check file pattern on microsoft windows
+                if (strncmp(pattern, supported_globs[i], strlen(supported_globs[i])) == 0)
+                {
+                    // Add properties to the list
+                    const char *name = g_file_info_get_display_name(info);
+                    char *path = g_file_get_path(prefs1->file);
+                    char *image_path = g_strdup_printf("%s/%s", path, name);
+                    g_list_store_append(prefs1->images_list,
+                                        my_item_new(name, image_path, FALSE));
+                    g_free(path);
+                    break;
+                }
+            }
+            g_free(pattern);
         }
+    }
+
+    // Check weather list is updated
+    if (g_list_model_get_n_items(G_LIST_MODEL(prefs1->images_list)) == 0)
+    {
+        prefs1->current_folder_index = -1;
     }
 }
 
@@ -293,8 +314,36 @@ static void update_external_image(MyPrefs *prefs, const char *file_name)
     }
 }
 
+static void file_dialog_opened(GObject *dialog, GAsyncResult *result, gpointer data)
+{
+    GFile *file;
+    MyPrefs *prefs = MY_PREFS(data);
+
+    // Get the file
+    file = gtk_file_dialog_select_folder_finish(GTK_FILE_DIALOG(dialog), result, NULL);
+    if (file != NULL)
+    {
+        // g_print("Dialog Accepted!");
+        char *path = g_file_get_path(file);
+        char *name = g_file_get_basename(file);
+        g_list_store_append(prefs->folders_list,
+                            my_item_new(name, path, FALSE));
+        g_object_unref(file);
+        g_free(path);
+        g_free(name);
+    }
+    else
+    {
+        // g_print("Dialog Cancelled!");
+    }
+}
+
 static void btnadd_clicked(GtkWidget *widget, MyPrefs *prefs)
 {
+    GtkFileDialog *dialog;
+    // Create a file dialog
+    dialog = gtk_file_dialog_new();
+    gtk_file_dialog_select_folder(dialog, GTK_WINDOW(prefs), NULL, file_dialog_opened, prefs);
 }
 
 static void btnremove_clicked(GtkWidget *widget, MyPrefs *prefs)
@@ -474,8 +523,9 @@ static void my_prefs_init(MyPrefs *self)
     // Add timer to scan the list
     g_timeout_add(1, scan_func, self);
 
-    // Close request for this window
+    // Connect signals
     g_signal_connect(self, "close-request", G_CALLBACK(my_prefs_close_request), NULL);
+    g_signal_connect(self->btn_add, "clicked", G_CALLBACK(btnadd_clicked), self);
 }
 
 static void my_prefs_class_init(MyPrefsClass *klass)

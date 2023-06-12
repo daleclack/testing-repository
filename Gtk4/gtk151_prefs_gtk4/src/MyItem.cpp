@@ -3,7 +3,7 @@
 struct _MyItem
 {
     GObject parent_instance;
-    const char *col_name, *col_path;
+    char col_name[name_max_length], col_path[path_max_length];
     gboolean internal;
 };
 
@@ -40,8 +40,8 @@ MyItem *my_item_new(const char *disp_name, const char *path,
 {
     // Create a object
     MyItem *item = MY_ITEM(g_object_new(my_item_get_type(), NULL));
-    item->col_name = disp_name;
-    item->col_path = path;
+    strncpy(item->col_name, disp_name, name_max_length);
+    strncpy(item->col_path, path, path_max_length);
     item->internal = internal1;
     return item;
 }

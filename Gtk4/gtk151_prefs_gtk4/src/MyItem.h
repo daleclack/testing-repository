@@ -4,6 +4,10 @@
 
 G_DECLARE_FINAL_TYPE(MyItem, my_item, MY, ITEM, GObject)
 
+// File name and path limits
+const int name_max_length = 256;
+const int path_max_length = 4096;
+
 // Create a new item
 MyItem *my_item_new(const char *disp_name, const char *path,
                     gboolean internal1);
