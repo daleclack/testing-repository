@@ -1,5 +1,9 @@
 #include "MyItem.h"
 
+// File name and path limits
+#define name_max_length 256
+#define path_max_length 4096
+
 struct _MyItem
 {
     GObject parent_instance;
