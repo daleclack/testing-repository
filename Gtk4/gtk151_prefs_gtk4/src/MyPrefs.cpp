@@ -269,6 +269,24 @@ static void update_internal_image(GtkWidget *background1, const char **id)
     g_object_unref(sized);
 }
 
+static void update_external_image(GtkWidget *background2, const char *file_name)
+{
+    GError *error = NULL;
+    // Create a pixbuf
+    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file(file_name, &error);
+    if (error == NULL)
+    {
+        // Load the image with pixbuf
+        GdkPixbuf *sized = gdk_pixbuf_scale_simple(pixbuf, 1024, 576, GDK_INTERP_BILINEAR);
+        gtk_picture_set_pixbuf(GTK_PICTURE(background2), sized);
+        g_object_unref(sized);
+        g_object_unref(pixbuf);
+    }else{
+        // if file load failed, load default image
+        update_internal_image(background2, winpe);
+    }
+}
+
 // Scan the selection of two column views
 static gboolean scan_func(gpointer data)
 {
@@ -300,6 +318,8 @@ static gboolean scan_func(gpointer data)
             g_object_unref(prefs->file);
         }
         prefs->current_folder_index = folder_item_index;
+        // Force reload image
+        prefs->current_image_index = -1;
     }
 
     // Get the selection of images view
@@ -339,6 +359,8 @@ static gboolean scan_func(gpointer data)
         else
         {
             // For image which is outside
+            update_external_image(prefs->background, file_name);
+            prefs->current_image_index = image_item_index;
         }
     }
     return TRUE;
@@ -359,7 +381,7 @@ static void my_prefs_init(MyPrefs *self)
         "1280x720",
         "1366x768",
         NULL};
-    
+
     // Default window size
     self->width = 1024;
     self->height = 576;
