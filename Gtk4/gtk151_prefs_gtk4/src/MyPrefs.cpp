@@ -77,6 +77,7 @@ static void factory_folder_string_setup(GtkListItemFactory *factory, GtkListItem
 {
     // Add a label
     GtkWidget *label = gtk_label_new("");
+    gtk_widget_set_halign(label, GTK_ALIGN_START);
     gtk_list_item_set_child(item, label);
 }
 
@@ -154,6 +155,7 @@ static void factory_pics_string_setup(GtkListItemFactory *factory, GtkListItem *
 {
     // Add a label
     GtkWidget *label = gtk_label_new("");
+    gtk_widget_set_halign(label, GTK_ALIGN_START);
     gtk_list_item_set_child(item, label);
 }
 
@@ -260,16 +262,17 @@ static void pics_view_init(MyPrefs *self)
                                   self->pics_string_column);
 }
 
-static void update_internal_image(GtkWidget *background1, const char **id)
+static void update_internal_image(MyPrefs *prefs, const char **id)
 {
     GdkPixbuf *pixbuf = gdk_pixbuf_new_from_xpm_data(id);
-    GdkPixbuf *sized = gdk_pixbuf_scale_simple(pixbuf, 1024, 576, GDK_INTERP_BILINEAR);
-    gtk_picture_set_pixbuf(GTK_PICTURE(background1), pixbuf);
+    GdkPixbuf *sized = gdk_pixbuf_scale_simple(pixbuf, prefs->width,
+                                               prefs->height, GDK_INTERP_BILINEAR);
+    gtk_picture_set_pixbuf(GTK_PICTURE(prefs->background), pixbuf);
     g_object_unref(pixbuf);
     g_object_unref(sized);
 }
 
-static void update_external_image(GtkWidget *background2, const char *file_name)
+static void update_external_image(MyPrefs *prefs, const char *file_name)
 {
     GError *error = NULL;
     // Create a pixbuf
@@ -277,14 +280,25 @@ static void update_external_image(GtkWidget *background2, const char *file_name)
     if (error == NULL)
     {
         // Load the image with pixbuf
-        GdkPixbuf *sized = gdk_pixbuf_scale_simple(pixbuf, 1024, 576, GDK_INTERP_BILINEAR);
-        gtk_picture_set_pixbuf(GTK_PICTURE(background2), sized);
+        GdkPixbuf *sized = gdk_pixbuf_scale_simple(pixbuf, prefs->width,
+                                                   prefs->height, GDK_INTERP_BILINEAR);
+        gtk_picture_set_pixbuf(GTK_PICTURE(prefs->background), sized);
         g_object_unref(sized);
         g_object_unref(pixbuf);
-    }else{
-        // if file load failed, load default image
-        update_internal_image(background2, winpe);
     }
+    else
+    {
+        // if file load failed, load default image
+        update_internal_image(prefs, winpe);
+    }
+}
+
+static void btnadd_clicked(GtkWidget *widget, MyPrefs *prefs)
+{
+}
+
+static void btnremove_clicked(GtkWidget *widget, MyPrefs *prefs)
+{
 }
 
 // Scan the selection of two column views
@@ -348,10 +362,10 @@ static gboolean scan_func(gpointer data)
             switch (file_name[1])
             {
             case '1':
-                update_internal_image(prefs->background, img7);
+                update_internal_image(prefs, img7);
                 break;
             case '2':
-                update_internal_image(prefs->background, winpe);
+                update_internal_image(prefs, winpe);
                 break;
             }
             prefs->current_image_index = image_item_index;
@@ -359,7 +373,7 @@ static gboolean scan_func(gpointer data)
         else
         {
             // For image which is outside
-            update_external_image(prefs->background, file_name);
+            update_external_image(prefs, file_name);
             prefs->current_image_index = image_item_index;
         }
     }
