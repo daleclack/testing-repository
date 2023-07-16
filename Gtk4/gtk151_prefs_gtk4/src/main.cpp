@@ -11,7 +11,7 @@ static void gtkmain(GtkApplication *app, gpointer data)
     _window = GTK_WINDOW(window);
     gtk_window_set_icon_name(_window, "org.gtk.daleclack");
     gtk_window_set_title(_window, "Background Prefs Test");
-    // gtk_window_set_default_size(_window, 1024, 576);
+    gtk_window_set_default_size(_window, 1024, 576);
 
     // Overlay to pack the background and button
     overlay = gtk_overlay_new();
@@ -27,7 +27,7 @@ static void gtkmain(GtkApplication *app, gpointer data)
     gtk_widget_set_halign(main_pic, GTK_ALIGN_FILL);
     gtk_widget_set_valign(main_pic, GTK_ALIGN_FILL);
     gtk_overlay_set_child(_overlay, main_pic);
-    gtk_widget_set_size_request(main_pic, 1024, 576);
+    // gtk_widget_set_size_request(main_pic, 1024, 576);
 
     // Add a button
     btn_back = gtk_button_new_with_label("Prefs");
