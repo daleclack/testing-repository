@@ -1,6 +1,8 @@
 {
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
     "files.associations": {
-        "*.xpm": "cpp"
-    }
+        "*.xpm": "cpp",
+        "chrono": "cpp"
+    },
+    "cmake.configureOnOpen": true
 }
