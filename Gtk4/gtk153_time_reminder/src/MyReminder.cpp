@@ -13,6 +13,7 @@ struct _MyReminder
 {
     GtkApplicationWindow parent_instance;
     GtkWidget *time_label;
+    GtkWidget *header, *btn_prefs;
     int year, month, day;
     std::string color;
 };
@@ -66,8 +67,18 @@ static void my_reminder_init(MyReminder *self)
 {
     // Set properties of window
     gtk_window_set_icon_name(GTK_WINDOW(self), "org.gtk.daleclack");
-    gtk_window_set_default_size(GTK_WINDOW(self), 240, 200);
+    gtk_window_set_default_size(GTK_WINDOW(self), 350, 250);
     gtk_window_set_title(GTK_WINDOW(self), "Reminder");
+    
+    // Create header bar
+    self->header = gtk_header_bar_new();
+    gtk_header_bar_set_decoration_layout(GTK_HEADER_BAR(self->header),
+        "close,minimize,maximize,icon:menu");
+    gtk_window_set_titlebar(GTK_WINDOW(self), self->header);
+
+    // Create button for preference
+    self->btn_prefs = gtk_button_new_with_label("Prefs");
+    gtk_header_bar_pack_end(GTK_HEADER_BAR(self->header), self->btn_prefs);
 
     // Load data from json file
     load_json_data(self);
