@@ -67,7 +67,12 @@ static void my_reminder_init(MyReminder *self)
     self->time_label = gtk_label_new(" ");
 
     // Get time duration
-    char time_str[57];
+    char time_str[120];
+
+    // String for timeout
+    const char *timeout_str = "<span foreground=\"red\" size='16pt'>Time is out!</span>";
+
+    // Get days for deadline
     int time = get_time_duration(self->year, self->month, self->day);
     if (time >= 0)
     {
@@ -77,7 +82,7 @@ static void my_reminder_init(MyReminder *self)
     }
     else
     {
-        strncpy(time_str, "<span foreground=\"red\" size='16pt'>Time is out!</span>", 56);
+        strncpy(time_str, timeout_str, strlen(timeout_str));
     }
 
     // Text style of the label
