@@ -2,6 +2,13 @@
 #include <fstream>
 #include "timer.h"
 
+// Default config values
+#define default_color "blue"
+#define default_year 2023
+#define default_month 12
+#define default_day 23
+#define label_max_length 120
+
 struct _MyReminder
 {
     GtkApplicationWindow parent_instance;
@@ -16,7 +23,7 @@ static void load_json_data(MyReminder *self)
 {
     std::fstream json_file;
     json json_data;
-    std::string default_color("blue");
+    std::string color_string(default_color);
 
     // Open json file for data
     json_file.open("config.json", std::ios_base::in);
@@ -29,16 +36,18 @@ static void load_json_data(MyReminder *self)
     else
     {
         // Json file not exist, load default config
-        self->color = default_color;
-        self->year = 2023;
-        self->month = 12;
-        self->day = 23;
+        self->color = color_string;
+        self->year = default_year;
+        self->month = default_month;
+        self->day = default_day;
+        return;
     }
 
-    if (!json_data.empty()){
+    if (!json_data.empty())
+    {
         // Get json data
-        std::string tmp_color = json_data["color_set"];
-        self->color = tmp_color;
+        color_string = json_data["color_set"];
+        self->color = color_string;
         self->year = json_data["year"];
         self->month = json_data["month"];
         self->day = json_data["day"];
@@ -46,10 +55,10 @@ static void load_json_data(MyReminder *self)
     else
     {
         // No json data, load default config
-        self->color = default_color;
-        self->year = 2023;
-        self->month = 12;
-        self->day = 23;
+        self->color = color_string;
+        self->year = default_year;
+        self->month = default_month;
+        self->day = default_day;
     }
 }
 
@@ -67,7 +76,7 @@ static void my_reminder_init(MyReminder *self)
     self->time_label = gtk_label_new(" ");
 
     // Get time duration
-    char time_str[120];
+    char time_str[label_max_length];
 
     // String for timeout
     const char *timeout_str = "<span foreground=\"red\" size='16pt'>Time is out!</span>";
@@ -77,7 +86,7 @@ static void my_reminder_init(MyReminder *self)
     if (time >= 0)
     {
         snprintf(time_str, sizeof(time_str),
-                 "<span foreground=\"%s\" size='16pt'>%d</span>\nDays Left", 
+                 "<span foreground=\"%s\" size='16pt'>%d</span>\nDays Left",
                  self->color.c_str(), time);
     }
     else
