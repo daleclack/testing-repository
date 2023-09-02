@@ -26,7 +26,7 @@ link_directories (${GTK4_LIBRARY_DIRS})
 # set(PO_DIR ${CMAKE_BINARY_DIR}/po/zh_CN/LC_MESSAGES)
 
 #Source files
-set(SOURCE_FILE src/main.cpp src/MyReminder.cpp src/timer.cpp)
+set(SOURCE_FILE src/main.cpp src/MyReminder.cpp src/MyPrefs.cpp src/timer.cpp)
 
 #Compile Resource
 
