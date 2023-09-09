@@ -6,16 +6,38 @@
 struct _MyPrefs
 {
     GtkWindow parent_instance;
-    GtkWidget *main_box, *btn_box;
+    GtkWidget *main_box, *color_box;
     GtkWidget *label_color;
     GtkWidget *calendar_frame, *calendar;
     GtkWidget *color_button;
     GtkWidget *btnapply;
     GtkColorDialog *dialog;
+    char color[12];
     GtkWidget *color_drop;
+    GtkWidget *check_default_color, *check_rgba_color;
+    GtkWidget *def_color_box, *rgba_color_box;
 };
 
 G_DEFINE_TYPE(MyPrefs, my_prefs, GTK_TYPE_WINDOW)
+
+static const char *color_strings[] =
+    {
+        "aqua",
+        "black",
+        "blue",
+        "fuchsia",
+        "gray",
+        "green",
+        "lime",
+        "maroon",
+        "navy",
+        "olive",
+        "purple",
+        "red",
+        "silver",
+        "teal",
+        "white",
+        "yellow"};
 
 static void load_reminder_config(MyPrefs *prefs)
 {
@@ -93,7 +115,7 @@ static void btnapply_clicked(GtkWidget *widget, MyPrefs *prefs)
     // Save data to the file when available
     if (outfile.is_open())
     {
-        outfile<<out_data;
+        outfile << out_data;
     }
     outfile.close();
 }
@@ -103,13 +125,19 @@ static void my_prefs_init(MyPrefs *self)
     // Initalize preferneces window
     // gtk_window_set_icon_name(GTK_WINDOW(self), "org.gtk.daleclack");
     gtk_window_set_default_size(GTK_WINDOW(self), 300, 200);
+    gtk_window_set_title(GTK_WINDOW(self), "Preferences");
 
     // Create layout and widgets
-    self->main_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
-    self->btn_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
+    self->main_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
+    self->color_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+    self->def_color_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+    self->rgba_color_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
     self->calendar_frame = gtk_frame_new("Select a date For reminder");
     gtk_widget_set_halign(self->main_box, GTK_ALIGN_CENTER);
     gtk_widget_set_valign(self->main_box, GTK_ALIGN_CENTER);
+    gtk_widget_set_valign(self->color_box, GTK_ALIGN_CENTER);
+    gtk_widget_set_halign(self->def_color_box, GTK_ALIGN_CENTER);
+    gtk_widget_set_halign(self->rgba_color_box, GTK_ALIGN_CENTER);
 
     // Create calendar and add it to the frame
     self->calendar = gtk_calendar_new();
@@ -121,20 +149,46 @@ static void my_prefs_init(MyPrefs *self)
 
     // Create information labels
     self->label_color = gtk_label_new("Font Color:");
-    gtk_box_append(GTK_BOX(self->btn_box), self->label_color);
+    gtk_widget_set_halign(self->label_color, GTK_ALIGN_CENTER);
+    gtk_box_append(GTK_BOX(self->color_box), self->label_color);
 
-    // Create color widgets
+    // Create check buttons for selection
+    self->check_default_color = gtk_check_button_new_with_label("Use default color");
+    self->check_rgba_color = gtk_check_button_new_with_label("Use color from RGBA");
+    gtk_check_button_set_group(GTK_CHECK_BUTTON(self->check_default_color),
+                               GTK_CHECK_BUTTON(self->check_rgba_color));
+    gtk_check_button_set_active(GTK_CHECK_BUTTON(self->check_default_color), TRUE);
+
+    // Create defaut colors dropdown
+    self->color_drop = gtk_drop_down_new_from_strings(color_strings);
+    gtk_drop_down_set_selected(GTK_DROP_DOWN(self->color_drop), 2);
+    gtk_box_append(GTK_BOX(self->def_color_box), self->check_default_color);
+    gtk_box_append(GTK_BOX(self->def_color_box), self->color_drop);
+    gtk_box_append(GTK_BOX(self->color_box), self->def_color_box);
+
+    // Create widgets for rgba color
     self->dialog = gtk_color_dialog_new();
     self->color_button = gtk_color_dialog_button_new(self->dialog);
-    gtk_box_append(GTK_BOX(self->btn_box), self->color_button);
-    gtk_widget_set_halign(self->btn_box, GTK_ALIGN_CENTER);
-    gtk_box_append(GTK_BOX(self->main_box), self->btn_box);
+    gtk_box_append(GTK_BOX(self->rgba_color_box), self->check_rgba_color);
+    gtk_box_append(GTK_BOX(self->rgba_color_box), self->color_button);
+    gtk_box_append(GTK_BOX(self->color_box), self->rgba_color_box);
 
     // Add button to the main box
     self->btnapply = gtk_button_new_with_label("Apply Settings");
     g_signal_connect(self->btnapply, "clicked", G_CALLBACK(btnapply_clicked), self);
     gtk_widget_set_halign(self->btnapply, GTK_ALIGN_CENTER);
-    gtk_box_append(GTK_BOX(self->main_box), self->btnapply);
+    gtk_box_append(GTK_BOX(self->color_box), self->btnapply);
+    gtk_box_append(GTK_BOX(self->main_box), self->color_box);
+
+    // Bind properties of objects
+    g_object_bind_property(self->check_default_color, "active",
+                           self->color_drop, "sensitive",
+                           G_BINDING_DEFAULT);
+    g_object_bind_property(self->check_rgba_color, "active",
+                           self->color_button, "sensitive",
+                           G_BINDING_DEFAULT);
+    // The color button should disabled defaultly
+    gtk_widget_set_sensitive(self->color_button, FALSE);
 
     // Set margin
     gtk_widget_set_margin_bottom(self->main_box, 10);
