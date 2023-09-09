@@ -2,6 +2,7 @@
 #include "MyPrefs.h"
 #include "config.h"
 #include <fstream>
+#include <string>
 
 struct _MyPrefs
 {
@@ -37,7 +38,34 @@ static const char *color_strings[] =
         "silver",
         "teal",
         "white",
-        "yellow"};
+        "yellow",
+        NULL};
+
+static void load_color(MyPrefs *prefs, std::string &color_str1)
+{
+    if (color_str1[0] == '#')
+    {
+        // RGBA Color config
+        gtk_check_button_set_active(GTK_CHECK_BUTTON(prefs->check_rgba_color),
+                                    TRUE);
+    }
+    else
+    {
+        // Default Color config
+        gtk_check_button_set_active(GTK_CHECK_BUTTON(prefs->check_default_color),
+                                    TRUE);
+        for (int i = 0; color_strings[i] != NULL; i++)
+        {
+            const char *color_set_str = color_strings[i];
+            if (strncmp(color_set_str,
+                        color_str1.c_str(),
+                        strlen(color_set_str)) == 0)
+            {
+                gtk_drop_down_set_selected(GTK_DROP_DOWN(prefs->color_drop), i);
+            }
+        }
+    }
+}
 
 static void load_reminder_config(MyPrefs *prefs)
 {
@@ -46,6 +74,7 @@ static void load_reminder_config(MyPrefs *prefs)
     infile.open("config.json", std::ios_base::in);
     json json_data;
     GDateTime *selected_day;
+    std::string color_str(default_color);
 
     if (infile.is_open())
     {
@@ -68,6 +97,9 @@ static void load_reminder_config(MyPrefs *prefs)
         int month = json_data["month"];
         int day = json_data["day"];
 
+        // Get Color string
+        color_str = json_data["color_set"];
+
         // Select Day
         GTimeZone *timezone = g_time_zone_new_local();
         selected_day = g_date_time_new(timezone, year,
@@ -82,6 +114,8 @@ static void load_reminder_config(MyPrefs *prefs)
                                        default_month, default_day, 8, 0, 0);
         gtk_calendar_select_day(GTK_CALENDAR(prefs->calendar), selected_day);
     }
+    // Load color config
+    load_color(prefs, color_str);
 }
 
 static void btnapply_clicked(GtkWidget *widget, MyPrefs *prefs)
@@ -95,6 +129,17 @@ static void btnapply_clicked(GtkWidget *widget, MyPrefs *prefs)
     month1 = g_date_time_get_month(selected_day);
     day1 = g_date_time_get_day_of_month(selected_day);
 
+    // Get color config
+    std::string color_string1;
+    if (gtk_check_button_get_active(
+            GTK_CHECK_BUTTON(prefs->check_default_color)))
+    {
+        guint index = gtk_drop_down_get_selected(GTK_DROP_DOWN(prefs->color_drop));
+        color_string1.append(color_strings[index]);
+    }else{
+
+    }
+
     // Create json data
     json out_data = json::parse(R"(
         {
@@ -107,6 +152,7 @@ static void btnapply_clicked(GtkWidget *widget, MyPrefs *prefs)
     out_data["year"] = year1;
     out_data["month"] = month1;
     out_data["day"] = day1;
+    out_data["color_set"] = color_string1;
 
     // Save data to the json file
     std::fstream outfile;
@@ -143,9 +189,6 @@ static void my_prefs_init(MyPrefs *self)
     self->calendar = gtk_calendar_new();
     gtk_frame_set_child(GTK_FRAME(self->calendar_frame), self->calendar);
     gtk_box_append(GTK_BOX(self->main_box), self->calendar_frame);
-
-    // Load config
-    load_reminder_config(self);
 
     // Create information labels
     self->label_color = gtk_label_new("Font Color:");
@@ -189,6 +232,9 @@ static void my_prefs_init(MyPrefs *self)
                            G_BINDING_DEFAULT);
     // The color button should disabled defaultly
     gtk_widget_set_sensitive(self->color_button, FALSE);
+
+    // Load config
+    load_reminder_config(self);
 
     // Set margin
     gtk_widget_set_margin_bottom(self->main_box, 10);
