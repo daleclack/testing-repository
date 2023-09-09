@@ -41,6 +41,30 @@ static const char *color_strings[] =
         "yellow",
         NULL};
 
+// Convert 2-bit 16numbers to 0-1 float for rgba
+static float str16_to_rgb_float(char high_bit, char low_bit)
+{
+    int rgba_255 = 0;
+    if (high_bit >= 'A')
+    {
+        rgba_255 += (high_bit - 'A' + 10) * 16;
+    }
+    else
+    {
+        rgba_255 += (high_bit - '0') * 16;
+    }
+
+    if (low_bit >= 'A')
+    {
+        rgba_255 += (low_bit - 'A' + 10);
+    }
+    else
+    {
+        rgba_255 += (low_bit - '0');
+    }
+    return rgba_255 / 255.0;
+}
+
 static void load_color(MyPrefs *prefs, std::string &color_str1)
 {
     if (color_str1[0] == '#')
@@ -48,6 +72,22 @@ static void load_color(MyPrefs *prefs, std::string &color_str1)
         // RGBA Color config
         gtk_check_button_set_active(GTK_CHECK_BUTTON(prefs->check_rgba_color),
                                     TRUE);
+
+        // Get color setting from color string
+        GdkRGBA rgba_color;
+        float red, green, blue, alpha;
+        red = str16_to_rgb_float(color_str1[1], color_str1[2]);
+        green = str16_to_rgb_float(color_str1[3], color_str1[4]);
+        blue = str16_to_rgb_float(color_str1[5], color_str1[6]);
+        alpha = str16_to_rgb_float(color_str1[7], color_str1[8]);
+        rgba_color.alpha = alpha;
+        rgba_color.blue = blue;
+        rgba_color.red = red;
+        rgba_color.green = green;
+
+        // Set rgba color for color button
+        gtk_color_dialog_button_set_rgba(
+            GTK_COLOR_DIALOG_BUTTON(prefs->color_button), &rgba_color);
     }
     else
     {
@@ -136,8 +176,24 @@ static void btnapply_clicked(GtkWidget *widget, MyPrefs *prefs)
     {
         guint index = gtk_drop_down_get_selected(GTK_DROP_DOWN(prefs->color_drop));
         color_string1.append(color_strings[index]);
-    }else{
+    }
+    else
+    {
+        // Get GdkRGBA object for color
+        const GdkRGBA *rgba_color;
+        rgba_color = gtk_color_dialog_button_get_rgba(
+            GTK_COLOR_DIALOG_BUTTON(prefs->color_button));
 
+        // Convert color from (0,1) to (0,255)
+        int red = (rgba_color->red) * 255;
+        int green = (rgba_color->green) * 255;
+        int blue = (rgba_color->blue) * 255;
+        int alpha = (rgba_color->alpha) * 255;
+
+        // Format the color string to #XXXXXXXX
+        snprintf(prefs->color, 12, "#%02X%02X%02X%02X", red,
+                 green, blue, alpha);
+        color_string1.append(prefs->color);
     }
 
     // Create json data
