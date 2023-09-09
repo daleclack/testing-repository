@@ -1,13 +1,8 @@
 #include "MyReminder.h"
 #include <fstream>
 #include "timer.h"
-
-// Default config values
-#define default_color "blue"
-#define default_year 2023
-#define default_month 12
-#define default_day 23
-#define label_max_length 120
+#include "MyPrefs.h"
+#include "config.h"
 
 struct _MyReminder
 {
@@ -63,6 +58,14 @@ static void load_json_data(MyReminder *self)
     }
 }
 
+static void btnprefs_clicked(GtkWidget *widget, MyReminder *win)
+{
+    // Show the preference window
+    // Create Preference window
+    MyPrefs *prefs_window = my_prefs_new(GTK_WINDOW(win));
+    gtk_window_present(GTK_WINDOW(prefs_window));
+}
+
 static void my_reminder_init(MyReminder *self)
 {
     // Set properties of window
@@ -73,12 +76,13 @@ static void my_reminder_init(MyReminder *self)
     // Create header bar
     self->header = gtk_header_bar_new();
     gtk_header_bar_set_decoration_layout(GTK_HEADER_BAR(self->header),
-        "close,minimize,maximize,icon:menu");
+        "close,minimize,maximize:menu");
     gtk_window_set_titlebar(GTK_WINDOW(self), self->header);
 
     // Create button for preference
     self->btn_prefs = gtk_button_new_with_label("Prefs");
     gtk_header_bar_pack_end(GTK_HEADER_BAR(self->header), self->btn_prefs);
+    g_signal_connect(self->btn_prefs, "clicked", G_CALLBACK(btnprefs_clicked), self);
 
     // Load data from json file
     load_json_data(self);
