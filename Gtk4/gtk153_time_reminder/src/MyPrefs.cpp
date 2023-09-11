@@ -1,6 +1,7 @@
 #include "MyReminder.h"
 #include "MyPrefs.h"
 #include "config.h"
+#include "MyMsgBox.h"
 #include <fstream>
 #include <string>
 
@@ -217,7 +218,12 @@ static void btnapply_clicked(GtkWidget *widget, MyPrefs *prefs)
     // Save data to the file when available
     if (outfile.is_open())
     {
+        // OutPut the file data
         outfile << out_data;
+
+        // Show a message box
+        MyMsgBox *msgbox = my_msgbox_new(GTK_WINDOW(prefs));
+        my_msgbox_show(msgbox, "Config File Saved!\nRestart to take affect");
     }
     outfile.close();
 }
