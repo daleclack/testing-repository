@@ -1,5 +1,5 @@
 set(CMAKE_CXX_STANDARD 17)
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.5.0)
 project(gtk149_file_exp VERSION 1.0.0)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../../GCR_CMake/macros)
@@ -59,7 +59,7 @@ if(WIN32)
 	set_property(SOURCE ../icon.rc APPEND PROPERTY
         OBJECT_DEPENDS ${PROJECT_SOURCE_DIR}/../icon.ico
         )
-	add_executable(${PROJECT_NAME} WIN32 ${app_WINRC} ${SOURCE_FILE} ${RESOURCE_FILE})
+	add_executable(${PROJECT_NAME} ${app_WINRC} ${SOURCE_FILE} ${RESOURCE_FILE})
     add_custom_command( TARGET ${PROJECT_NAME} 
                         COMMAND echo * > ${CMAKE_BINARY_DIR}/.gitignore
                         COMMAND echo **/* > ${CMAKE_BINARY_DIR}/.hgignore)

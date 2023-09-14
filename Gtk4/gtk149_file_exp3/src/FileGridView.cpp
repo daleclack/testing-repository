@@ -1,4 +1,5 @@
 #include "FileGridView.h"
+#include "GetFileType.h"
 
 static void setup_grid_item(GtkListItemFactory *factory, GtkListItem *item)
 {
@@ -63,7 +64,7 @@ static void gridview_activate(GtkGridView *view, guint position, FileWindow *win
     GtkDirectoryList *list = GTK_DIRECTORY_LIST(file_window_get_grid_model(win));
 
     // if the file type is directory, open the directory
-    if (g_file_info_get_file_type(info) == G_FILE_TYPE_DIRECTORY)
+    if (check_directory(info))
     {
         // Get the file and set it to the GtkDirectoryList
         GFile *file = G_FILE(g_file_info_get_attribute_object(info, "standard::file"));
