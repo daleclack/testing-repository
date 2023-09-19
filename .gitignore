@@ -5,6 +5,9 @@
 */build/*
 */build_mingw/*
 
+# Cache
+*/.cache/*
+
 # Qt Build Directory
 build*
 
