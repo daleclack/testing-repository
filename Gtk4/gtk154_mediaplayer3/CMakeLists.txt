@@ -26,7 +26,7 @@ link_directories (${GTK4_LIBRARY_DIRS})
 # set(PO_DIR ${CMAKE_BINARY_DIR}/po/zh_CN/LC_MESSAGES)
 
 #Source files
-set(SOURCE_FILE src/main.cpp src/MyMediaPlayer.cpp src/MyItem.cpp)
+set(SOURCE_FILE src/main.cpp src/MyMediaPlayer.cpp src/MyItem.cpp src/LyricsParser.cpp)
 
 #Compile Resource
 

@@ -4,11 +4,12 @@
 struct _MyMediaPlayer
 {
     GtkApplicationWindow parent_instance;
-    GtkWidget *video;
+    GtkWidget *video, *label_lyrics;
     GtkWidget *main_box, *btn_box;
     GtkWidget *btn_add, *btn_remove;
     GtkWidget *btn_load, *btn_save;
     GtkWidget *column_view;
+    GtkWidget *scrolled_window;
     GListStore *music_store;
     GtkSingleSelection *music_selection;
     GtkListItemFactory *filename_factory;
@@ -48,6 +49,11 @@ static void btnadd_clicked(GtkWidget *widget, MyMediaPlayer *player)
 
 static void btnremove_clicked(GtkWidget *widget, MyMediaPlayer *player)
 {
+    // Get selected position
+    guint pos = gtk_single_selection_get_selected(player->music_selection);
+
+    // Remove the selected item
+    g_list_store_remove(player->music_store, pos);
 }
 
 static void btnload_clicked(GtkWidget *widget, MyMediaPlayer *player)
@@ -56,6 +62,33 @@ static void btnload_clicked(GtkWidget *widget, MyMediaPlayer *player)
 
 static void btnsave_clicked(GtkWidget *widget, MyMediaPlayer *player)
 {
+}
+
+static void column_view_activated(GtkColumnView *self, gint position, MyMediaPlayer *player)
+{
+    // Clear stream for player
+    GtkMediaStream *stream = gtk_video_get_media_stream(GTK_VIDEO(player->video));
+    if (stream != NULL)
+    {
+        gtk_media_file_clear(GTK_MEDIA_FILE(stream));
+        // g_object_unref(stream);
+    }
+
+    // Play the selected media
+    MyItem *item;
+    GFile *music_file;
+    item = MY_ITEM(gtk_single_selection_get_selected_item(player->music_selection));
+    music_file = g_file_new_for_path(my_item_get_filename(item));
+    if (music_file != NULL)
+    {
+        gtk_video_set_file(GTK_VIDEO(player->video), music_file);
+        g_object_unref(music_file);
+    }
+
+    // // Check whether media stream has video
+    // if(!gtk_media_stream_has_video(stream)){
+    //     gtk_widget_set_size_request(player->video, 300, 50);
+    // }
 }
 
 static void filename_factory_setup(GtkListItemFactory *factory,
@@ -93,12 +126,18 @@ static void my_media_player_init(MyMediaPlayer *self)
     // Create widgets
     self->main_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
     self->video = gtk_video_new();
+    self->label_lyrics = gtk_label_new(" ");
     self->btn_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
     self->btn_add = gtk_button_new_from_icon_name("list-add");
+    self->scrolled_window = gtk_scrolled_window_new();
     self->btn_remove = gtk_button_new_from_icon_name("list-remove");
     self->btn_load = gtk_button_new_from_icon_name("go-up");
     self->btn_save = gtk_button_new_from_icon_name("document-save");
-    gtk_widget_set_size_request(self->video, 300, 50);
+    gtk_widget_set_size_request(self->video, 300, 150);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(self->scrolled_window),
+                                   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+    gtk_label_set_markup(GTK_LABEL(self->label_lyrics),
+                         "<span color=\"red\" size='12pt'>No Lyric File Found!</span>");
 
     // Link signals for buttons
     g_signal_connect(self->btn_add, "clicked", G_CALLBACK(btnadd_clicked), self);
@@ -120,17 +159,21 @@ static void my_media_player_init(MyMediaPlayer *self)
                      G_CALLBACK(filename_factory_setup), NULL);
     g_signal_connect(self->filename_factory, "bind",
                      G_CALLBACK(filename_factory_bind), NULL);
+    g_signal_connect(self->column_view, "activate", G_CALLBACK(column_view_activated), self);
     gtk_column_view_append_column(GTK_COLUMN_VIEW(self->column_view),
                                   self->filename_column);
 
     // Add widgets
     gtk_box_append(GTK_BOX(self->main_box), self->video);
+    gtk_box_append(GTK_BOX(self->main_box), self->label_lyrics);
     gtk_box_append(GTK_BOX(self->btn_box), self->btn_add);
     gtk_box_append(GTK_BOX(self->btn_box), self->btn_remove);
     gtk_box_append(GTK_BOX(self->btn_box), self->btn_load);
     gtk_box_append(GTK_BOX(self->btn_box), self->btn_save);
     gtk_box_append(GTK_BOX(self->main_box), self->btn_box);
-    gtk_box_append(GTK_BOX(self->main_box), self->column_view);
+    gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(self->scrolled_window),
+                                  self->column_view);
+    gtk_box_append(GTK_BOX(self->main_box), self->scrolled_window);
     gtk_window_set_child(GTK_WINDOW(self), self->main_box);
 }
 
