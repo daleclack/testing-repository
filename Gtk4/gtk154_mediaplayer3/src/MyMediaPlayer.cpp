@@ -1,16 +1,22 @@
 #include "MyMediaPlayer.h"
+#include "LyricsParser.h"
 #include "MyItem.h"
+#include <cstring>
 
 struct _MyMediaPlayer
 {
     GtkApplicationWindow parent_instance;
     GtkWidget *video, *label_lyrics;
+    GtkWidget *ctrl_box;
+    GtkWidget *btn_priv, *btn_play, *btn_next, *btn_stop;
     GtkWidget *main_box, *btn_box;
     GtkWidget *btn_add, *btn_remove;
     GtkWidget *btn_load, *btn_save;
     GtkWidget *column_view;
     GtkWidget *scrolled_window;
     GListStore *music_store;
+    char current_filename[path_max_length];
+    gboolean music_loaded;
     GtkSingleSelection *music_selection;
     GtkListItemFactory *filename_factory;
     GtkColumnViewColumn *filename_column;
@@ -77,18 +83,25 @@ static void column_view_activated(GtkColumnView *self, gint position, MyMediaPla
     // Play the selected media
     MyItem *item;
     GFile *music_file;
+    const char *file_name;
+
+    // Get selection and open the music file
     item = MY_ITEM(gtk_single_selection_get_selected_item(player->music_selection));
-    music_file = g_file_new_for_path(my_item_get_filename(item));
+    file_name = my_item_get_filename(item);
+    music_file = g_file_new_for_path(file_name);
     if (music_file != NULL)
     {
+        // Add file to video widget for play
         gtk_video_set_file(GTK_VIDEO(player->video), music_file);
-        g_object_unref(music_file);
-    }
 
-    // // Check whether media stream has video
-    // if(!gtk_media_stream_has_video(stream)){
-    //     gtk_widget_set_size_request(player->video, 300, 50);
-    // }
+        // Mark the player is ready and update current file name
+        player->music_loaded = TRUE;
+        strncpy(player->current_filename, file_name, strlen(file_name));
+        g_object_unref(music_file);
+
+        // Update lyrics file
+        update_lyrics(player);
+    }
 }
 
 static void filename_factory_setup(GtkListItemFactory *factory,
@@ -114,6 +127,30 @@ static void filename_factory_bind(GtkListItemFactory *factory,
     MyItem *file_item = MY_ITEM(gtk_list_item_get_item(item));
     gtk_label_set_label(GTK_LABEL(label),
                         my_item_get_dispname(file_item));
+}
+
+gboolean my_media_player_get_music_loaded(MyMediaPlayer *self)
+{
+    // Get whether music is loaded
+    return self->music_loaded;
+}
+
+GtkWidget *my_media_player_get_video_widget(MyMediaPlayer *self)
+{
+    // Get video widget
+    return self->video;
+}
+
+GtkLabel *my_media_player_get_lyrics_widget(MyMediaPlayer *self)
+{
+    // Get Label for lyrics
+    return GTK_LABEL(self->label_lyrics);
+}
+
+char *my_media_player_get_filename(MyMediaPlayer *self)
+{
+    // Get file name
+    return self->current_filename;
 }
 
 static void my_media_player_init(MyMediaPlayer *self)
@@ -162,6 +199,10 @@ static void my_media_player_init(MyMediaPlayer *self)
     g_signal_connect(self->column_view, "activate", G_CALLBACK(column_view_activated), self);
     gtk_column_view_append_column(GTK_COLUMN_VIEW(self->column_view),
                                   self->filename_column);
+
+    // Add a timer for music playing
+    self->music_loaded = FALSE;
+    g_timeout_add(1, lyric_time_func, self);
 
     // Add widgets
     gtk_box_append(GTK_BOX(self->main_box), self->video);

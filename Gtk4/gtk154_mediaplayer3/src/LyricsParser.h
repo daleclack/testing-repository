@@ -1,3 +1,9 @@
 #pragma once
 
-void get_lyrics(const char *lyrics_file, int time, char *lyric_string);
+#include "MyMediaPlayer.h"
+
+// Timeout function for music played time
+gboolean lyric_time_func(gpointer data);
+
+// Update lyrics file when a music will play
+void update_lyrics(MyMediaPlayer *player);
