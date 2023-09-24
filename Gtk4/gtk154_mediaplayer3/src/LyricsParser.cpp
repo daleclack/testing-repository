@@ -2,48 +2,12 @@
 #include "LyricsParser.h"
 #include "MyMediaPlayer.h"
 #include <cstdio>
-#include <cstring>
-#include <vector>
 
 #define lyrics_max_length 1024
 
 static FILE *lyrics_file = NULL;
 static gboolean line_read = FALSE, lyrics_updated = FALSE;
 static char current_lyrics[lyrics_max_length];
-
-void update_lyrics(MyMediaPlayer *player)
-{
-    // Get position between filename and extension
-    int point_pos;
-    char *current_filename = my_media_player_get_filename(player);
-    g_print("%s\n", current_filename);
-    for (int i = strlen(current_filename) - 1; i > 0; i--)
-    {
-        if (current_filename[i] == '.')
-        {
-            point_pos = i;
-            break;
-        }
-    }
-
-    // Get Lyrics file name
-    char lyric_filename[path_max_length];
-    strncpy(lyric_filename, current_filename, point_pos);
-    lyric_filename[point_pos] = '\0';
-    strncat(lyric_filename, ".lrc", 4);
-    g_print("%s\n", lyric_filename);
-
-    // Close pervious opened lyrics file
-    if (lyrics_file != NULL)
-    {
-        fclose(lyrics_file);
-        lyrics_file = NULL;
-    }
-
-    // Open the lyrics file
-    lyrics_file = fopen(lyric_filename, "rt+");
-    lyrics_updated = TRUE;
-}
 
 static void get_substr(char *src, char *dest, size_t start,
                        size_t end)
@@ -108,6 +72,41 @@ static gint64 get_lrc_line_timestamp(const char *lyrics_line, size_t timestamp_l
                  lyric_min * 60 * 1000;
 
     return lyric_time;
+}
+
+void update_lyrics(MyMediaPlayer *player)
+{
+    // Get position between filename and extension
+    int point_pos;
+    char *current_filename = my_media_player_get_filename(player);
+    g_print("%s\n", current_filename);
+    for (int i = strlen(current_filename) - 1; i > 0; i--)
+    {
+        if (current_filename[i] == '.')
+        {
+            point_pos = i;
+            break;
+        }
+    }
+
+    // Get Lyrics file name
+    char lyric_filename[path_max_length];
+    strncpy(lyric_filename, current_filename, point_pos);
+    lyric_filename[point_pos] = '\0';
+    strncat(lyric_filename, ".lrc", 4);
+    g_print("%s\n", lyric_filename);
+
+    // Close pervious opened lyrics file
+    if (lyrics_file != NULL)
+    {
+        fclose(lyrics_file);
+        lyrics_file = NULL;
+    }
+
+    // Open the lyrics file
+    lyrics_file = fopen(lyric_filename, "rt+");
+    lyrics_updated = TRUE;
+    line_read = FALSE;
 }
 
 static void get_lyrics(gint64 curr_time, gboolean playing, MyMediaPlayer *player)
