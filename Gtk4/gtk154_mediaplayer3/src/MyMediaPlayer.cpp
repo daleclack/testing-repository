@@ -96,8 +96,13 @@ static void column_view_activated(GtkColumnView *self, gint position, MyMediaPla
 
         // Mark the player is ready and update current file name
         player->music_loaded = TRUE;
-        strncpy(player->current_filename, file_name, strlen(file_name));
+        char *filename1 = player->current_filename;
+        strncpy(filename1, file_name, strlen(file_name));
+        filename1[strlen(file_name)] = '\0';
         g_object_unref(music_file);
+
+        // Force update lyrics file
+        update_lyrics(player);
     }
 }
 
