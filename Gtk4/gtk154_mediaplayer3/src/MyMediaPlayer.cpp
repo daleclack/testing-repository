@@ -13,7 +13,7 @@ struct _MyMediaPlayer
     GtkWidget *btn_add, *btn_remove;
     GtkWidget *btn_load, *btn_save;
     GtkWidget *column_view;
-    GtkWidget *scrolled_window;
+    GtkWidget *scrolled_window, *scrolled_lyrics;
     GListStore *music_store;
     char current_filename[path_max_length];
     gboolean music_loaded;
@@ -169,12 +169,15 @@ static void my_media_player_init(MyMediaPlayer *self)
     self->btn_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
     self->btn_add = gtk_button_new_from_icon_name("list-add");
     self->scrolled_window = gtk_scrolled_window_new();
+    self->scrolled_lyrics = gtk_scrolled_window_new();
     self->btn_remove = gtk_button_new_from_icon_name("list-remove");
     self->btn_load = gtk_button_new_from_icon_name("go-up");
     self->btn_save = gtk_button_new_from_icon_name("document-save");
     gtk_widget_set_size_request(self->video, 300, 150);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(self->scrolled_window),
                                    GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(self->scrolled_window),
+                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER);
     gtk_label_set_markup(GTK_LABEL(self->label_lyrics),
                          "<span color=\"red\" size='12pt'>No Lyric File Found!</span>");
 
@@ -208,7 +211,9 @@ static void my_media_player_init(MyMediaPlayer *self)
 
     // Add widgets
     gtk_box_append(GTK_BOX(self->main_box), self->video);
-    gtk_box_append(GTK_BOX(self->main_box), self->label_lyrics);
+    gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(self->scrolled_lyrics),
+                                  self->label_lyrics);
+    gtk_box_append(GTK_BOX(self->main_box), self->scrolled_lyrics);
     gtk_box_append(GTK_BOX(self->btn_box), self->btn_add);
     gtk_box_append(GTK_BOX(self->btn_box), self->btn_remove);
     gtk_box_append(GTK_BOX(self->btn_box), self->btn_load);

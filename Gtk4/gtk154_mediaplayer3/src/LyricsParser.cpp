@@ -96,14 +96,6 @@ void update_lyrics(MyMediaPlayer *player)
     strncat(lyric_filename, ".lrc", 4);
     g_print("%s\n", lyric_filename);
 
-    // Close pervious opened lyrics file
-    if (lyrics_file != NULL)
-    {
-        fclose(lyrics_file);
-        lyrics_file = NULL;
-    }
-
-    // Open the lyrics file
     lyrics_file = fopen(lyric_filename, "rt+");
     lyrics_updated = TRUE;
     line_read = FALSE;
@@ -125,7 +117,7 @@ static void get_lyrics(gint64 curr_time, gboolean playing, MyMediaPlayer *player
         {
             // Get lyrics time
             fgets(lyrics_line, lyrics_max_length, lyrics_file);
-            fflush(lyrics_file);
+            // fflush(lyrics_file);
 
             // Some lrc files has empty lines
             if (strlen(lyrics_line) == 0)
@@ -154,6 +146,8 @@ static void get_lyrics(gint64 curr_time, gboolean playing, MyMediaPlayer *player
         }
         // g_print("%ld\n", lyric_time);
 
+        // g_print("%lld %lld\n", curr_time, lyric_time);
+        // g_print("%d\n", line_read);
         if (curr_time / 100 == lyric_time / 100 && line_read || lyric_time == 0)
         {
             // Since a new line is read and time match, load lyrics
@@ -166,6 +160,7 @@ static void get_lyrics(gint64 curr_time, gboolean playing, MyMediaPlayer *player
     }
     else
     {
+        // g_print("Lyric file open failed!\n");
         gtk_label_set_markup(my_media_player_get_lyrics_widget(player),
                              "<span color=\"red\" size='12pt'>No Lyric File Found!</span>");
     }
