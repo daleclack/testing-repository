@@ -5,7 +5,7 @@
 #include <cstring>
 
 #define lyrics_max_length 1024
-#define timestamp_length 12
+#define timestamp_length 11
 
 static FILE *lyrics_file = NULL;
 static gboolean line_read = FALSE, lyrics_updated = FALSE;
@@ -48,7 +48,7 @@ void update_lyrics(MyMediaPlayer *player)
 static void get_substr(char *src, char *dest, size_t start, size_t end)
 {
     // Copy string to the end
-    if(strlen(src) == 0)
+    if(strlen(src) == 0 || strlen(src) == timestamp_length)
     {
         return ;
     }
@@ -74,6 +74,12 @@ static void get_lyrics(gint64 curr_time, gboolean playing, MyMediaPlayer *player
             // Get lyrics time
             fgets(lyrics_line, lyrics_max_length, lyrics_file);
             fflush(lyrics_file);
+
+            // Some lrc files has empty lines
+            if(strlen(lyrics_line) == 0){
+                line_read = TRUE;
+                return;
+            }
             // g_print("%s\n", lyrics_line);
             gint64 lyric_min = (lyrics_line[1] - '0') * 10 +
                                (lyrics_line[2] - '0');
