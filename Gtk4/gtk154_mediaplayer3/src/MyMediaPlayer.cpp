@@ -98,9 +98,6 @@ static void column_view_activated(GtkColumnView *self, gint position, MyMediaPla
         player->music_loaded = TRUE;
         strncpy(player->current_filename, file_name, strlen(file_name));
         g_object_unref(music_file);
-
-        // Update lyrics file
-        update_lyrics(player);
     }
 }
 
