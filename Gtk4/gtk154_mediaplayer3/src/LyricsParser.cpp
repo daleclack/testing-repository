@@ -9,6 +9,7 @@ static gboolean lyrics_loaded = FALSE;
 static gboolean line_read = FALSE, lyrics_updated = FALSE;
 static char current_lyrics[lyrics_max_length];
 
+// Get lyrics string
 static void get_substr(char *src, char *dest, size_t start,
                        size_t end)
 {
@@ -24,6 +25,7 @@ static void get_substr(char *src, char *dest, size_t start,
     dest[end] = '\0';
 }
 
+// Get the position of timestamp end to separate lyrics and timestamp
 static size_t get_lrc_timestamp_end_pos(const char *lrc_line)
 {
     size_t timestamp_end;
@@ -38,6 +40,7 @@ static size_t get_lrc_timestamp_end_pos(const char *lrc_line)
     return timestamp_end;
 }
 
+// Get timestamp of a lyrics line
 static gint64 get_lrc_line_timestamp(const char *lyrics_line, size_t timestamp_length)
 {
     static gint64 lyric_time = -1;
@@ -64,16 +67,13 @@ static gint64 get_lrc_line_timestamp(const char *lyrics_line, size_t timestamp_l
         break;
     }
 
-    // if (lyric_micro > 500)
-    // {
-    //     lyric_micro += 1000;
-    // }
     lyric_time = lyric_micro + lyric_sec * 1000 +
                  lyric_min * 60 * 1000;
 
     return lyric_time;
 }
 
+// Get a line of lyrics
 static void get_lyrics_line(const char *lyrics, char *lyrics_line1, gboolean reset)
 {
     static gint64 start_pos = 0, end_pos = 0;
@@ -109,10 +109,10 @@ static void get_lyrics_line(const char *lyrics, char *lyrics_line1, gboolean res
         }
         end_pos++;
         start_pos = end_pos;
-        // g_print("%lld\n", start_pos);
     }
 }
 
+// Update lyrics
 void update_lyrics(MyMediaPlayer *player)
 {
     // Get position between filename and extension
@@ -134,9 +134,7 @@ void update_lyrics(MyMediaPlayer *player)
     strncpy(lyric_filename, current_filename, point_pos);
     lyric_filename[point_pos] = '\0';
     strncat(lyric_filename, ".lrc", 4);
-    // show_filename(player, lyric_filename);
     g_print("%s\n", lyric_filename);
-    // lyrics_file = fopen(lyric_filename, "rt+");
 
     // Load lyrics with gio to avoid coding problem
     GFile *lyrics_file = g_file_new_for_path(lyric_filename);
@@ -151,8 +149,7 @@ void update_lyrics(MyMediaPlayer *player)
     // Load contents
     if (g_file_load_contents(lyrics_file, NULL, &lyrics_content, &length, NULL, NULL))
     {
-        GtkTextBuffer *buffer;
-        // g_print("%s", lyrics_content);
+        lyrics_loaded = TRUE;
     }
     else
     {
@@ -162,7 +159,6 @@ void update_lyrics(MyMediaPlayer *player)
     g_object_unref(lyrics_file);
 
     // Reset load status
-    lyrics_loaded = TRUE;
     lyrics_updated = TRUE;
     line_read = FALSE;
 
@@ -170,6 +166,7 @@ void update_lyrics(MyMediaPlayer *player)
     get_lyrics_line(NULL, NULL, TRUE);
 }
 
+// Get lyrics for a specfied time
 static void get_lyrics(gint64 curr_time, gboolean playing, MyMediaPlayer *player)
 {
     char lyrics_line[lyrics_max_length];
@@ -183,9 +180,7 @@ static void get_lyrics(gint64 curr_time, gboolean playing, MyMediaPlayer *player
         // g_print("Lrc file load successful\n");
         if (playing && !line_read)
         {
-            // Get lyrics time
-            // fgets(lyrics_line, lyrics_max_length, lyrics_file);
-            // fflush(lyrics_file);
+            // Get lyrics line
             get_lyrics_line(lyrics_content, lyrics_line, FALSE);
 
             // Some lrc files has empty lines
@@ -213,10 +208,6 @@ static void get_lyrics(gint64 curr_time, gboolean playing, MyMediaPlayer *player
                        strlen(lyrics_line) - timestamp_length);
             line_read = TRUE;
         }
-        // g_print("%ld\n", lyric_time);
-
-        // g_print("%lld %lld\n", curr_time, lyric_time);
-        // g_print("%d\n", line_read);
         if (curr_time >= lyric_time - 100 && curr_time <= lyric_time + 100 && 
          line_read || lyric_time == 0)
         {
@@ -236,6 +227,7 @@ static void get_lyrics(gint64 curr_time, gboolean playing, MyMediaPlayer *player
     }
 }
 
+// Check whether the media is playing
 static gboolean get_media_playing(gint64 curr_time)
 {
     static gint64 tmp_time = -1;
@@ -250,13 +242,13 @@ static gboolean get_media_playing(gint64 curr_time)
     }
 }
 
+// Check whether lyrics should be update
 static void get_media_stream_status(MyMediaPlayer *player,
                                     GtkMediaStream *stream, gint64 timestamp)
 {
     if (timestamp == 0 && !lyrics_updated)
     {
         // Load lyrics when a new media loaded
-        // g_print("Load new lyrics\n");
         update_lyrics(player);
     }
 
@@ -265,9 +257,9 @@ static void get_media_stream_status(MyMediaPlayer *player,
         // Reset status when the media playing
         lyrics_updated = FALSE;
     }
-    // g_print("%d\n", lyrics_updated);
 }
 
+// Time monitor
 gboolean lyric_time_func(gpointer data)
 {
     MyMediaPlayer *player = MYMEDIA_PLAYER(data);
