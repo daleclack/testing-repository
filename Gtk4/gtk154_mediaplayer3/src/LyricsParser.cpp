@@ -323,9 +323,12 @@ static void reset_lyrics(gint64 timestamp, GtkMediaStream *stream,
     lyrics_label_update(timestamp, player);
 
     // Pause audio before seek to avoid isolation
-    gtk_media_stream_pause(stream);
-    gtk_media_stream_seek(stream, timestamp * 1000);
-    gtk_media_stream_play(stream);
+    if (timestamp != 0)
+    {
+        gtk_media_stream_pause(stream);
+        gtk_media_stream_seek(stream, timestamp * 1000);
+        gtk_media_stream_play(stream);
+    }
 }
 
 // Check whether the media is playing
@@ -339,7 +342,8 @@ static gboolean get_media_playing(gint64 curr_time,
     }
     else
     {
-        if (abs(curr_time - tmp_time) > 500)
+        gint64 delta_time = abs(curr_time - tmp_time);
+        if (delta_time > 500)
         {
             // Reset lyrics load status
             reset_lyrics(curr_time, stream, player);
@@ -360,15 +364,16 @@ static gboolean get_media_stream_status(MyMediaPlayer *player,
     }
 
     // The Media ended, reset the status
-    if (gtk_media_stream_get_ended(stream))
-    {
-        lyrics_loaded = FALSE;
-    }
+    // if (gtk_media_stream_get_ended(stream))
+    // {
+    //     lyrics_loaded = FALSE;
+    // }
 
     if (get_media_playing(timestamp, stream, player))
     {
         // Reset status when the media playing
         lyrics_updated = FALSE;
+        lyrics_loaded = TRUE;
         return TRUE;
     }
     else

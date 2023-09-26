@@ -179,6 +179,8 @@ static void my_media_player_init(MyMediaPlayer *self)
     self->btn_remove = gtk_button_new_from_icon_name("list-remove");
     self->btn_load = gtk_button_new_from_icon_name("go-up");
     self->btn_save = gtk_button_new_from_icon_name("document-save");
+
+    // Initalize widgets
     gtk_widget_set_size_request(self->video, 300, 150);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(self->scrolled_window),
                                    GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
@@ -186,6 +188,7 @@ static void my_media_player_init(MyMediaPlayer *self)
                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER);
     gtk_label_set_markup(GTK_LABEL(self->label_lyrics),
                          "<span color=\"red\" size='12pt'>No media file playing!</span>");
+    gtk_video_set_autoplay(GTK_VIDEO(self->video), FALSE);
 
     // Link signals for buttons
     g_signal_connect(self->btn_add, "clicked", G_CALLBACK(btnadd_clicked), self);
