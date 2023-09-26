@@ -83,12 +83,13 @@ static void column_view_activated(GtkColumnView *self, gint position, MyMediaPla
     // Play the selected media
     MyItem *item;
     GFile *music_file;
-    const char *file_name;
+    const char *file_name, *disp_name;
 
     // Get selection and open the music file
     item = MY_ITEM(gtk_single_selection_get_selected_item(player->music_selection));
     file_name = my_item_get_filename(item);
     music_file = g_file_new_for_path(file_name);
+    disp_name = my_item_get_dispname(item);
     if (music_file != NULL)
     {
         // Add file to video widget for play
@@ -100,6 +101,11 @@ static void column_view_activated(GtkColumnView *self, gint position, MyMediaPla
         strncpy(filename1, file_name, strlen(file_name));
         filename1[strlen(file_name)] = '\0';
         g_object_unref(music_file);
+
+        // Set the label for initial status
+        char *label_str = g_strdup_printf("<span color=\"green\" size='12pt'>%s</span>", disp_name);
+        gtk_label_set_markup(GTK_LABEL(player->label_lyrics), label_str);
+        g_free(label_str);
 
         // Force update lyrics file
         update_lyrics(player);
@@ -179,7 +185,7 @@ static void my_media_player_init(MyMediaPlayer *self)
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(self->scrolled_window),
                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER);
     gtk_label_set_markup(GTK_LABEL(self->label_lyrics),
-                         "<span color=\"red\" size='12pt'>No Lyric File Found!</span>");
+                         "<span color=\"red\" size='12pt'>No media file playing!</span>");
 
     // Link signals for buttons
     g_signal_connect(self->btn_add, "clicked", G_CALLBACK(btnadd_clicked), self);
