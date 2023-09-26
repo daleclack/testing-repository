@@ -9,6 +9,42 @@ static gboolean lyrics_loaded = FALSE;
 static gboolean line_read = FALSE, lyrics_updated = FALSE;
 static char current_lyrics[lyrics_max_length];
 
+// Replace the symbol
+static void UTF8_Replace_and_Symbol(gint64 pos_and_char, char *utf8_string)
+{
+    size_t string_length = strlen(utf8_string);
+
+    // Copy string after '&'
+    for (int i = pos_and_char + 1; i < string_length; i++)
+    {
+        utf8_string[i + 4] = utf8_string[i];
+    }
+
+    // Replace "&" with "&amp;"
+    utf8_string[pos_and_char + 1] = 'a';
+    utf8_string[pos_and_char + 2] = 'm';
+    utf8_string[pos_and_char + 3] = 'p';
+    utf8_string[pos_and_char + 4] = ';';
+    
+    // Fix end symbol
+    utf8_string[string_length + 3] = '\0';
+}
+
+// Fix UTF-8 '&' String
+static void UTF8_String_Fix(char *utf8_string)
+{
+    // Check for '&' String
+    gint64 pos_and_char = -1;
+    size_t string_length = strlen(utf8_string);
+    for (int i = 0; i < string_length; i++)
+    {
+        if (utf8_string[i] == '&')
+        {
+            UTF8_Replace_and_Symbol(i, utf8_string);
+        }
+    }
+}
+
 // Get lyrics string
 static void get_substr(char *src, char *dest, size_t start,
                        size_t end)
@@ -77,7 +113,7 @@ static gint64 get_lrc_line_timestamp(const char *lyrics_line, size_t timestamp_l
 static void get_lyrics_line(const char *lyrics, char *lyrics_line1, gboolean reset)
 {
     static gint64 start_pos = 0, end_pos = 0;
-    // Reset position to load from start, 
+    // Reset position to load frm start,
     // the lyrics and lyrics_line1 should be NULL to avoid problems
     if (reset)
     {
@@ -105,7 +141,7 @@ static void get_lyrics_line(const char *lyrics, char *lyrics_line1, gboolean res
         if (lyrics[end_pos] == '\0')
         {
             end_pos = 0;
-            lyrics_loaded = FALSE;
+            // lyrics_loaded = FALSE;
         }
         end_pos++;
         start_pos = end_pos;
@@ -206,10 +242,14 @@ static void get_lyrics(gint64 curr_time, gboolean playing, MyMediaPlayer *player
             // Remove time stamp
             get_substr(lyrics_line, current_lyrics, timestamp_length,
                        strlen(lyrics_line) - timestamp_length);
+
+            // Fix some symbols
+            UTF8_String_Fix(current_lyrics);
             line_read = TRUE;
         }
-        if (curr_time >= lyric_time - 100 && curr_time <= lyric_time + 100 && 
-         line_read || lyric_time == 0)
+        if (curr_time >= lyric_time - 100 && curr_time <= lyric_time + 100 &&
+                line_read ||
+            lyric_time == 0)
         {
             // Since a new line is read and time match, load lyrics
             snprintf(label_string, lyrics_max_length,
