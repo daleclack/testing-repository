@@ -156,7 +156,7 @@ void update_lyrics(MyMediaPlayer *player)
     int point_pos;
     gsize length;
     char *current_filename = my_media_player_get_filename(player);
-    g_print("%s\n", current_filename);
+    // g_print("%s\n", current_filename);
     for (int i = strlen(current_filename) - 1; i > 0; i--)
     {
         if (current_filename[i] == '.')
@@ -171,7 +171,7 @@ void update_lyrics(MyMediaPlayer *player)
     strncpy(lyric_filename, current_filename, point_pos);
     lyric_filename[point_pos] = '\0';
     strncat(lyric_filename, ".lrc", 4);
-    g_print("%s\n", lyric_filename);
+    // g_print("%s\n", lyric_filename);
 
     // Load lyrics with gio to avoid coding problem
     GFile *lyrics_file = g_file_new_for_path(lyric_filename);
@@ -224,7 +224,7 @@ static void lyric_line_process(char *lyrics_line,
     // Get timestamp length
     timestamp_length = get_lrc_timestamp_end_pos(lyrics_line);
 
-    g_print("%s\n", lyrics_line);
+    // g_print("%s\n", lyrics_line);
     lyric_time = get_lrc_line_timestamp(lyrics_line, timestamp_length);
 
     // Remove time stamp

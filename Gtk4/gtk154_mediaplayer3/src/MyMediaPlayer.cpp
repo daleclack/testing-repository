@@ -1,7 +1,13 @@
 #include "MyMediaPlayer.h"
 #include "LyricsParser.h"
 #include "MyItem.h"
+#include "../json_nlohmann/json.hpp"
+#include <vector>
+#include <fstream>
 #include <cstring>
+
+using json = nlohmann::json;
+typedef std::vector<std::string> string_vector;
 
 struct _MyMediaPlayer
 {
@@ -48,6 +54,7 @@ static void btnadd_clicked(GtkWidget *widget, MyMediaPlayer *player)
 {
     // Create a file dialog window
     GtkFileDialog *dialog = gtk_file_dialog_new();
+    gtk_file_dialog_set_title(dialog, "Open media file");
 
     // Open the file dialog
     gtk_file_dialog_open(dialog, GTK_WINDOW(player), NULL, file_dialog_response, player);
@@ -62,12 +69,121 @@ static void btnremove_clicked(GtkWidget *widget, MyMediaPlayer *player)
     g_list_store_remove(player->music_store, pos);
 }
 
+static void load_playlist(std::string filename, MyMediaPlayer *player)
+{
+    // Load a new json data to the list
+    std::fstream infile;
+
+    infile.open(filename, std::ios_base::in);
+    if (infile.is_open())
+    {
+        // Get json data
+        json data = json::parse(infile);
+
+        // Check whether json data is empty
+        if (data.empty())
+        {
+            return;
+        }
+        string_vector sound_names = data["name"];
+        string_vector sound_paths = data["path"];
+        std::string disp_name, file_path;
+
+        for (int i = 0; i < sound_names.size(); i++)
+        {
+            // Append items
+            disp_name = sound_names[i];
+            file_path = sound_paths[i];
+            g_list_store_append(G_LIST_STORE(player->music_store),
+                                my_item_new(disp_name.c_str(), file_path.c_str()));
+        }
+    }
+}
+
+static void load_dialog_response(GObject *dialog, GAsyncResult *res, gpointer data)
+{
+    GFile *file;
+    MyMediaPlayer *player = MYMEDIA_PLAYER(data);
+
+    // Get file
+    file = gtk_file_dialog_open_finish(GTK_FILE_DIALOG(dialog), res, NULL);
+    if (file != NULL)
+    {
+        // Get file name
+        char *path = g_file_get_path(file);
+        load_playlist(path, player);
+        g_object_unref(file);
+    }
+}
+
 static void btnload_clicked(GtkWidget *widget, MyMediaPlayer *player)
 {
+    // Create a file dialog window
+    GtkFileDialog *dialog = gtk_file_dialog_new();
+    gtk_file_dialog_set_title(dialog, "Open Playlist file");
+
+    // Create a filter
+    GtkFileFilter *filter_json = gtk_file_filter_new();
+    gtk_file_filter_add_pattern(filter_json, "*.json");
+    gtk_file_filter_set_name(filter_json, "json file");
+
+    // Create store for filters
+    GListStore *filters_store = g_list_store_new(GTK_TYPE_FILE_FILTER);
+    g_list_store_append(filters_store, filter_json);
+    gtk_file_dialog_set_filters(dialog, G_LIST_MODEL(filters_store));
+
+    // Set json filter for default
+    gtk_file_dialog_set_default_filter(dialog, filter_json);
+
+    // Open the file dialog
+    gtk_file_dialog_open(dialog, GTK_WINDOW(player), NULL, load_dialog_response, player);
 }
 
 static void btnsave_clicked(GtkWidget *widget, MyMediaPlayer *player)
 {
+    // Save playlist to json data
+    string_vector sound_names, sound_paths;
+    std::string disp_name, file_path;
+
+    // Get n items of the list
+    guint list_items = g_list_model_get_n_items(G_LIST_MODEL(player->music_store));
+
+    // Insert all items to the vectors
+    for (int i = 0; i < list_items; i++)
+    {
+        // Get sound name and the path
+        MyItem *item = MY_ITEM(g_list_model_get_item(G_LIST_MODEL(player->music_store), i));
+        disp_name = std::string(my_item_get_dispname(item));
+        file_path = std::string(my_item_get_filename(item));
+
+        // Push data to the vectors
+        sound_names.push_back(disp_name);
+        sound_paths.push_back(file_path);
+    }
+
+    // Save data to json file
+    std::fstream outfile;
+    outfile.open("playlist.json", std::ios::out);
+    if (outfile.is_open())
+    {
+        // Load json data
+        json data = json::parse(R"(
+            {
+                "name":[""],
+                "path":[""]
+            }
+        )");
+        data["name"] = sound_names;
+        data["path"] = sound_paths;
+
+        // Save to file
+        outfile << data;
+    }
+    else
+    {
+        g_print("Failed to save file!\n");
+    }
+    outfile.close();
 }
 
 static void column_view_activated(GtkColumnView *self, gint position, MyMediaPlayer *player)
@@ -217,6 +333,9 @@ static void my_media_player_init(MyMediaPlayer *self)
     // Add a timer for music playing
     self->music_loaded = FALSE;
     g_timeout_add(1, lyric_time_func, self);
+
+    // Load a default playlist
+    load_playlist("playlist.json", self);
 
     // Add widgets
     gtk_box_append(GTK_BOX(self->main_box), self->video);
