@@ -15,9 +15,10 @@ struct _MyMediaPlayer
     GtkWidget *video, *label_lyrics;
     GtkWidget *ctrl_box;
     GtkWidget *btn_priv, *btn_play, *btn_next, *btn_stop, *btn_list;
-    GtkWidget *main_box, *btn_box, *play_ctrl_box;
+    GtkWidget *main_box, *btn_box;
     GtkWidget *btn_add, *btn_remove;
     GtkWidget *btn_load, *btn_save;
+    GtkWidget *list_expander, *list_box;
     GtkWidget *column_view;
     GtkWidget *scrolled_window, *scrolled_lyrics;
     GListStore *music_store;
@@ -287,27 +288,45 @@ char *my_media_player_get_filename(MyMediaPlayer *self)
     return self->current_filename;
 }
 
+static void my_media_player_expander_activate(GtkExpander *self, MyMediaPlayer *player)
+{
+    if (!gtk_expander_get_expanded(self))
+    {
+        g_print("Try to recover size!\n");
+        gtk_widget_set_size_request(player->main_box, 300, 270);
+        gtk_widget_set_size_request(GTK_WIDGET(player), 300, 270);
+    }
+}
+
 static void my_media_player_init(MyMediaPlayer *self)
 {
     // Initalize window
     gtk_window_set_icon_name(GTK_WINDOW(self), "org.gtk.daleclack");
     gtk_window_set_title(GTK_WINDOW(self), "Gtk4 Media Player 3");
-    gtk_window_set_default_size(GTK_WINDOW(self), 300, 400);
+    gtk_window_set_default_size(GTK_WINDOW(self), 300, 270);
+    gtk_window_set_resizable(GTK_WINDOW(self), TRUE);
 
     // Create widgets
     self->main_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
     self->video = gtk_video_new();
     self->label_lyrics = gtk_label_new(" ");
+    self->ctrl_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
+    self->btn_play = gtk_button_new_from_icon_name("media-playback-start");
+    self->btn_priv = gtk_button_new_from_icon_name("media-skip-backward");
+    self->btn_next = gtk_button_new_from_icon_name("media-skip-forward");
     self->btn_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
     self->btn_add = gtk_button_new_from_icon_name("list-add");
     self->scrolled_window = gtk_scrolled_window_new();
     self->scrolled_lyrics = gtk_scrolled_window_new();
+    self->list_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+    self->list_expander = gtk_expander_new("Play List");
     self->btn_remove = gtk_button_new_from_icon_name("list-remove");
     self->btn_load = gtk_button_new_from_icon_name("go-up");
     self->btn_save = gtk_button_new_from_icon_name("document-save");
 
     // Initalize widgets
     gtk_widget_set_size_request(self->video, 300, 150);
+    gtk_widget_set_halign(self->ctrl_box, GTK_ALIGN_CENTER);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(self->scrolled_window),
                                    GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(self->scrolled_window),
@@ -315,12 +334,16 @@ static void my_media_player_init(MyMediaPlayer *self)
     gtk_label_set_markup(GTK_LABEL(self->label_lyrics),
                          "<span color=\"red\" size='12pt'>No media file playing!</span>");
     gtk_video_set_autoplay(GTK_VIDEO(self->video), FALSE);
+    gtk_widget_set_hexpand(self->main_box, TRUE);
+    gtk_widget_set_vexpand(self->main_box, TRUE);
 
     // Link signals for buttons
     g_signal_connect(self->btn_add, "clicked", G_CALLBACK(btnadd_clicked), self);
     g_signal_connect(self->btn_remove, "clicked", G_CALLBACK(btnremove_clicked), self);
     g_signal_connect(self->btn_load, "clicked", G_CALLBACK(btnload_clicked), self);
     g_signal_connect(self->btn_save, "clicked", G_CALLBACK(btnsave_clicked), self);
+    g_signal_connect(self->list_expander, "activate",
+                     G_CALLBACK(my_media_player_expander_activate), self);
 
     // Create store and list view
     self->music_store = g_list_store_new(MY_ITEM_TYPE);
@@ -339,6 +362,7 @@ static void my_media_player_init(MyMediaPlayer *self)
     g_signal_connect(self->column_view, "activate", G_CALLBACK(column_view_activated), self);
     gtk_column_view_append_column(GTK_COLUMN_VIEW(self->column_view),
                                   self->filename_column);
+    gtk_widget_set_size_request(self->column_view, 300, 250);
 
     // Add a timer for music playing
     self->music_loaded = FALSE;
@@ -352,14 +376,20 @@ static void my_media_player_init(MyMediaPlayer *self)
     gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(self->scrolled_lyrics),
                                   self->label_lyrics);
     gtk_box_append(GTK_BOX(self->main_box), self->scrolled_lyrics);
+    gtk_box_append(GTK_BOX(self->ctrl_box), self->btn_priv);
+    gtk_box_append(GTK_BOX(self->ctrl_box), self->btn_play);
+    gtk_box_append(GTK_BOX(self->ctrl_box), self->btn_next);
+    gtk_box_append(GTK_BOX(self->main_box), self->ctrl_box);
     gtk_box_append(GTK_BOX(self->btn_box), self->btn_add);
     gtk_box_append(GTK_BOX(self->btn_box), self->btn_remove);
     gtk_box_append(GTK_BOX(self->btn_box), self->btn_load);
     gtk_box_append(GTK_BOX(self->btn_box), self->btn_save);
-    gtk_box_append(GTK_BOX(self->main_box), self->btn_box);
+    gtk_box_append(GTK_BOX(self->list_box), self->btn_box);
     gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(self->scrolled_window),
                                   self->column_view);
-    gtk_box_append(GTK_BOX(self->main_box), self->scrolled_window);
+    gtk_box_append(GTK_BOX(self->list_box), self->scrolled_window);
+    gtk_expander_set_child(GTK_EXPANDER(self->list_expander), self->list_box);
+    gtk_box_append(GTK_BOX(self->main_box), self->list_expander);
     gtk_window_set_child(GTK_WINDOW(self), self->main_box);
 }
 
