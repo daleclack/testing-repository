@@ -30,29 +30,33 @@ set(SOURCE_FILE src/main.cpp src/MyMediaPlayer.cpp src/MyItem.cpp src/LyricsPars
 
 #Compile Resource
 
-# set(RESOURCE_LIST
-#     icons/16x16/actions/folder-images.svg
-#     icons/16x16/actions/list-add.svg
-#     icons/16x16/actions/list-remove.svg
-#     icons/16x16/actions/My_GtkUI.png
-#     icons/16x16/actions/prefs_folder.svg
-#     icons/48x48/actions/dialog-error.png
-#     icons/48x48/actions/My_GtkUI.png
-#     icons/scalable/status/display_prefs.svg
-#     prefs_stack.ui
-#     )
+set(RESOURCE_LIST
+    icons/scalable/status/media-eject.svg
+    icons/scalable/status/media-mount.svg
+    icons/scalable/status/media-playback-pause.svg
+    icons/scalable/status/media-playback-start.svg
+    icons/scalable/status/media-playback-stop.svg
+    icons/scalable/status/media-playlist-append.svg
+    icons/scalable/status/media-playlist-play.svg
+    icons/scalable/status/media-playlist-repeat.svg
+    icons/scalable/status/media-playlist-shuffle.svg
+    icons/scalable/status/media-seek-backward.svg
+    icons/scalable/status/media-seek-forward.svg
+    icons/scalable/status/media-skip-backward.svg
+    icons/scalable/status/media-skip-forward.svg
+    )
 
-# compile_gresources(RESOURCE_FILE
-#                    XML_OUT
-#                    TYPE EMBED_C
-#                    RESOURCES ${RESOURCE_LIST}
-#                    PREFIX "/org/gtk/daleclack"
-#                    SOURCE_DIR ${PROJECT_SOURCE_DIR}/res)
+compile_gresources(RESOURCE_FILE
+                   XML_OUT
+                   TYPE EMBED_C
+                   RESOURCES ${RESOURCE_LIST}
+                   PREFIX "/org/gtk/daleclack"
+                   SOURCE_DIR ${PROJECT_SOURCE_DIR}/res)
                
 # Add a custom target to the makefile. Now make builds our resource file.
 # It depends on the output RESOURCE_FILE.
 
-# add_custom_target(resource ALL DEPENDS ${RESOURCE_FILE})
+add_custom_target(resource ALL DEPENDS ${RESOURCE_FILE})
 
 #For win32 platform,use rc resource and .ico icon
 if(WIN32)
@@ -61,12 +65,12 @@ if(WIN32)
 	set_property(SOURCE ../icon.rc APPEND PROPERTY
         OBJECT_DEPENDS ${PROJECT_SOURCE_DIR}/../icon.ico
         )
-	add_executable(${PROJECT_NAME} ${app_WINRC} ${SOURCE_FILE})
+	add_executable(${PROJECT_NAME} ${app_WINRC} ${SOURCE_FILE} ${RESOURCE_FILE})
     add_custom_command( TARGET ${PROJECT_NAME} 
                         COMMAND echo * > ${CMAKE_BINARY_DIR}/.gitignore
                         COMMAND echo **/* > ${CMAKE_BINARY_DIR}/.hgignore)
 else()
-	add_executable(${PROJECT_NAME} ${SOURCE_FILE})
+	add_executable(${PROJECT_NAME} ${SOURCE_FILE} ${RESOURCE_FILE})
     add_custom_command( TARGET ${PROJECT_NAME}
                         COMMAND echo \"*\" > ${CMAKE_BINARY_DIR}/.gitignore
                         COMMAND echo \"**/*\" > ${CMAKE_BINARY_DIR}/.hgignore)   

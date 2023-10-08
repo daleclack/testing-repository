@@ -14,8 +14,8 @@ struct _MyMediaPlayer
     GtkApplicationWindow parent_instance;
     GtkWidget *video, *label_lyrics;
     GtkWidget *ctrl_box;
-    GtkWidget *btn_priv, *btn_play, *btn_next, *btn_stop;
-    GtkWidget *main_box, *btn_box;
+    GtkWidget *btn_priv, *btn_play, *btn_next, *btn_stop, *btn_list;
+    GtkWidget *main_box, *btn_box, *play_ctrl_box;
     GtkWidget *btn_add, *btn_remove;
     GtkWidget *btn_load, *btn_save;
     GtkWidget *column_view;
