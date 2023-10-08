@@ -22,6 +22,7 @@ struct _MyMediaPlayer
     GtkWidget *scrolled_window, *scrolled_lyrics;
     GListStore *music_store;
     char current_filename[path_max_length];
+    guint n_items;
     gboolean music_loaded;
     GtkSingleSelection *music_selection;
     GtkListItemFactory *filename_factory;
@@ -97,6 +98,9 @@ static void load_playlist(std::string filename, MyMediaPlayer *player)
             g_list_store_append(G_LIST_STORE(player->music_store),
                                 my_item_new(disp_name.c_str(), file_path.c_str()));
         }
+
+        player->n_items = g_list_model_get_n_items(
+            G_LIST_MODEL(player->music_store));
     }
 }
 
@@ -257,6 +261,12 @@ gboolean my_media_player_get_music_loaded(MyMediaPlayer *self)
 {
     // Get whether music is loaded
     return self->music_loaded;
+}
+
+void my_media_player_set_music_loaded(MyMediaPlayer *self, gboolean music_loaded)
+{
+    // Set status of music loaded
+    self->music_loaded = music_loaded;
 }
 
 GtkWidget *my_media_player_get_video_widget(MyMediaPlayer *self)

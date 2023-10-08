@@ -363,12 +363,6 @@ static gboolean get_media_stream_status(MyMediaPlayer *player,
         update_lyrics(player);
     }
 
-    // The Media ended, reset the status
-    // if (gtk_media_stream_get_ended(stream))
-    // {
-    //     lyrics_loaded = FALSE;
-    // }
-
     if (get_media_playing(timestamp, stream, player))
     {
         // Reset status when the media playing
@@ -406,6 +400,14 @@ gboolean lyric_time_func(gpointer data)
             // Update lyrics and Check whether media stopped
             get_lyrics(timestamp_ms, get_media_stream_status(player, stream, timestamp_ms),
                        player);
+
+            // The Media ended, reset the status
+            if (gtk_media_stream_get_ended(stream) && 
+                my_media_player_get_music_loaded(player))
+            {
+                my_media_player_set_music_loaded(player, FALSE);
+                g_print("Media ended!\n");
+            }
         }
     }
     return TRUE;
