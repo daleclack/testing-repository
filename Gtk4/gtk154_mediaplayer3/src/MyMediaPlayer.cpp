@@ -15,6 +15,7 @@ struct _MyMediaPlayer
     GtkWidget *video, *label_lyrics;
     GtkWidget *ctrl_box;
     GtkWidget *btn_priv, *btn_play, *btn_next, *btn_stop, *btn_list;
+    PlayMode current_play_mode;
     GtkWidget *main_box, *btn_box;
     GtkWidget *btn_add, *btn_remove;
     GtkWidget *btn_load, *btn_save;
@@ -288,6 +289,11 @@ char *my_media_player_get_filename(MyMediaPlayer *self)
     return self->current_filename;
 }
 
+PlayMode my_media_player_get_play_mode(MyMediaPlayer *self){
+    // Get Current play mode
+    return self->current_play_mode;
+}
+
 static void my_media_player_expander_activate(GtkExpander *self, MyMediaPlayer *player)
 {
     if (!gtk_expander_get_expanded(self))
@@ -295,6 +301,8 @@ static void my_media_player_expander_activate(GtkExpander *self, MyMediaPlayer *
         g_print("Try to recover size!\n");
         gtk_widget_set_size_request(player->main_box, 300, 270);
         gtk_widget_set_size_request(GTK_WIDGET(player), 300, 270);
+        gtk_widget_queue_resize(player->list_box);
+        gtk_widget_queue_resize(GTK_WIDGET(player));
     }
 }
 
