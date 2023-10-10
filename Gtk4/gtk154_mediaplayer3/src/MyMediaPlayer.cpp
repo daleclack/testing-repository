@@ -27,6 +27,7 @@ struct _MyMediaPlayer
     char current_filename[path_max_length];
     guint n_items, current_audio_index;
     gboolean music_loaded;
+    gboolean dark_mode;
     GtkSingleSelection *music_selection;
     GtkListItemFactory *filename_factory;
     GtkColumnViewColumn *filename_column;
@@ -433,12 +434,33 @@ static gboolean my_media_player_close_request(GtkWindow *window)
 // Get whether use dark icon theme, to match icons with stack icons
 static gboolean my_media_player_check_dark_theme(MyMediaPlayer *player)
 {
+    gboolean dark_mode = FALSE;
+    int theme_name_index = 0, theme_name_length;
+    char temp_string[5] = {0};
     // Get current theme
     GtkIconTheme *theme = gtk_icon_theme_get_for_display(
         gtk_widget_get_display(GTK_WIDGET(player)));
     char *theme_name = gtk_icon_theme_get_theme_name(theme);
-    g_print("%s\n", theme_name);
+    theme_name_length = strlen(theme_name);
+
+    // Translate string to lower
+    for(int i = 0; i < theme_name_length; i++)
+    {
+        theme_name[i] = tolower(theme_name[i]);
+    }
+
+    // Check "dark" string
+    for(int i = 0; i < 4; i++)
+    {
+        temp_string[i] = theme_name[theme_name_length - 4 + i];
+    }
+
+    if(strncmp(temp_string, "dark", 4) == 0){
+        dark_mode = TRUE;
+    }
     free(theme_name);
+
+    return dark_mode;
 }
 
 static void my_media_player_init(MyMediaPlayer *self)
@@ -521,6 +543,9 @@ static void my_media_player_init(MyMediaPlayer *self)
 
     // Load a default playlist
     load_playlist("playlist.json", self);
+
+    // Check whether use dark icon name
+    self->dark_mode = my_media_player_check_dark_theme(self);
 
     // Add widgets
     gtk_box_append(GTK_BOX(self->main_box), self->video);
