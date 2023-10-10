@@ -14,7 +14,8 @@ struct _MyMediaPlayer
     GtkApplicationWindow parent_instance;
     GtkWidget *video, *label_lyrics;
     GtkWidget *ctrl_box;
-    GtkWidget *btn_priv, *btn_play, *btn_next, *btn_stop, *btn_list;
+    GtkWidget *btn_priv, *btn_play, *btn_next,
+        *btn_stop, *btn_playmode;
     PlayMode current_play_mode;
     GtkWidget *main_box, *btn_box;
     GtkWidget *btn_add, *btn_remove;
@@ -231,6 +232,9 @@ static void column_view_activated(GtkColumnView *self, gint position, MyMediaPla
 
         // Force update lyrics file
         update_lyrics(player);
+
+        // Enable control button
+        gtk_widget_set_sensitive(player->btn_play, TRUE);
     }
 }
 
@@ -289,7 +293,8 @@ char *my_media_player_get_filename(MyMediaPlayer *self)
     return self->current_filename;
 }
 
-PlayMode my_media_player_get_play_mode(MyMediaPlayer *self){
+PlayMode my_media_player_get_play_mode(MyMediaPlayer *self)
+{
     // Get Current play mode
     return self->current_play_mode;
 }
@@ -304,6 +309,51 @@ static void my_media_player_expander_activate(GtkExpander *self, MyMediaPlayer *
         gtk_widget_queue_resize(player->list_box);
         gtk_widget_queue_resize(GTK_WIDGET(player));
     }
+}
+
+// Play button
+static void btnplay_clicked(GtkButton *self, MyMediaPlayer *player)
+{
+    // Get Media stream and play
+    GtkMediaStream *stream = gtk_video_get_media_stream(GTK_VIDEO(player->video));
+    if(GTK_IS_MEDIA_STREAM(stream))
+    {
+        if(gtk_media_stream_get_playing(stream))
+        {
+            // Media is playing, pause it
+            gtk_media_stream_pause(stream);
+            gtk_button_set_icon_name(self, "media-playback-start");
+        }else{
+            // Media is not playing
+            gtk_media_stream_play(stream);
+            gtk_button_set_icon_name(self, "media-playback-pause");
+        }
+    }
+}
+
+// Play previous music
+static void btnpriv_clicked(GtkButton *self, MyMediaPlayer *player)
+{
+}
+
+// Play next music
+static void btnnext_clicked(GtkButton *self, MyMediaPlayer *player)
+{
+}
+
+// Stop current music
+static void btnstop_clicked(GtkButton *self, MyMediaPlayer *player)
+{
+    // Get Media stream and stop
+    GtkMediaStream *stream = gtk_video_get_media_stream(GTK_VIDEO(player->video));
+    gtk_media_file_clear(GTK_MEDIA_FILE(stream));
+    gtk_button_set_icon_name(GTK_BUTTON(player->btn_play), "media-playback-start");
+    gtk_widget_set_sensitive(player->btn_play, FALSE);
+}
+
+// Switch play mode
+static void btn_playmode_clicked(GtkButton *self, MyMediaPlayer *player)
+{
 }
 
 static void my_media_player_init(MyMediaPlayer *self)
@@ -322,6 +372,8 @@ static void my_media_player_init(MyMediaPlayer *self)
     self->btn_play = gtk_button_new_from_icon_name("media-playback-start");
     self->btn_priv = gtk_button_new_from_icon_name("media-skip-backward");
     self->btn_next = gtk_button_new_from_icon_name("media-skip-forward");
+    self->btn_stop = gtk_button_new_from_icon_name("media-playback-stop");
+    self->btn_playmode = gtk_button_new_from_icon_name("media-playlist-repeat");
     self->btn_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
     self->btn_add = gtk_button_new_from_icon_name("list-add");
     self->scrolled_window = gtk_scrolled_window_new();
@@ -352,6 +404,12 @@ static void my_media_player_init(MyMediaPlayer *self)
     g_signal_connect(self->btn_save, "clicked", G_CALLBACK(btnsave_clicked), self);
     g_signal_connect(self->list_expander, "activate",
                      G_CALLBACK(my_media_player_expander_activate), self);
+    g_signal_connect(self->btn_play, "clicked", G_CALLBACK(btnplay_clicked), self);
+    g_signal_connect(self->btn_priv, "clicked", G_CALLBACK(btnpriv_clicked), self);
+    g_signal_connect(self->btn_next, "clicked", G_CALLBACK(btnnext_clicked), self);
+    g_signal_connect(self->btn_stop, "clicked", G_CALLBACK(btnstop_clicked), self);
+    g_signal_connect(self->btn_playmode, "clicked",
+                     G_CALLBACK(btn_playmode_clicked), self);
 
     // Create store and list view
     self->music_store = g_list_store_new(MY_ITEM_TYPE);
@@ -387,6 +445,8 @@ static void my_media_player_init(MyMediaPlayer *self)
     gtk_box_append(GTK_BOX(self->ctrl_box), self->btn_priv);
     gtk_box_append(GTK_BOX(self->ctrl_box), self->btn_play);
     gtk_box_append(GTK_BOX(self->ctrl_box), self->btn_next);
+    gtk_box_append(GTK_BOX(self->ctrl_box), self->btn_stop);
+    gtk_box_append(GTK_BOX(self->ctrl_box), self->btn_playmode);
     gtk_box_append(GTK_BOX(self->main_box), self->ctrl_box);
     gtk_box_append(GTK_BOX(self->btn_box), self->btn_add);
     gtk_box_append(GTK_BOX(self->btn_box), self->btn_remove);
