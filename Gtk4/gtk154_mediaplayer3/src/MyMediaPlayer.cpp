@@ -400,6 +400,26 @@ static void btnstop_clicked(GtkButton *self, MyMediaPlayer *player)
 // Switch play mode
 static void btn_playmode_clicked(GtkButton *self, MyMediaPlayer *player)
 {
+    // Change play mode
+    switch (player->current_play_mode)
+    {
+    case PlayMode::List_Once:
+        player->current_play_mode = PlayMode::List_Repeat;
+        gtk_button_set_icon_name(self, "media-playlist-repeat");
+        break;
+    case PlayMode::List_Repeat:
+        player->current_play_mode = PlayMode::List_Shuffle;
+        gtk_button_set_icon_name(self, "media-playlist-shuffle");
+        break;
+    case PlayMode::List_Shuffle:
+        player->current_play_mode = PlayMode::One_Repeat;
+        gtk_button_set_icon_name(self, "media-playlist-repeat-one-symbolic");
+        break;
+    case PlayMode::One_Repeat:
+        player->current_play_mode = PlayMode::List_Once;
+        gtk_button_set_icon_name(self, "media-playlist-normal");
+        break;
+    }
 }
 
 static gboolean my_media_player_close_request(GtkWindow *window)
@@ -408,6 +428,17 @@ static gboolean my_media_player_close_request(GtkWindow *window)
     save_playlist("playlist.json", MYMEDIA_PLAYER(window));
     gtk_window_destroy(window);
     return TRUE;
+}
+
+// Get whether use dark icon theme, to match icons with stack icons
+static gboolean my_media_player_check_dark_theme(MyMediaPlayer *player)
+{
+    // Get current theme
+    GtkIconTheme *theme = gtk_icon_theme_get_for_display(
+        gtk_widget_get_display(GTK_WIDGET(player)));
+    char *theme_name = gtk_icon_theme_get_theme_name(theme);
+    g_print("%s\n", theme_name);
+    free(theme_name);
 }
 
 static void my_media_player_init(MyMediaPlayer *self)

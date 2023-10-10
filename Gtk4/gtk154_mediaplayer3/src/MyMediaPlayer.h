@@ -3,9 +3,11 @@
 #include <gtk/gtk.h>
 
 enum PlayMode{
-    List_Once,
-    One_Repeat,
-    List_Repeat
+    List_Once,          // Play the media with a playlist once
+    List_Repeat,        // Play the media with a playlist repeatly
+    List_Shuffle,       // Random play a media in the playlist
+    One_Repeat          // Repeat a media file
+    
 };
 
 G_DECLARE_FINAL_TYPE(MyMediaPlayer, my_media_player, MYMEDIA, PLAYER, GtkApplicationWindow)

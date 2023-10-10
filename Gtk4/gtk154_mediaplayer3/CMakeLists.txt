@@ -37,7 +37,9 @@ set(RESOURCE_LIST
     icons/scalable/status/media-playback-start.svg
     icons/scalable/status/media-playback-stop.svg
     icons/scalable/status/media-playlist-append.svg
+    icons/scalable/status/media-playlist-normal.svg
     icons/scalable/status/media-playlist-play.svg
+    icons/scalable/status/media-playlist-repeat-one-symbolic.svg
     icons/scalable/status/media-playlist-repeat.svg
     icons/scalable/status/media-playlist-shuffle.svg
     icons/scalable/status/media-seek-backward.svg
