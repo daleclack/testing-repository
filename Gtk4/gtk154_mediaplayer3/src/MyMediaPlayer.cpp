@@ -25,7 +25,7 @@ struct _MyMediaPlayer
     GtkWidget *scrolled_window, *scrolled_lyrics;
     GListStore *music_store;
     char current_filename[path_max_length];
-    guint n_items;
+    guint n_items, current_audio_index;
     gboolean music_loaded;
     GtkSingleSelection *music_selection;
     GtkListItemFactory *filename_factory;
@@ -34,6 +34,7 @@ struct _MyMediaPlayer
 
 G_DEFINE_TYPE(MyMediaPlayer, my_media_player, GTK_TYPE_APPLICATION_WINDOW)
 
+// Add media file item to the list when the file open dialog accepted
 void file_dialog_response(GObject *dialog, GAsyncResult *res, gpointer data)
 {
     GFile *file;
@@ -51,9 +52,14 @@ void file_dialog_response(GObject *dialog, GAsyncResult *res, gpointer data)
         g_object_unref(file);
         g_free(path);
         g_free(name);
+
+        // Update items count of media files
+        player->n_items = g_list_model_get_n_items(
+            G_LIST_MODEL(player->music_store));
     }
 }
 
+// Add a media file item
 static void btnadd_clicked(GtkWidget *widget, MyMediaPlayer *player)
 {
     // Create a file dialog window
@@ -64,6 +70,7 @@ static void btnadd_clicked(GtkWidget *widget, MyMediaPlayer *player)
     gtk_file_dialog_open(dialog, GTK_WINDOW(player), NULL, file_dialog_response, player);
 }
 
+// Remove the selected item
 static void btnremove_clicked(GtkWidget *widget, MyMediaPlayer *player)
 {
     // Get selected position
@@ -73,6 +80,7 @@ static void btnremove_clicked(GtkWidget *widget, MyMediaPlayer *player)
     g_list_store_remove(player->music_store, pos);
 }
 
+// Load playlist
 static void load_playlist(std::string filename, MyMediaPlayer *player)
 {
     // Load a new json data to the list
@@ -89,24 +97,33 @@ static void load_playlist(std::string filename, MyMediaPlayer *player)
         {
             return;
         }
-        string_vector sound_names = data["name"];
-        string_vector sound_paths = data["path"];
-        std::string disp_name, file_path;
-
-        for (int i = 0; i < sound_names.size(); i++)
+        try
         {
-            // Append items
-            disp_name = sound_names[i];
-            file_path = sound_paths[i];
-            g_list_store_append(G_LIST_STORE(player->music_store),
-                                my_item_new(disp_name.c_str(), file_path.c_str()));
+            string_vector sound_names = data["name"];
+            string_vector sound_paths = data["path"];
+            std::string disp_name, file_path;
+
+            for (int i = 0; i < sound_names.size(); i++)
+            {
+                // Append items
+                disp_name = sound_names[i];
+                file_path = sound_paths[i];
+                g_list_store_append(G_LIST_STORE(player->music_store),
+                                    my_item_new(disp_name.c_str(), file_path.c_str()));
+            }
+        }
+        catch (const nlohmann::detail::exception &ex)
+        {
+            g_print("%s\n", ex.what());
         }
 
+        // Update count of media files
         player->n_items = g_list_model_get_n_items(
             G_LIST_MODEL(player->music_store));
     }
 }
 
+// Response for the dialog of load playlist
 static void load_dialog_response(GObject *dialog, GAsyncResult *res, gpointer data)
 {
     GFile *file;
@@ -123,6 +140,7 @@ static void load_dialog_response(GObject *dialog, GAsyncResult *res, gpointer da
     }
 }
 
+// Handler for load playlist button
 static void btnload_clicked(GtkWidget *widget, MyMediaPlayer *player)
 {
     // Create a file dialog window
@@ -146,7 +164,8 @@ static void btnload_clicked(GtkWidget *widget, MyMediaPlayer *player)
     gtk_file_dialog_open(dialog, GTK_WINDOW(player), NULL, load_dialog_response, player);
 }
 
-static void btnsave_clicked(GtkWidget *widget, MyMediaPlayer *player)
+// Save the play list to a path
+static void save_playlist(std::string filename, MyMediaPlayer *player)
 {
     // Save playlist to json data
     string_vector sound_names, sound_paths;
@@ -170,7 +189,7 @@ static void btnsave_clicked(GtkWidget *widget, MyMediaPlayer *player)
 
     // Save data to json file
     std::fstream outfile;
-    outfile.open("playlist.json", std::ios::out);
+    outfile.open(filename, std::ios::out);
     if (outfile.is_open())
     {
         // Load json data
@@ -193,23 +212,20 @@ static void btnsave_clicked(GtkWidget *widget, MyMediaPlayer *player)
     outfile.close();
 }
 
-static void column_view_activated(GtkColumnView *self, gint position, MyMediaPlayer *player)
+// Handler for save list dialog
+static void btnsave_clicked(GtkWidget *widget, MyMediaPlayer *player)
 {
-    // Clear stream for player
-    GtkMediaStream *stream = gtk_video_get_media_stream(GTK_VIDEO(player->video));
-    if (stream != NULL)
-    {
-        gtk_media_file_clear(GTK_MEDIA_FILE(stream));
-        // g_object_unref(stream);
-    }
+    // Currently just save the playlist to a default name
+    save_playlist("playlist.json", player);
+}
 
-    // Play the selected media
-    MyItem *item;
+// Load a audio with specificed index
+static void load_audio(MyItem *item, MyMediaPlayer *player)
+{
+    // Load the audio file
     GFile *music_file;
     const char *file_name, *disp_name;
 
-    // Get selection and open the music file
-    item = MY_ITEM(gtk_single_selection_get_selected_item(player->music_selection));
     file_name = my_item_get_filename(item);
     music_file = g_file_new_for_path(file_name);
     disp_name = my_item_get_dispname(item);
@@ -236,6 +252,24 @@ static void column_view_activated(GtkColumnView *self, gint position, MyMediaPla
         // Enable control button
         gtk_widget_set_sensitive(player->btn_play, TRUE);
     }
+}
+
+static void column_view_activated(GtkColumnView *self, gint position, MyMediaPlayer *player)
+{
+    // Clear stream for player
+    GtkMediaStream *stream = gtk_video_get_media_stream(GTK_VIDEO(player->video));
+    if (stream != NULL)
+    {
+        gtk_media_file_clear(GTK_MEDIA_FILE(stream));
+        // g_object_unref(stream);
+    }
+
+    // Play the selected media
+    MyItem *item;
+
+    // Get selection and open the music file
+    item = MY_ITEM(gtk_single_selection_get_selected_item(player->music_selection));
+    load_audio(item, player);
 }
 
 static void filename_factory_setup(GtkListItemFactory *factory,
@@ -316,14 +350,16 @@ static void btnplay_clicked(GtkButton *self, MyMediaPlayer *player)
 {
     // Get Media stream and play
     GtkMediaStream *stream = gtk_video_get_media_stream(GTK_VIDEO(player->video));
-    if(GTK_IS_MEDIA_STREAM(stream))
+    if (GTK_IS_MEDIA_STREAM(stream))
     {
-        if(gtk_media_stream_get_playing(stream))
+        if (gtk_media_stream_get_playing(stream))
         {
             // Media is playing, pause it
             gtk_media_stream_pause(stream);
             gtk_button_set_icon_name(self, "media-playback-start");
-        }else{
+        }
+        else
+        {
             // Media is not playing
             gtk_media_stream_play(stream);
             gtk_button_set_icon_name(self, "media-playback-pause");
@@ -334,6 +370,15 @@ static void btnplay_clicked(GtkButton *self, MyMediaPlayer *player)
 // Play previous music
 static void btnpriv_clicked(GtkButton *self, MyMediaPlayer *player)
 {
+    // Clear stream for player
+    GtkMediaStream *stream = gtk_video_get_media_stream(GTK_VIDEO(player->video));
+    if (stream != NULL)
+    {
+        gtk_media_file_clear(GTK_MEDIA_FILE(stream));
+        // g_object_unref(stream);
+    }
+
+    // Current index
 }
 
 // Play next music
@@ -347,6 +392,7 @@ static void btnstop_clicked(GtkButton *self, MyMediaPlayer *player)
     // Get Media stream and stop
     GtkMediaStream *stream = gtk_video_get_media_stream(GTK_VIDEO(player->video));
     gtk_media_file_clear(GTK_MEDIA_FILE(stream));
+    gtk_video_set_file(GTK_VIDEO(player->video), NULL);
     gtk_button_set_icon_name(GTK_BUTTON(player->btn_play), "media-playback-start");
     gtk_widget_set_sensitive(player->btn_play, FALSE);
 }
@@ -354,6 +400,14 @@ static void btnstop_clicked(GtkButton *self, MyMediaPlayer *player)
 // Switch play mode
 static void btn_playmode_clicked(GtkButton *self, MyMediaPlayer *player)
 {
+}
+
+static gboolean my_media_player_close_request(GtkWindow *window)
+{
+    // Save current list to a playlist file
+    save_playlist("playlist.json", MYMEDIA_PLAYER(window));
+    gtk_window_destroy(window);
+    return TRUE;
 }
 
 static void my_media_player_init(MyMediaPlayer *self)
@@ -463,6 +517,7 @@ static void my_media_player_init(MyMediaPlayer *self)
 
 static void my_media_player_class_init(MyMediaPlayerClass *klass)
 {
+    GTK_WINDOW_CLASS(klass)->close_request = my_media_player_close_request;
 }
 
 MyMediaPlayer *my_media_player_new(GtkApplication *app)
