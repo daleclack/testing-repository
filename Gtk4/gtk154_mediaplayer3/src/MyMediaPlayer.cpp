@@ -346,6 +346,26 @@ static void my_media_player_expander_activate(GtkExpander *self, MyMediaPlayer *
     }
 }
 
+// Set button icon name with dark icon theme support
+static void player_button_set_icon_name(GtkButton *button, const char *icon_name,
+                                        gboolean dark_mode)
+{
+    char *icon_name1;
+    //  Change icon name string for dark mode
+    if (dark_mode)
+    {
+        icon_name1 = g_strdup_printf("%s-dark", icon_name);
+    }
+    else
+    {
+        icon_name1 = g_strdup_printf("%s", icon_name);
+    }
+
+    // Set icon name and free memory for icon name
+    gtk_button_set_icon_name(button, icon_name1);
+    g_free(icon_name1);
+}
+
 // Play button
 static void btnplay_clicked(GtkButton *self, MyMediaPlayer *player)
 {
@@ -357,13 +377,13 @@ static void btnplay_clicked(GtkButton *self, MyMediaPlayer *player)
         {
             // Media is playing, pause it
             gtk_media_stream_pause(stream);
-            gtk_button_set_icon_name(self, "media-playback-start");
+            player_button_set_icon_name(self, "media-playback-start", player->dark_mode);
         }
         else
         {
             // Media is not playing
             gtk_media_stream_play(stream);
-            gtk_button_set_icon_name(self, "media-playback-pause");
+            player_button_set_icon_name(self, "media-playback-pause", player->dark_mode);
         }
     }
 }
@@ -394,7 +414,8 @@ static void btnstop_clicked(GtkButton *self, MyMediaPlayer *player)
     GtkMediaStream *stream = gtk_video_get_media_stream(GTK_VIDEO(player->video));
     gtk_media_file_clear(GTK_MEDIA_FILE(stream));
     gtk_video_set_file(GTK_VIDEO(player->video), NULL);
-    gtk_button_set_icon_name(GTK_BUTTON(player->btn_play), "media-playback-start");
+    player_button_set_icon_name(GTK_BUTTON(player->btn_play), "media-playback-start",
+                                player->dark_mode);
     gtk_widget_set_sensitive(player->btn_play, FALSE);
 }
 
@@ -406,19 +427,19 @@ static void btn_playmode_clicked(GtkButton *self, MyMediaPlayer *player)
     {
     case PlayMode::List_Once:
         player->current_play_mode = PlayMode::List_Repeat;
-        gtk_button_set_icon_name(self, "media-playlist-repeat");
+        player_button_set_icon_name(self, "media-playlist-repeat", player->dark_mode);
         break;
     case PlayMode::List_Repeat:
         player->current_play_mode = PlayMode::List_Shuffle;
-        gtk_button_set_icon_name(self, "media-playlist-shuffle");
+        player_button_set_icon_name(self, "media-playlist-shuffle", player->dark_mode);
         break;
     case PlayMode::List_Shuffle:
         player->current_play_mode = PlayMode::One_Repeat;
-        gtk_button_set_icon_name(self, "media-playlist-repeat-one-symbolic");
+        player_button_set_icon_name(self, "media-playlist-repeat-one", player->dark_mode);
         break;
     case PlayMode::One_Repeat:
         player->current_play_mode = PlayMode::List_Once;
-        gtk_button_set_icon_name(self, "media-playlist-normal");
+        player_button_set_icon_name(self, "media-playlist-normal", player->dark_mode);
         break;
     }
 }
@@ -444,18 +465,19 @@ static gboolean my_media_player_check_dark_theme(MyMediaPlayer *player)
     theme_name_length = strlen(theme_name);
 
     // Translate string to lower
-    for(int i = 0; i < theme_name_length; i++)
+    for (int i = 0; i < theme_name_length; i++)
     {
         theme_name[i] = tolower(theme_name[i]);
     }
 
     // Check "dark" string
-    for(int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++)
     {
         temp_string[i] = theme_name[theme_name_length - 4 + i];
     }
 
-    if(strncmp(temp_string, "dark", 4) == 0){
+    if (strncmp(temp_string, "dark", 4) == 0)
+    {
         dark_mode = TRUE;
     }
     free(theme_name);
