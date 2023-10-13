@@ -264,6 +264,7 @@ static void column_view_activated(GtkColumnView *self, gint position, MyMediaPla
         gtk_media_file_clear(GTK_MEDIA_FILE(stream));
         // g_object_unref(stream);
     }
+    gtk_video_set_file(GTK_VIDEO(player->video), NULL);
 
     // Play the selected media
     MyItem *item;
@@ -399,12 +400,63 @@ static void btnpriv_clicked(GtkButton *self, MyMediaPlayer *player)
         // g_object_unref(stream);
     }
 
+    // Clear video widget
+    gtk_video_set_file(GTK_VIDEO(player->video), NULL);
+
     // Current index
+    if (player->current_audio_index == 0)
+    {
+        player->current_audio_index = player->n_items - 1;
+    }
+    else
+    {
+        player->current_audio_index -= 1;
+    }
+
+    // Load music at index
+    // Get item
+    MyItem *item = MY_ITEM(g_list_model_get_item(G_LIST_MODEL(player->music_store),
+                                                 player->current_audio_index));
+    load_audio(item, player);
+    
+    // Update selected item
+    gtk_single_selection_set_selected(player->music_selection,
+        player->current_audio_index);
 }
 
 // Play next music
 static void btnnext_clicked(GtkButton *self, MyMediaPlayer *player)
 {
+    // Clear stream for player
+    GtkMediaStream *stream = gtk_video_get_media_stream(GTK_VIDEO(player->video));
+    if (stream != NULL)
+    {
+        gtk_media_file_clear(GTK_MEDIA_FILE(stream));
+        // g_object_unref(stream);
+    }
+
+    // Clear video widget
+    gtk_video_set_file(GTK_VIDEO(player->video), NULL);
+
+    // Current index
+    if (player->current_audio_index == (player->n_items - 1))
+    {
+        player->current_audio_index = 0;
+    }
+    else
+    {
+        player->current_audio_index += 1;
+    }
+
+    // Load music at index
+    // Get item
+    MyItem *item = MY_ITEM(g_list_model_get_item(G_LIST_MODEL(player->music_store),
+                                                 player->current_audio_index));
+    load_audio(item, player);
+
+    // Update selected item
+    gtk_single_selection_set_selected(player->music_selection,
+        player->current_audio_index);
 }
 
 // Stop current music
