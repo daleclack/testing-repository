@@ -389,16 +389,43 @@ static void media_play_ended_handler(MyMediaPlayer *player)
     {
     // Play a list of music once
     case PlayMode::List_Once:
+        // Only play music when current audio is not the end of the audio list
+        if (my_media_player_get_current_index(player) <
+            my_media_player_get_n_audios(player) - 1)
+        {
+            // use the function for play next button to load next audio
+            btnnext_clicked(NULL, player);
+
+            // Get media stream to control
+            stream = gtk_video_get_media_stream(GTK_VIDEO(
+                my_media_player_get_video_widget(player)));
+
+            // Play media stream associated with media file
+            gtk_media_stream_play(stream);
+        }
         break;
     case PlayMode::List_Repeat:
+        // In List Repeat Mode, use the function for play next button
         btnnext_clicked(NULL, player);
+
+        // Get Media stream to control
         stream = gtk_video_get_media_stream(GTK_VIDEO(
             my_media_player_get_video_widget(player)));
+
+        // Play media stream associated with media file
         gtk_media_stream_play(stream);
         break;
     case PlayMode::List_Shuffle:
         break;
     case PlayMode::One_Repeat:
+    
+        // Get media stream to control
+        stream = gtk_video_get_media_stream(GTK_VIDEO(
+            my_media_player_get_video_widget(player)));
+
+        // Play media stream associated with media file
+        gtk_media_stream_play(stream);
+
         break;
     }
 }

@@ -335,6 +335,18 @@ PlayMode my_media_player_get_play_mode(MyMediaPlayer *self)
     return self->current_play_mode;
 }
 
+guint my_media_player_get_current_index(MyMediaPlayer *self)
+{
+    // Get the index of current playing audio
+    return self->current_audio_index;
+}
+
+guint my_media_player_get_n_audios(MyMediaPlayer *self)
+{
+    // Get the number of audios in the list
+    return self->n_items;
+}
+
 static void my_media_player_expander_activate(GtkExpander *self, MyMediaPlayer *player)
 {
     if (!gtk_expander_get_expanded(self))
@@ -421,7 +433,7 @@ static void btnpriv_clicked(GtkButton *self, MyMediaPlayer *player)
 
     // Update selected item
     gtk_single_selection_set_selected(player->music_selection,
-        player->current_audio_index);
+                                      player->current_audio_index);
 }
 
 // Play next music
@@ -456,7 +468,7 @@ void btnnext_clicked(GtkButton *self, MyMediaPlayer *player)
 
     // Update selected item
     gtk_single_selection_set_selected(player->music_selection,
-        player->current_audio_index);
+                                      player->current_audio_index);
 }
 
 // Stop current music
