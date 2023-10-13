@@ -24,4 +24,6 @@ PlayMode my_media_player_get_play_mode(MyMediaPlayer *self);
 
 char *my_media_player_get_filename(MyMediaPlayer *self);
 
+void btnnext_clicked(GtkButton *self, MyMediaPlayer *player);
+
 MyMediaPlayer *my_media_player_new(GtkApplication *app);

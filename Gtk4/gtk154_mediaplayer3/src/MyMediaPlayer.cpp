@@ -418,14 +418,14 @@ static void btnpriv_clicked(GtkButton *self, MyMediaPlayer *player)
     MyItem *item = MY_ITEM(g_list_model_get_item(G_LIST_MODEL(player->music_store),
                                                  player->current_audio_index));
     load_audio(item, player);
-    
+
     // Update selected item
     gtk_single_selection_set_selected(player->music_selection,
         player->current_audio_index);
 }
 
 // Play next music
-static void btnnext_clicked(GtkButton *self, MyMediaPlayer *player)
+void btnnext_clicked(GtkButton *self, MyMediaPlayer *player)
 {
     // Clear stream for player
     GtkMediaStream *stream = gtk_video_get_media_stream(GTK_VIDEO(player->video));
@@ -620,6 +620,9 @@ static void my_media_player_init(MyMediaPlayer *self)
 
     // Check whether use dark icon name
     self->dark_mode = my_media_player_check_dark_theme(self);
+
+    // Default Play mode is List_Repeat mode
+    self->current_play_mode = PlayMode::List_Repeat;
 
     // Add widgets
     gtk_box_append(GTK_BOX(self->main_box), self->video);
