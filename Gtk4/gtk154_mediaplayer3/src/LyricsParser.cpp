@@ -420,7 +420,14 @@ static void media_play_ended_handler(MyMediaPlayer *player)
         break;
     case PlayMode::List_Shuffle:
         // Play music with random index
-        
+        my_media_player_load_random_audio(player);
+
+        // Get Media stream to control
+        stream = gtk_video_get_media_stream(GTK_VIDEO(
+            my_media_player_get_video_widget(player)));
+
+        // Play media stream associated with media file
+        gtk_media_stream_play(stream);
         break;
     case PlayMode::One_Repeat:
 

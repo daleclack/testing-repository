@@ -57,6 +57,9 @@ void file_dialog_response(GObject *dialog, GAsyncResult *res, gpointer data)
         // Update items count of media files
         player->n_items = g_list_model_get_n_items(
             G_LIST_MODEL(player->music_store));
+        // Update index information
+        player->current_audio_index = gtk_single_selection_get_selected(
+            player->music_selection);
     }
 }
 
@@ -79,6 +82,12 @@ static void btnremove_clicked(GtkWidget *widget, MyMediaPlayer *player)
 
     // Remove the selected item
     g_list_store_remove(player->music_store, pos);
+
+    // Update index information
+    player->n_items = g_list_model_get_n_items(
+        G_LIST_MODEL(player->music_store));
+    player->current_audio_index = gtk_single_selection_get_selected(
+        player->music_selection);
 }
 
 // Load playlist
@@ -121,6 +130,9 @@ static void load_playlist(std::string filename, MyMediaPlayer *player)
         // Update count of media files
         player->n_items = g_list_model_get_n_items(
             G_LIST_MODEL(player->music_store));
+        // Update index information
+        player->current_audio_index = gtk_single_selection_get_selected(
+            player->music_selection);
     }
 }
 
@@ -272,7 +284,7 @@ static void column_view_activated(GtkColumnView *self, gint position, MyMediaPla
     // Get selection and open the music file
     item = MY_ITEM(gtk_single_selection_get_selected_item(player->music_selection));
     load_audio(item, player);
-    
+
     // Update Column index
     player->current_audio_index = gtk_single_selection_get_selected(player->music_selection);
 }
@@ -483,6 +495,34 @@ void btnnext_clicked(GtkButton *self, MyMediaPlayer *player)
     {
         player->current_audio_index += 1;
     }
+
+    // Load music at index
+    // Get item
+    MyItem *item = MY_ITEM(g_list_model_get_item(G_LIST_MODEL(player->music_store),
+                                                 player->current_audio_index));
+    load_audio(item, player);
+
+    // Update selected item
+    gtk_single_selection_set_selected(player->music_selection,
+                                      player->current_audio_index);
+}
+
+// Load music with random index
+void my_media_player_load_random_audio(MyMediaPlayer *player)
+{
+    // Get music index
+    player->current_audio_index = rand() % (player->n_items);
+
+    // Clear stream for player
+    GtkMediaStream *stream = gtk_video_get_media_stream(GTK_VIDEO(player->video));
+    if (stream != NULL)
+    {
+        gtk_media_file_clear(GTK_MEDIA_FILE(stream));
+        // g_object_unref(stream);
+    }
+
+    // Clear video widget
+    gtk_video_set_file(GTK_VIDEO(player->video), NULL);
 
     // Load music at index
     // Get item
