@@ -272,6 +272,9 @@ static void column_view_activated(GtkColumnView *self, gint position, MyMediaPla
     // Get selection and open the music file
     item = MY_ITEM(gtk_single_selection_get_selected_item(player->music_selection));
     load_audio(item, player);
+    
+    // Update Column index
+    player->current_audio_index = gtk_single_selection_get_selected(player->music_selection);
 }
 
 static void filename_factory_setup(GtkListItemFactory *factory,
@@ -357,6 +360,27 @@ static void my_media_player_expander_activate(GtkExpander *self, MyMediaPlayer *
         gtk_widget_queue_resize(player->list_box);
         gtk_widget_queue_resize(GTK_WIDGET(player));
     }
+}
+
+// Create a button with dark icon support
+static GtkWidget *player_button_new(const char *icon_name, gboolean dark_mode)
+{
+    char *icon_name1;
+    GtkWidget *button;
+    //  Change icon name string for dark mode
+    if (dark_mode)
+    {
+        icon_name1 = g_strdup_printf("%s-dark", icon_name);
+    }
+    else
+    {
+        icon_name1 = g_strdup_printf("%s", icon_name);
+    }
+
+    // Set icon name and free memory for icon name
+    button = gtk_button_new_from_icon_name(icon_name1);
+    g_free(icon_name1);
+    return button;
 }
 
 // Set button icon name with dark icon theme support
@@ -557,16 +581,19 @@ static void my_media_player_init(MyMediaPlayer *self)
     gtk_window_set_default_size(GTK_WINDOW(self), 300, 270);
     gtk_window_set_resizable(GTK_WINDOW(self), TRUE);
 
+    // Check whether use dark icon name
+    self->dark_mode = my_media_player_check_dark_theme(self);
+
     // Create widgets
     self->main_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
     self->video = gtk_video_new();
     self->label_lyrics = gtk_label_new(" ");
     self->ctrl_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
-    self->btn_play = gtk_button_new_from_icon_name("media-playback-start");
-    self->btn_priv = gtk_button_new_from_icon_name("media-skip-backward");
-    self->btn_next = gtk_button_new_from_icon_name("media-skip-forward");
-    self->btn_stop = gtk_button_new_from_icon_name("media-playback-stop");
-    self->btn_playmode = gtk_button_new_from_icon_name("media-playlist-repeat");
+    self->btn_play = player_button_new("media-playback-start", self->dark_mode);
+    self->btn_priv = player_button_new("media-skip-backward", self->dark_mode);
+    self->btn_next = player_button_new("media-skip-forward", self->dark_mode);
+    self->btn_stop = player_button_new("media-playback-stop", self->dark_mode);
+    self->btn_playmode = player_button_new("media-playlist-repeat", self->dark_mode);
     self->btn_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
     self->btn_add = gtk_button_new_from_icon_name("list-add");
     self->scrolled_window = gtk_scrolled_window_new();
@@ -629,9 +656,6 @@ static void my_media_player_init(MyMediaPlayer *self)
 
     // Load a default playlist
     load_playlist("playlist.json", self);
-
-    // Check whether use dark icon name
-    self->dark_mode = my_media_player_check_dark_theme(self);
 
     // Default Play mode is List_Repeat mode
     self->current_play_mode = PlayMode::List_Repeat;

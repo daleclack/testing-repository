@@ -388,8 +388,11 @@ static void media_play_ended_handler(MyMediaPlayer *player)
     switch (play_mode)
     {
     // Play a list of music once
+    // g_print("%d", play_mode);
     case PlayMode::List_Once:
         // Only play music when current audio is not the end of the audio list
+        // g_print("%d %d\n", my_media_player_get_current_index(player),
+        //         my_media_player_get_n_audios(player));
         if (my_media_player_get_current_index(player) <
             my_media_player_get_n_audios(player) - 1)
         {
@@ -416,9 +419,11 @@ static void media_play_ended_handler(MyMediaPlayer *player)
         gtk_media_stream_play(stream);
         break;
     case PlayMode::List_Shuffle:
+        // Play music with random index
+        
         break;
     case PlayMode::One_Repeat:
-    
+
         // Get media stream to control
         stream = gtk_video_get_media_stream(GTK_VIDEO(
             my_media_player_get_video_widget(player)));
