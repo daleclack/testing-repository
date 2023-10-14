@@ -272,6 +272,8 @@ static void get_lyrics(gint64 curr_time, gboolean playing, MyMediaPlayer *player
             // Get lyrics line
             get_lyrics_line(lyrics_content, lyrics_line, FALSE);
 
+            g_print("%s\n", lyrics_line);
+
             // Process lyrics line
             lyric_line_process(lyrics_line, timestamp_length);
         }
@@ -430,6 +432,8 @@ static void media_play_ended_handler(MyMediaPlayer *player)
         gtk_media_stream_play(stream);
         break;
     case PlayMode::One_Repeat:
+        // Reload audio
+        my_media_player_reload_audio(player);
 
         // Get media stream to control
         stream = gtk_video_get_media_stream(GTK_VIDEO(

@@ -535,6 +535,31 @@ void my_media_player_load_random_audio(MyMediaPlayer *player)
                                       player->current_audio_index);
 }
 
+// Reload audio for repeat mode
+void my_media_player_reload_audio(MyMediaPlayer *player)
+{
+    // Clear stream for player
+    GtkMediaStream *stream = gtk_video_get_media_stream(GTK_VIDEO(player->video));
+    if (stream != NULL)
+    {
+        gtk_media_file_clear(GTK_MEDIA_FILE(stream));
+        // g_object_unref(stream);
+    }
+
+    // Clear video widget
+    gtk_video_set_file(GTK_VIDEO(player->video), NULL);
+
+    // Load music at index
+    // Get item
+    MyItem *item = MY_ITEM(g_list_model_get_item(G_LIST_MODEL(player->music_store),
+                                                 player->current_audio_index));
+    load_audio(item, player);
+
+    // Update selected item
+    gtk_single_selection_set_selected(player->music_selection,
+                                      player->current_audio_index);
+}
+
 // Stop current music
 static void btnstop_clicked(GtkButton *self, MyMediaPlayer *player)
 {
