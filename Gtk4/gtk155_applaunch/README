@@ -1,0 +1,5 @@
+# README of My Reminder
+This simple application is a reminder for the date, 
+and the window show the days left for the deadline set by user
+
+The reminded date and color of text can be changed by preferences dialog.
