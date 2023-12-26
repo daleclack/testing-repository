@@ -30,10 +30,10 @@ static void app_view_setup(GtkListItemFactory *factory, GtkListItem *item)
     // Create widgets
     app_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
     image = gtk_image_new();
-    label = gtk_label_new("             ");
+    label = gtk_label_new("          ");
     gtk_image_set_pixel_size(GTK_IMAGE(image), 48);
-    gtk_label_set_max_width_chars(GTK_LABEL(label), 5);
-    gtk_widget_set_size_request(image, 48, 48);
+    gtk_widget_set_size_request(label, 64, 12);
+    gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_END);
 
     // Append widgets to the box
     gtk_box_append(GTK_BOX(app_box), image);
@@ -56,8 +56,6 @@ static void app_view_bind(GtkListItemFactory *factory, GtkListItem *item)
     // Initalize widgets
     gtk_image_set_from_gicon(GTK_IMAGE(image), g_app_info_get_icon(app_info));
     gtk_label_set_label(GTK_LABEL(label), g_app_info_get_display_name(app_info));
-    gtk_label_set_max_width_chars(GTK_LABEL(label), 15);
-    gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_END);
 }
 
 static void app_view_activate(GtkGridView *list, guint position, gpointer data)
