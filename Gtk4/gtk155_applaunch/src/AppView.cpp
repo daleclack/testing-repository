@@ -54,7 +54,13 @@ static void app_view_bind(GtkListItemFactory *factory, GtkListItem *item)
     app_info = G_APP_INFO(gtk_list_item_get_item(item));
 
     // Initalize widgets
-    gtk_image_set_from_gicon(GTK_IMAGE(image), g_app_info_get_icon(app_info));
+    GIcon *icon = g_app_info_get_icon(app_info);
+    if(!icon)
+    {
+        gtk_image_set_from_icon_name(GTK_IMAGE(image), "application-x-executable");
+    }else{
+        gtk_image_set_from_gicon(GTK_IMAGE(image), g_app_info_get_icon(app_info));
+    }
     gtk_label_set_label(GTK_LABEL(label), g_app_info_get_display_name(app_info));
 }
 
