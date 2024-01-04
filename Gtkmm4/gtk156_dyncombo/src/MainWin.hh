@@ -16,6 +16,12 @@ public:
 private:
     // Use StringList for dropdown and json file
     Glib::RefPtr<Gtk::StringList> dropdown_list;
+    Glib::RefPtr<Gtk::SingleSelection> selection;
+
+    // Factory to renderer
+    Glib::RefPtr<Gtk::SignalListItemFactory> factory;
+    void setup_label(const Glib::RefPtr<Gtk::ListItem> &item);
+    void bind_label(const Glib::RefPtr<Gtk::ListItem> &item);
 
     // Child widgets
     Gtk::DropDown dropdown;

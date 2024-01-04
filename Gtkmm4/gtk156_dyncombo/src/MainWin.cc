@@ -2,11 +2,11 @@
 
 MainWin::MainWin()
     : main_box(Gtk::Orientation::HORIZONTAL, 5),
-    lists_box(Gtk::Orientation::VERTICAL, 5),
-    drop_frame("Dropdown widget"),
-    list_frame("Items List"),
-    btn_add("Add Item"),
-    btn_remove("Remove Item")
+      lists_box(Gtk::Orientation::VERTICAL, 5),
+      drop_frame("Dropdown widget"),
+      list_frame("Items List"),
+      btn_add("Add Item"),
+      btn_remove("Remove Item")
 {
     // Initalize window
     set_icon_name("org.gtk.daleclack");
@@ -19,7 +19,21 @@ MainWin::MainWin()
     drop_overlay.add_overlay(dropdown);
     drop_frame.set_child(drop_overlay);
 
-    
+    // Create string list
+    dropdown_list = Gtk::StringList::create({"Longterm", "Stable", "Develop"});
+    selection = Gtk::SingleSelection::create(dropdown_list);
+    dropdown.set_model(dropdown_list);
+    main_list_view.set_model(selection);
+
+    // Add a factory to the list view
+    factory = Gtk::SignalListItemFactory::create();
+    factory->signal_bind().connect(sigc::mem_fun(*this, &MainWin::bind_label));
+    factory->signal_setup().connect(sigc::mem_fun(*this, &MainWin::setup_label));
+    main_list_view.set_factory(factory);
+
+    // Link Signal for buttons
+    btn_add.signal_clicked().connect(sigc::mem_fun(*this, &MainWin::btnadd_clicked));
+    btn_remove.signal_clicked().connect(sigc::mem_fun(*this, &MainWin::btnremove_clicked));
 
     // Add List widget
     // Scrolled window for listview widget
@@ -44,6 +58,32 @@ MainWin::MainWin()
     set_child(main_box);
 }
 
+void MainWin::setup_label(const Glib::RefPtr<Gtk::ListItem> &item)
+{
+    // Set label for item
+    item->set_child(*Gtk::make_managed<Gtk::Label>("", Gtk::Align::START));
+}
+
+void MainWin::bind_label(const Glib::RefPtr<Gtk::ListItem> &item)
+{
+    // Get position
+    auto pos = item->get_position();
+    if (pos == GTK_INVALID_LIST_POSITION)
+    {
+        return;
+    }
+
+    // Get label
+    auto label = dynamic_cast<Gtk::Label*>(item->get_child());
+    if (!label)
+    {
+        return;
+    }
+
+    // Set text
+    label->set_text(dropdown_list->get_string(pos));
+}
+
 void MainWin::btnadd_clicked()
 {
     Glib::ustring entry_str;
@@ -60,4 +100,9 @@ void MainWin::btnadd_clicked()
 
 void MainWin::btnremove_clicked()
 {
+    // Get Position of item
+    auto pos = selection->get_selected();
+
+    // Remove item
+    dropdown_list->remove(pos);
 }
