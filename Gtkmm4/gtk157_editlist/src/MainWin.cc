@@ -20,10 +20,6 @@ MainWin::MainWin()
     drop_overlay.add_overlay(dropdown);
     drop_frame.set_child(drop_overlay);
 
-    // Create string list
-    dropdown_list = Gtk::StringList::create({"Longterm", "Stable", "Develop"});
-    dropdown.set_model(dropdown_list);
-
     // Create List for column View
     main_list = Gio::ListStore<ModelColumns>::create();
     selection = Gtk::SingleSelection::create(main_list);
@@ -33,6 +29,16 @@ MainWin::MainWin()
     main_list->append(ModelColumns::create("Longterm", "5.14"));
     main_list->append(ModelColumns::create("Stable", "9.1"));
     main_list->append(ModelColumns::create("Develop", "10.0"));
+
+    // Create string list
+    dropdown.set_model(main_list);
+
+    // Add factory for dropdown
+    drop_factory = Gtk::SignalListItemFactory::create();
+    drop_factory->signal_bind().connect(sigc::mem_fun(*this, &MainWin::bind_drop));
+    drop_factory->signal_setup().connect(sigc::mem_fun(*this, &MainWin::setup_drop));
+    dropdown.set_factory(drop_factory);
+    dropdown.set_list_factory(drop_factory);
 
     // Add a factory to the branch column
     branch_factory = Gtk::SignalListItemFactory::create();
@@ -66,7 +72,7 @@ MainWin::MainWin()
     btn_add.set_halign(Gtk::Align::CENTER);
     btn_remove.set_halign(Gtk::Align::CENTER);
     btn_show.set_halign(Gtk::Align::CENTER);
-    lists_box.append(item_entry);
+    // lists_box.append(item_entry);
     lists_box.append(btn_add);
     lists_box.append(btn_remove);
     lists_box.append(btn_show);
@@ -76,6 +82,29 @@ MainWin::MainWin()
     main_box.append(drop_frame);
     main_box.append(list_frame);
     set_child(main_box);
+}
+
+void MainWin::setup_drop(const Glib::RefPtr<Gtk::ListItem> &item)
+{
+    // Set label for item
+    item->set_child(*Gtk::make_managed<Gtk::Label>());
+}
+
+void MainWin::bind_drop(const Glib::RefPtr<Gtk::ListItem> &item)
+{
+    // Get position
+    auto pos = item->get_position();
+
+    // Get label widget
+    auto label = dynamic_cast<Gtk::Label *>(item->get_child());
+    if (!label)
+    {
+        return;
+    }
+
+    // Set text to the label
+    auto item1 = main_list->get_item(pos);
+    label->set_text(item1->get_branch_str());
 }
 
 void MainWin::setup_branch(const Glib::RefPtr<Gtk::ListItem> &item)
@@ -132,16 +161,16 @@ void MainWin::bind_version(const Glib::RefPtr<Gtk::ListItem> &item)
 
 void MainWin::btnadd_clicked()
 {
-    Glib::ustring entry_str;
+    // Glib::ustring entry_str;
 
-    // Get String from entry
-    entry_str = item_entry.get_text();
+    // // Get String from entry
+    // entry_str = item_entry.get_text();
 
-    // Append text to the list
-    if (!entry_str.empty())
-    {
-        dropdown_list->append(entry_str);
-    }
+    // // Append text to the list
+    // if (!entry_str.empty())
+    // {
+    //     dropdown_list->append(entry_str);
+    // }
 }
 
 void MainWin::btnremove_clicked()
@@ -150,17 +179,18 @@ void MainWin::btnremove_clicked()
     auto pos = selection->get_selected();
 
     // Remove item
-    dropdown_list->remove(pos);
+    main_list->remove(pos);
 }
 
 void MainWin::btnshow_clicked()
 {
-    // Show all items
+    // Show all items and sync the main list to drop down
     auto length = main_list->get_n_items();
-    for(int i = 0; i < length; i++)
+
+    for (int i = 0; i < length; i++)
     {
         auto item = main_list->get_item(i);
         std::cout << item->get_branch_str().c_str() << " "
-            << item->get_version_str().c_str() << std::endl;
+                  << item->get_version_str().c_str() << std::endl;
     }
 }

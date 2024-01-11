@@ -50,6 +50,7 @@ private:
     Glib::Property<Glib::ustring> branch_prep, version_prep;
 
 protected:
+    // Register type and initalize properties
     ModelColumns(Glib::ustring branch, Glib::ustring version)
         : Glib::ObjectBase(typeid(ModelColumns)),
           Glib::Object(),
@@ -66,12 +67,14 @@ public:
     MainWin();
 
 private:
-    // Use StringList for dropdown and json file
-    Glib::RefPtr<Gtk::StringList> dropdown_list;
-
     // Main list object for branchs and versions
     Glib::RefPtr<Gio::ListStore<ModelColumns>> main_list;
     Glib::RefPtr<Gtk::SingleSelection> selection;
+
+    // Factory to renderer string for dropdown
+    Glib::RefPtr<Gtk::SignalListItemFactory> drop_factory;
+    void setup_drop(const Glib::RefPtr<Gtk::ListItem> &item);
+    void bind_drop(const Glib::RefPtr<Gtk::ListItem> &item);
 
     // Factory to renderer branch string
     Glib::RefPtr<Gtk::ColumnViewColumn> branch_column;
@@ -93,7 +96,7 @@ private:
     Gtk::ScrolledWindow m_sw;
     Gtk::ListView main_list_view;
     Gtk::ColumnView main_column_view;
-    Gtk::Entry item_entry;
+    // Gtk::Entry item_entry;
     Gtk::Button btn_add, btn_remove, btn_show;
 
     // Signal Handlers
