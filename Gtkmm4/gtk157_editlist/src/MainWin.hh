@@ -3,6 +3,7 @@
 #include "../json_nlohmann/json.hpp"
 #include <vector>
 #include <gtkmm.h>
+#include <iostream>
 
 using json = nlohmann::json;
 typedef std::vector<std::string> str_vec;
@@ -93,9 +94,10 @@ private:
     Gtk::ListView main_list_view;
     Gtk::ColumnView main_column_view;
     Gtk::Entry item_entry;
-    Gtk::Button btn_add, btn_remove;
+    Gtk::Button btn_add, btn_remove, btn_show;
 
     // Signal Handlers
     void btnadd_clicked();
     void btnremove_clicked();
+    void btnshow_clicked();
 };

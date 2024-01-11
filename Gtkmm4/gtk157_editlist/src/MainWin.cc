@@ -6,7 +6,8 @@ MainWin::MainWin()
       drop_frame("Dropdown widget"),
       list_frame("Items List"),
       btn_add("Add Item"),
-      btn_remove("Remove Item")
+      btn_remove("Remove Item"),
+      btn_show("Show items")
 {
     // Initalize window
     set_icon_name("org.gtk.daleclack");
@@ -50,6 +51,7 @@ MainWin::MainWin()
     // Link Signal for buttons
     btn_add.signal_clicked().connect(sigc::mem_fun(*this, &MainWin::btnadd_clicked));
     btn_remove.signal_clicked().connect(sigc::mem_fun(*this, &MainWin::btnremove_clicked));
+    btn_show.signal_clicked().connect(sigc::mem_fun(*this, &MainWin::btnshow_clicked));
 
     // Add List widget
     // Scrolled window for listview widget
@@ -63,9 +65,11 @@ MainWin::MainWin()
     // Entry and buttons
     btn_add.set_halign(Gtk::Align::CENTER);
     btn_remove.set_halign(Gtk::Align::CENTER);
+    btn_show.set_halign(Gtk::Align::CENTER);
     lists_box.append(item_entry);
     lists_box.append(btn_add);
     lists_box.append(btn_remove);
+    lists_box.append(btn_show);
     list_frame.set_child(lists_box);
 
     // Append the frames to the main box
@@ -82,6 +86,9 @@ void MainWin::setup_branch(const Glib::RefPtr<Gtk::ListItem> &item)
 
 void MainWin::bind_branch(const Glib::RefPtr<Gtk::ListItem> &item)
 {
+    // Get position
+    auto pos = item->get_position();
+
     // Get Entry
     auto entry = dynamic_cast<Gtk::Entry *>(item->get_child());
     if (!entry)
@@ -90,8 +97,11 @@ void MainWin::bind_branch(const Glib::RefPtr<Gtk::ListItem> &item)
     }
 
     // Bind text
-    auto item1 = dynamic_cast<ModelColumns *>(item.get());
-    Glib::Binding::bind_property(item1->property_version(), entry->property_text());
+    // auto item1 = dynamic_cast<ModelColumns *>(item.get());
+    auto item1 = main_list->get_item(pos);
+    entry->set_text(item1->get_branch_str());
+    Glib::Binding::bind_property(item1->property_branch(), entry->property_text(),
+                                 Glib::Binding::Flags::BIDIRECTIONAL);
 }
 
 void MainWin::setup_version(const Glib::RefPtr<Gtk::ListItem> &item)
@@ -102,6 +112,9 @@ void MainWin::setup_version(const Glib::RefPtr<Gtk::ListItem> &item)
 
 void MainWin::bind_version(const Glib::RefPtr<Gtk::ListItem> &item)
 {
+    // Get position
+    auto pos = item->get_position();
+
     // Get Entry
     auto entry = dynamic_cast<Gtk::Entry *>(item->get_child());
     if (!entry)
@@ -110,8 +123,11 @@ void MainWin::bind_version(const Glib::RefPtr<Gtk::ListItem> &item)
     }
 
     // Bind text
-    auto item1 = dynamic_cast<ModelColumns *>(item.get());
-    Glib::Binding::bind_property(item1->property_version(), entry->property_text());
+    // auto item1 = dynamic_cast<ModelColumns *>(item.get());
+    auto item1 = main_list->get_item(pos);
+    entry->set_text(item1->get_version_str());
+    Glib::Binding::bind_property(item1->property_version(), entry->property_text(),
+                                 Glib::Binding::Flags::BIDIRECTIONAL);
 }
 
 void MainWin::btnadd_clicked()
@@ -135,4 +151,16 @@ void MainWin::btnremove_clicked()
 
     // Remove item
     dropdown_list->remove(pos);
+}
+
+void MainWin::btnshow_clicked()
+{
+    // Show all items
+    auto length = main_list->get_n_items();
+    for(int i = 0; i < length; i++)
+    {
+        auto item = main_list->get_item(i);
+        std::cout << item->get_branch_str().c_str() << " "
+            << item->get_version_str().c_str() << std::endl;
+    }
 }
