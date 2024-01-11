@@ -69,7 +69,7 @@ public:
 private:
     // Main list object for branchs and versions
     Glib::RefPtr<Gio::ListStore<ModelColumns>> main_list;
-    Glib::RefPtr<Gtk::SingleSelection> selection;
+    Glib::RefPtr<Gtk::NoSelection> selection;
 
     // Factory to renderer string for dropdown
     Glib::RefPtr<Gtk::SignalListItemFactory> drop_factory;

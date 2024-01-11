@@ -22,7 +22,9 @@ MainWin::MainWin()
 
     // Create List for column View
     main_list = Gio::ListStore<ModelColumns>::create();
-    selection = Gtk::SingleSelection::create(main_list);
+
+    // The list for dropdown to select should has no selection
+    selection = Gtk::NoSelection::create(main_list);
     main_column_view.set_model(selection);
 
     // Add items
@@ -162,13 +164,13 @@ void MainWin::bind_version(const Glib::RefPtr<Gtk::ListItem> &item)
 void MainWin::btnadd_clicked()
 {
     // Append a item to the list
-    main_list->append(ModelColumns::create(" ", " "));
+    main_list->append(ModelColumns::create("", ""));
 }
 
 void MainWin::btnremove_clicked()
 {
     // Get Position of item
-    auto pos = selection->get_selected();
+    auto pos = main_list->get_n_items() - 1;
 
     // Remove item
     main_list->remove(pos);
