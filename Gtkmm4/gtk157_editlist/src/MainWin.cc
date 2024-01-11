@@ -161,16 +161,8 @@ void MainWin::bind_version(const Glib::RefPtr<Gtk::ListItem> &item)
 
 void MainWin::btnadd_clicked()
 {
-    // Glib::ustring entry_str;
-
-    // // Get String from entry
-    // entry_str = item_entry.get_text();
-
-    // // Append text to the list
-    // if (!entry_str.empty())
-    // {
-    //     dropdown_list->append(entry_str);
-    // }
+    // Append a item to the list
+    main_list->append(ModelColumns::create(" ", " "));
 }
 
 void MainWin::btnremove_clicked()
