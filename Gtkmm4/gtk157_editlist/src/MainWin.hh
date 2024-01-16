@@ -4,6 +4,7 @@
 #include <vector>
 #include <gtkmm.h>
 #include <iostream>
+#include <fstream>
 
 using json = nlohmann::json;
 typedef std::vector<std::string> str_vec;
@@ -91,16 +92,21 @@ private:
     // Child widgets
     Gtk::DropDown dropdown;
     Gtk::Overlay drop_overlay;
-    Gtk::Box main_box, lists_box;
+    Gtk::Box main_box, lists_box, drop_box, btn_box;
     Gtk::Frame drop_frame, list_frame;
     Gtk::ScrolledWindow m_sw;
     Gtk::ListView main_list_view;
     Gtk::ColumnView main_column_view;
     // Gtk::Entry item_entry;
-    Gtk::Button btn_add, btn_remove, btn_show;
+    Gtk::Button btn_get, btn_add, btn_remove,
+        btn_save, btn_show;
+
+    void load_config();
 
     // Signal Handlers
     void btnadd_clicked();
     void btnremove_clicked();
     void btnshow_clicked();
+    void btnget_clicked();
+    void btnsave_clicked();
 };

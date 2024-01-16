@@ -3,10 +3,13 @@
 MainWin::MainWin()
     : main_box(Gtk::Orientation::HORIZONTAL, 5),
       lists_box(Gtk::Orientation::VERTICAL, 5),
+      drop_box(Gtk::Orientation::VERTICAL, 5),
+      btn_box(Gtk::Orientation::HORIZONTAL, 5),
       drop_frame("Dropdown widget"),
       list_frame("Items List"),
       btn_add("Add Item"),
       btn_remove("Remove Item"),
+      btn_save("Save config"),
       btn_show("Show items")
 {
     // Initalize window
@@ -15,10 +18,15 @@ MainWin::MainWin()
     set_title("Dynamic Dropdown test");
 
     // Add overlay widget
-    dropdown.set_halign(Gtk::Align::CENTER);
-    dropdown.set_valign(Gtk::Align::CENTER);
-    drop_overlay.add_overlay(dropdown);
+    drop_box.set_halign(Gtk::Align::CENTER);
+    drop_box.set_valign(Gtk::Align::CENTER);
+    drop_overlay.add_overlay(drop_box);
     drop_frame.set_child(drop_overlay);
+
+    // Add widgets for the left side
+    btn_get.set_label("Show");
+    drop_box.append(dropdown);
+    drop_box.append(btn_get);
 
     // Create List for column View
     main_list = Gio::ListStore<ModelColumns>::create();
@@ -28,9 +36,7 @@ MainWin::MainWin()
     main_column_view.set_model(selection);
 
     // Add items
-    main_list->append(ModelColumns::create("Longterm", "5.14"));
-    main_list->append(ModelColumns::create("Stable", "9.1"));
-    main_list->append(ModelColumns::create("Develop", "10.0"));
+    load_config();
 
     // Create string list
     dropdown.set_model(main_list);
@@ -60,6 +66,8 @@ MainWin::MainWin()
     btn_add.signal_clicked().connect(sigc::mem_fun(*this, &MainWin::btnadd_clicked));
     btn_remove.signal_clicked().connect(sigc::mem_fun(*this, &MainWin::btnremove_clicked));
     btn_show.signal_clicked().connect(sigc::mem_fun(*this, &MainWin::btnshow_clicked));
+    btn_get.signal_clicked().connect(sigc::mem_fun(*this, &MainWin::btnget_clicked));
+    btn_save.signal_clicked().connect(sigc::mem_fun(*this, &MainWin::btnsave_clicked));
 
     // Add List widget
     // Scrolled window for listview widget
@@ -71,19 +79,45 @@ MainWin::MainWin()
     lists_box.append(m_sw);
 
     // Entry and buttons
-    btn_add.set_halign(Gtk::Align::CENTER);
-    btn_remove.set_halign(Gtk::Align::CENTER);
-    btn_show.set_halign(Gtk::Align::CENTER);
-    // lists_box.append(item_entry);
-    lists_box.append(btn_add);
-    lists_box.append(btn_remove);
-    lists_box.append(btn_show);
+    btn_box.set_halign(Gtk::Align::CENTER);
+    btn_box.append(btn_add);
+    btn_box.append(btn_remove);
+    btn_box.append(btn_show);
+    btn_box.append(btn_save);
+    lists_box.append(btn_box);
     list_frame.set_child(lists_box);
 
     // Append the frames to the main box
     main_box.append(drop_frame);
     main_box.append(list_frame);
     set_child(main_box);
+}
+
+void MainWin::load_config()
+{
+    // Open json file and try to parse
+    std::fstream json_file;
+    json_file.open("config.json", std::ios_base::in);
+    json data = json::parse(json_file);
+
+    // Get vectors from json
+    if (!data.empty())
+    {
+        // Put data to the GListStore
+        str_vec branch_vec = data["branches"];
+        str_vec version_vec = data["versions"];
+        for (int i = 0; i < branch_vec.size(); i++)
+        {
+            main_list->append(ModelColumns::create(branch_vec[i].c_str(),
+                                                   version_vec[i].c_str()));
+        }
+    }
+    else
+    {
+        main_list->append(ModelColumns::create("Longterm", "5.14"));
+        main_list->append(ModelColumns::create("Stable", "9.1"));
+        main_list->append(ModelColumns::create("Develop", "10.0"));
+    }
 }
 
 void MainWin::setup_drop(const Glib::RefPtr<Gtk::ListItem> &item)
@@ -128,7 +162,6 @@ void MainWin::bind_branch(const Glib::RefPtr<Gtk::ListItem> &item)
     }
 
     // Bind text
-    // auto item1 = dynamic_cast<ModelColumns *>(item.get());
     auto item1 = main_list->get_item(pos);
     entry->set_text(item1->get_branch_str());
     Glib::Binding::bind_property(item1->property_branch(), entry->property_text(),
@@ -154,7 +187,6 @@ void MainWin::bind_version(const Glib::RefPtr<Gtk::ListItem> &item)
     }
 
     // Bind text
-    // auto item1 = dynamic_cast<ModelColumns *>(item.get());
     auto item1 = main_list->get_item(pos);
     entry->set_text(item1->get_version_str());
     Glib::Binding::bind_property(item1->property_version(), entry->property_text(),
@@ -187,4 +219,55 @@ void MainWin::btnshow_clicked()
         std::cout << item->get_branch_str().c_str() << " "
                   << item->get_version_str().c_str() << std::endl;
     }
+}
+
+void MainWin::btnget_clicked()
+{
+    // Get Selected item index
+    auto index = dropdown.get_selected();
+
+    // Get item in the store
+    auto item = main_list->get_item(index);
+
+    // Get Version string
+    auto ver_str = item->get_version_str();
+
+    std::cout << ver_str << std::endl;
+}
+
+void MainWin::btnsave_clicked()
+{
+    // Get items count for the list
+    auto length = main_list->get_n_items();
+    str_vec branch_vec, version_vec;
+
+    // Push item strings to the vectors
+    for (int i = 0; i < length; i++)
+    {
+        auto item = main_list->get_item(i);
+        const char *temp1 = item->get_branch_str().c_str();
+        branch_vec.push_back(temp1);
+        const char *temp2 = item->get_version_str().c_str();
+        version_vec.push_back(temp2);
+    }
+
+    // Create a json file
+    json data = json::parse(R"({
+        "Note":"Generated, do not edit it!",
+        "branches":[],
+        "versions":[]
+    })");
+
+    // Creata file to save json data
+    std::fstream json_file;
+    json_file.open("config.json", std::ios_base::out);
+
+    // Save config when file creates
+    if (json_file.is_open())
+    {
+        data["branches"] = branch_vec;
+        data["versions"] = version_vec;
+        json_file << data;
+    }
+    json_file.close();
 }
