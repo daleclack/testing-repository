@@ -31,8 +31,8 @@ static void app_view_setup(GtkListItemFactory *factory, GtkListItem *item)
     app_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
     image = gtk_image_new();
     label = gtk_label_new("          ");
-    gtk_image_set_pixel_size(GTK_IMAGE(image), 48);
-    gtk_widget_set_size_request(label, 64, 12);
+    gtk_image_set_pixel_size(GTK_IMAGE(image), 40);
+    gtk_widget_set_size_request(label, 76, 12);
     gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_END);
 
     // Append widgets to the box
