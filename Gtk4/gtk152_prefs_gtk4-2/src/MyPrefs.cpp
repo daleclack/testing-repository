@@ -288,7 +288,9 @@ static void update_internal_image(MyPrefs *prefs, const char **id)
     GdkPixbuf *pixbuf = gdk_pixbuf_new_from_xpm_data(id);
     GdkPixbuf *sized = gdk_pixbuf_scale_simple(pixbuf, prefs->width,
                                                prefs->height, GDK_INTERP_BILINEAR);
-    gtk_picture_set_pixbuf(GTK_PICTURE(prefs->background), pixbuf);
+    GdkTexture *texture = gdk_texture_new_for_pixbuf(pixbuf);
+    gtk_picture_set_paintable(GTK_PICTURE(prefs->background), GDK_PAINTABLE(texture));
+    // gtk_picture_set_pixbuf(GTK_PICTURE(prefs->background), pixbuf);
     g_object_unref(pixbuf);
     g_object_unref(sized);
 }
@@ -303,7 +305,9 @@ static void update_external_image(MyPrefs *prefs, const char *file_name)
         // Load the image with pixbuf
         GdkPixbuf *sized = gdk_pixbuf_scale_simple(pixbuf, prefs->width,
                                                    prefs->height, GDK_INTERP_BILINEAR);
-        gtk_picture_set_pixbuf(GTK_PICTURE(prefs->background), sized);
+        GdkTexture *texture = gdk_texture_new_for_pixbuf(pixbuf);
+        gtk_picture_set_paintable(GTK_PICTURE(prefs->background), GDK_PAINTABLE(texture));
+        // gtk_picture_set_pixbuf(GTK_PICTURE(prefs->background), sized);
         g_object_unref(sized);
         g_object_unref(pixbuf);
     }
