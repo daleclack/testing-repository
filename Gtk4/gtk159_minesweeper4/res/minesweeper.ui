@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkWindow" id="minesweeper">
+    <property name="default-height">400</property>
+    <property name="default-width">700</property>
+    <child type="titlebar">
+      <object class="GtkStackSwitcher">
+        <property name="visible">0</property>
+      </object>
+    </child>
+    <property name="child">
+      <object class="GtkStack" id="main_stack">
+        <property name="visible">1</property>
+        <property name="halign">baseline</property>
+        <property name="transition-type">slide-right</property>
+        <child>
+          <object class="GtkGrid" id="start_page">
+            <property name="visible">1</property>
+            <property name="column-homogeneous">1</property>
+            <property name="column-spacing">2</property>
+            <property name="halign">center</property>
+            <property name="row-homogeneous">1</property>
+            <property name="valign">center</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="main_page">
+            <property name="visible">1</property>
+            <property name="orientation">vertical</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkGrid" id="custom_page">
+            <property name="visible">1</property>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+</interface>
