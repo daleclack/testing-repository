@@ -1,6 +1,6 @@
 set(CMAKE_CXX_STANDARD 17)
-cmake_minimum_required(VERSION 3.0.0)
-project(gtk142_minesweeper3 VERSION 1.0.0)
+cmake_minimum_required(VERSION 3.5.0)
+project(gtk158_minesweeper4 VERSION 1.0.0)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../../GCR_CMake/macros)
 include(GlibCompileResourcesSupport)
@@ -17,16 +17,16 @@ include_directories(..)
 
 #Find PkgConfig to use gtkmm3
 find_package (PkgConfig REQUIRED)
-pkg_check_modules (GTKMM4 REQUIRED gtkmm-4.0)
-include_directories (${GTKMM4_INCLUDE_DIRS})
-link_directories (${GTKMM4_LIBRARY_DIRS})
+pkg_check_modules (GTK4 REQUIRED gtk4)
+include_directories (${GTK4_INCLUDE_DIRS})
+link_directories (${GTK4_LIBRARY_DIRS})
 
 #Find Gettext
 # find_package (Gettext REQUIRED)
 # set(PO_DIR ${CMAKE_BINARY_DIR}/po/zh_CN/LC_MESSAGES)
 
 #Source files
-set(SOURCE_FILE src/main.cc src/MineSweeper.cc src/InputBox.cc src/ScoresWin.cc)
+set(SOURCE_FILE src/main.cpp src/MineSweeper.cpp)
 
 #Compile Resource
 
@@ -84,5 +84,5 @@ endif(WIN32)
 #                     COMMAND mkdir -p ${PO_DIR}
 #                     COMMAND ${GETTEXT_MSGFMT_EXECUTABLE} ${CMAKE_SOURCE_DIR}/po/zh_CN.po -o ${PO_DIR}/${PROJECT_NAME}.mo)
 
-SET (CMAKE_EXTRA_CXX_FLAGS ${GTKMM4_CFLAGS_OTHER})
-target_link_libraries (${PROJECT_NAME} ${GTKMM4_LIBRARIES} -lpthread)
+SET (CMAKE_EXTRA_CXX_FLAGS ${GTK4_CFLAGS_OTHER})
+target_link_libraries (${PROJECT_NAME} ${GTK4_LIBRARIES} -lpthread)
