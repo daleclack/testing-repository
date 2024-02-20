@@ -1,4 +1,5 @@
 #include "MineSweeper.h"
+#include "MineCell.h"
 
 struct _MineSweeper
 {
