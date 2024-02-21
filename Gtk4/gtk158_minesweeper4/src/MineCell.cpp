@@ -41,7 +41,7 @@ void mine_cell_set_configs(MineCell *cell, gboolean cell_has_mine, gboolean cell
     cell->cleared = cell_cleared;
     cell->mines_around = cell_mines_around;
     cell->x = cell_x;
-    cell->y = cell->y;
+    cell->y = cell_y;
 }
 
 MineCell *mine_cell_new()
