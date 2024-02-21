@@ -19,7 +19,7 @@ struct _MineSweeper
     // Child widgets
     GtkWidget *main_box, *btn_box;
     GtkWidget *mine_grid;
-    GtkWidget *time_label;
+    GtkWidget *time_label, *status_label;
     MineCell *cell[49];
     GtkWidget *btn_start, *btn_show, *btn_exit;
 
@@ -32,15 +32,25 @@ struct _MineSweeper
 
 G_DEFINE_TYPE(MineSweeper, mine_sweeper, GTK_TYPE_APPLICATION_WINDOW)
 
-static void mine_sweeper_lost(MineSweeper *self, int explode_index)
+static void mine_sweeper_game_lost(MineSweeper *self, int explode_index)
 {
+    gboolean has_mine, cleared;
+    int mines_around, x, y;
+    MineCell **cells = self->cell;
+
+    // Show all mines
     for (int i = 0; i < 49; i++)
     {
+        mine_cell_get_configs(cells[i], has_mine, cleared, mines_around, x, y);
+        if (has_mine && !cleared)
+        {
+            gtk_button_set_icon_name(GTK_BUTTON(cells[i]), "mine");
+        }
     }
     gtk_widget_set_sensitive(self->mine_grid, FALSE);
 }
 
-static void find_mines(int i, int j, MineCell **cell)
+static void mine_sweeper_find_mines(int i, int j, MineCell **cell)
 {
     gboolean has_mine, cleared;
     int mines_around, x, y;
@@ -80,6 +90,7 @@ static void mine_sweeper_reset(MineSweeper *self, int mines)
         for (int j = 0; j < 7; j++)
         {
             gtk_button_set_icon_name(GTK_BUTTON(cells[i * 7 + j]), "");
+            gtk_button_set_has_frame(GTK_BUTTON(cells[i * 7 + j]), TRUE);
             mine_cell_set_configs(cells[i * 7 + j], FALSE, FALSE, 0, j, i);
         }
     }
@@ -96,14 +107,72 @@ static void mine_sweeper_reset(MineSweeper *self, int mines)
         }
     }
 
-    // Calculate mines around a cell
     // Calculate the mines around a cell
     for (int i = 0; i < 7; i++)
     {
         for (int j = 0; j < 7; j++)
         {
-            find_mines(i, j, cells);
+            mine_sweeper_find_mines(i, j, cells);
         }
+    }
+}
+
+static void mine_sweeper_check_mines(MineSweeper *self, int pos_x, int pos_y)
+{
+    gboolean has_mine, cleared;
+    int mines_around, x, y;
+    MineCell **cells = self->cell;
+
+    if (pos_x >= 0 && pos_x <= 6 &&
+        pos_y >= 0 && pos_y <= 6)
+    {
+        mine_cell_get_configs(cells[pos_y * 7 + pos_x], has_mine, cleared, mines_around, x, y);
+        if (!has_mine && !cleared)
+        {
+            (self->mines_clear)++;
+            // Show the cell has no mines around
+            if (mines_around == 0)
+            {
+                gtk_button_set_icon_name(GTK_BUTTON(cells[pos_y * 7 + pos_x]), "");
+            }
+            else
+            {
+                // Show the numbers of mines around a cell
+                char *label = g_strdup_printf("%dmines", mines_around);
+                gtk_button_set_icon_name(GTK_BUTTON(cells[pos_y * 7 + pos_x]), label);
+                g_free(label);
+            }
+
+            // make the cell without mines cleared
+            gtk_button_set_has_frame(GTK_BUTTON(cells[pos_y * 7 + pos_x]), FALSE);
+            mine_cell_set_configs(cells[pos_y * 7 + pos_x], has_mine, TRUE, mines_around, x, y);
+
+            // Check the cells around a cell that has no mines
+            if (mines_around == 0)
+            {
+                mine_sweeper_check_mines(self, (pos_x - 1), (pos_y - 1));
+                mine_sweeper_check_mines(self, (pos_x + 1), (pos_y + 1));
+                mine_sweeper_check_mines(self, (pos_x - 1), (pos_y + 1));
+                mine_sweeper_check_mines(self, (pos_x + 1), (pos_y - 1));
+                mine_sweeper_check_mines(self, pos_x, (pos_y - 1));
+                mine_sweeper_check_mines(self, pos_x, (pos_y + 1));
+                mine_sweeper_check_mines(self, (pos_x + 1), pos_y);
+                mine_sweeper_check_mines(self, (pos_x - 1), pos_y);
+            }
+        }
+    }
+
+    // If all the mines has cleared, you has winned
+    if (self->mines_clear == 40)
+    {
+        // Stop the game
+        gtk_label_set_label(GTK_LABEL(self->status_label), "You winned!");
+        self->game_status = GameStatus::Winned;
+        self->started = FALSE;
+
+        // // Save the time of game
+        // input_dialog->set_game_time(timer_count);
+        // input_dialog->show();
     }
 }
 
@@ -114,7 +183,34 @@ static void mine_cell_clicked(MineCell *cell, MineSweeper *self)
 
     // Take all properties
     mine_cell_get_configs(cell, has_mine, cleared, mines_around, x, y);
-    g_print("(%d,%d) %d %d %d\n", x, y, has_mine, cleared, mines_around);
+
+    // Unset frame to show the cell opened
+    gtk_button_set_has_frame(GTK_BUTTON(cell), FALSE);
+    if (self->game_status == GameStatus::Running && !cleared)
+    {
+        // If get mine, the game will end now
+        if (has_mine)
+        {
+            // Clear the cell
+            mine_cell_set_configs(cell, has_mine, TRUE, mines_around, x, y);
+
+            // Set game to stop
+            // winned = false;
+            self->game_status = GameStatus::Ended;
+            gtk_button_set_icon_name(GTK_BUTTON(cell), "exploded");
+
+            // End the game
+            mine_sweeper_game_lost(self, y * 7 + x);
+            gtk_label_set_label(GTK_LABEL(self->status_label), "You lost!");
+            self->started = FALSE;
+            gtk_widget_set_sensitive(self->mine_grid, FALSE);
+        }
+        else
+        {
+            // If no mines, check the cell around
+            mine_sweeper_check_mines(self, x, y);
+        }
+    }
 }
 
 static void mine_sweeper_cells_init(MineSweeper *self, int width, int height)
@@ -140,6 +236,8 @@ static void mine_sweeper_cells_init(MineSweeper *self, int width, int height)
             mine_cell_set_configs((self->cell)[i * width + j], FALSE, FALSE, 0, j, i);
         }
     }
+
+    gtk_widget_set_sensitive(self->mine_grid, FALSE);
 }
 
 static gboolean time_func(gpointer data)
@@ -161,11 +259,29 @@ static void btnstart_clicked(GtkButton *btn, MineSweeper *self)
     gtk_widget_set_sensitive(self->mine_grid, TRUE);
     self->time_count = 0;
     self->started = TRUE;
+    self->game_status = GameStatus::Running;
     g_timeout_add(1000, time_func, self);
+    gtk_label_set_label(GTK_LABEL(self->status_label), "Started");
 }
 
 static void btnshow_clicked(GtkButton *btn, MineSweeper *self)
 {
+    // Show all cells that has mine
+    gboolean has_mine, cleared;
+    int mines_around, x, y;
+    MineCell **cells = self->cell;
+
+    // Take all properties
+    for (int i = 0; i < 49; i++)
+    {
+        mine_cell_get_configs(cells[i], has_mine, cleared, mines_around, x, y);
+
+        // Show all buttons that has mine
+        if (has_mine)
+        {
+            gtk_button_set_icon_name(GTK_BUTTON(cells[i]), "mine");
+        }
+    }
 }
 
 static void mine_sweeper_init(MineSweeper *self)
@@ -177,6 +293,7 @@ static void mine_sweeper_init(MineSweeper *self)
     self->main_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
     self->mine_grid = gtk_grid_new();
     self->time_label = gtk_label_new("");
+    self->status_label = gtk_label_new("");
     self->btn_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
     self->btn_start = gtk_button_new_with_label("Start/Reset");
     self->btn_show = gtk_button_new_with_label("Show All");
@@ -190,6 +307,7 @@ static void mine_sweeper_init(MineSweeper *self)
     gtk_widget_set_halign(self->time_label, GTK_ALIGN_CENTER);
     gtk_widget_set_halign(self->mine_grid, GTK_ALIGN_CENTER);
     gtk_widget_set_halign(self->btn_box, GTK_ALIGN_CENTER);
+    gtk_box_append(GTK_BOX(self->main_box), self->status_label);
     gtk_box_append(GTK_BOX(self->main_box), self->time_label);
     gtk_box_append(GTK_BOX(self->main_box), self->mine_grid);
     gtk_box_append(GTK_BOX(self->btn_box), self->btn_start);
