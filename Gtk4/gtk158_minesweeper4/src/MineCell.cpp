@@ -14,7 +14,7 @@ G_DEFINE_TYPE(MineCell, mine_cell, GTK_TYPE_BUTTON)
 static void mine_cell_init(MineCell *self)
 {
     gtk_button_set_icon_name(GTK_BUTTON(self), "");
-    gtk_button_set_has_frame(GTK_BUTTON(self), FALSE);
+    // gtk_button_set_has_frame(GTK_BUTTON(self), FALSE);
     gtk_widget_set_size_request(GTK_WIDGET(self), 40, 40);
     self->mines_around = 0;
     self->has_mine = FALSE;
