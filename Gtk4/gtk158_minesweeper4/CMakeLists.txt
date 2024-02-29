@@ -26,7 +26,8 @@ link_directories (${GTK4_LIBRARY_DIRS})
 # set(PO_DIR ${CMAKE_BINARY_DIR}/po/zh_CN/LC_MESSAGES)
 
 #Source files
-set(SOURCE_FILE src/main.cpp src/MineSweeper.cpp src/MineCell.cpp src/InputBox.cpp)
+set(SOURCE_FILE src/main.cpp src/MineSweeper.cpp src/MineCell.cpp 
+    src/InputBox.cpp src/ScoresItem.cpp src/ScoresWin.cpp)
 
 #Compile Resource
 

@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include "InputBox.h"
+#include "ScoresWin.h"
 #include "jsonfile.h"
 
 struct _InputBox
@@ -12,6 +13,9 @@ struct _InputBox
     GtkWidget *scores_check;
     GtkWidget *btn_ok, *btn_cancel;
     int game_time;
+
+    // Scores Window
+    ScoresWin *scores_win;
 };
 
 G_DEFINE_TYPE(InputBox, input_box, GTK_TYPE_WINDOW)
@@ -42,7 +46,10 @@ static void btnok_clicked(GtkButton *btn, InputBox *self)
     outfile.close();
 
     // Show Scores window
-
+    if (gtk_check_button_get_active(GTK_CHECK_BUTTON(self->scores_check)))
+    {
+        scores_win_update_and_show(self->scores_win);
+    }
     gtk_window_close(GTK_WINDOW(self));
 }
 
@@ -57,6 +64,7 @@ static void input_box_init(InputBox *self)
 {
     // Initalize window
     gtk_window_set_default_size(GTK_WINDOW(self), 300, 150);
+    gtk_window_set_icon_name(GTK_WINDOW(self), "org.gtk.daleclack");
 
     // Create widgets
     self->main_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
@@ -65,6 +73,10 @@ static void input_box_init(InputBox *self)
     self->scores_check = gtk_check_button_new_with_label("Show scores window");
     self->btn_ok = gtk_button_new_with_label("OK");
     self->btn_cancel = gtk_button_new_with_label("Cancel");
+
+    // Create Scores Window
+    GtkWindow *window = gtk_window_get_transient_for(GTK_WINDOW(self));
+    self->scores_win = scores_win_new(window);
 
     // Link signals
     g_signal_connect(self->btn_ok, "clicked", G_CALLBACK(btnok_clicked), self);
@@ -132,4 +144,9 @@ void input_box_set_game_time(InputBox *self, int time)
 
     // Set game time for input box
     self->game_time = time;
+}
+
+void input_box_show_scores(InputBox *self)
+{
+    scores_win_update_and_show(self->scores_win);
 }

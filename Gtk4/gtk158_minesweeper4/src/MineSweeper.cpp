@@ -304,6 +304,8 @@ static void newgame_activated(GSimpleAction *action, GVariant *parmeter, gpointe
 
 static void scores_activated(GSimpleAction *action, GVariant *parmeter, gpointer data)
 {
+    MineSweeper *app = MINE_SWEEPER(data);
+    input_box_show_scores(app->input_box);
 }
 
 static void showmines_activated(GSimpleAction *action, GVariant *parmeter, gpointer data)
