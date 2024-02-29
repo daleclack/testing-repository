@@ -1,5 +1,6 @@
 #include "MineSweeper.h"
 #include "MineCell.h"
+#include "InputBox.h"
 #include <cstdlib>
 #include <string>
 
@@ -32,6 +33,9 @@ struct _MineSweeper
     gboolean started;
     int mines_clear, mine_count;
     GameStatus game_status;
+
+    // InputBox for game win
+    InputBox *input_box;
 };
 
 G_DEFINE_TYPE(MineSweeper, mine_sweeper, GTK_TYPE_APPLICATION_WINDOW)
@@ -174,9 +178,9 @@ static void mine_sweeper_check_mines(MineSweeper *self, int pos_x, int pos_y)
         self->game_status = GameStatus::Winned;
         self->started = FALSE;
 
-        // // Save the time of game
-        // input_dialog->set_game_time(timer_count);
-        // input_dialog->show();
+        // Save the time of game
+        input_box_set_game_time(self->input_box, self->time_count);
+        input_box_present(self->input_box);
     }
 }
 
@@ -248,9 +252,13 @@ static gboolean time_func(gpointer data)
 {
     MineSweeper *mine_app = MINE_SWEEPER(data);
     char tmp[50];
-    (mine_app->time_count)++;
-    sprintf(tmp, "Time:%d", mine_app->time_count);
-    gtk_label_set_label(GTK_LABEL(mine_app->time_label), tmp);
+    // Update time when game is running
+    if (mine_app->game_status == GameStatus::Running)
+    {
+        (mine_app->time_count)++;
+        sprintf(tmp, "Time:%d", mine_app->time_count);
+        gtk_label_set_label(GTK_LABEL(mine_app->time_label), tmp);
+    }
     return mine_app->started;
 }
 
@@ -337,6 +345,9 @@ static void mine_sweeper_init(MineSweeper *self)
     GtkPopover *popover = gtk_menu_button_get_popover(GTK_MENU_BUTTON(self->menu_btn));
     gtk_popover_set_has_arrow(popover, FALSE);
     gtk_widget_set_halign(GTK_WIDGET(popover), GTK_ALIGN_END);
+
+    // Create Input Box
+    self->input_box = input_box_new(GTK_WINDOW(self));
 
     // Create widgets
     self->main_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
