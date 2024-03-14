@@ -90,7 +90,7 @@ static gint64 get_lrc_line_timestamp(const char *lyrics_line, size_t timestamp_l
                        (lyrics_line[5] - '0');
 
     // Millseconds
-    gint64 lyric_micro;
+    gint64 lyric_micro = 0;
     switch (timestamp_length)
     {
     case 9:
