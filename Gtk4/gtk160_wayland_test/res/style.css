@@ -7,6 +7,12 @@ headerbar{
 
 .ctrl_btn{
 	min-height: 8px;
+	min-width: 8px;
 	margin: 0px;
 	font-weight:900;
+	border-radius:100%;
+}
+
+.ctrl_btn:hover{
+	color:black;
 }
