@@ -6,41 +6,8 @@ using json = nlohmann::json;
 
 static void gtkmain(GtkApplication *app, gpointer user_data)
 {
-    GtkWidget *window, *header;
-    GtkWidget *btn_close, *btn_mini;
-    GtkWidget *img_close, *img_mini;
-
-    // Create widgets
-    window = gtk_application_window_new(app);
-    header = gtk_header_bar_new();
-
-    const char *title_classes[] = {"titlebar", ""};
-    gtk_widget_set_css_classes(header, title_classes);
-    gtk_window_set_titlebar(GTK_WINDOW(window), header);
-
-    // Initalize headerbar
-    gtk_header_bar_set_show_title_buttons(GTK_HEADER_BAR(header), FALSE);
-    const char *btn_classes[] = {"ctrl_btn",""};
-
-    // Add a close button
-    btn_close = gtk_button_new_with_label("\u00d7");
-    gtk_widget_set_css_classes(btn_close, btn_classes);
-    gtk_header_bar_pack_start(GTK_HEADER_BAR(header), btn_close);
-
-    // Add a minimize button
-    btn_mini = gtk_button_new_with_label("-");
-    gtk_widget_set_css_classes(btn_mini, btn_classes);
-    gtk_header_bar_pack_start(GTK_HEADER_BAR(header), btn_mini);
-
-    // Add style for headerbar
-    GtkCssProvider *provider = gtk_css_provider_new();
-    gtk_css_provider_load_from_resource(provider, "/org/gtk/daleclack/style.css");
-    gtk_style_context_add_provider_for_display(gtk_widget_get_display(window),
-                                               GTK_STYLE_PROVIDER(provider),
-                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-    g_signal_connect_swapped(btn_close, "clicked", G_CALLBACK(gtk_window_close), window);
-    g_signal_connect_swapped(btn_mini, "clicked", G_CALLBACK(gtk_window_minimize), window);
+    // Create window
+    MainWin *window = main_win_new(app);
     // show the window
     gtk_window_present(GTK_WINDOW(window));
 }

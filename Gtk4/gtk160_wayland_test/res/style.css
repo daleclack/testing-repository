@@ -1,12 +1,12 @@
 /* A slim headerbar style for widgets */
-.titlebar {
+.mytitlebar {
 	min-height: 10px;
 	margin: 0px;
 }
 
 .ctrl_btn {
 	min-height: 8px;
-	min-width: 8px;
+	min-width: 13px;
 	margin: 0px;
 	font-weight: 900;
 	border-radius: 100%;
