@@ -13,19 +13,23 @@ static void gtkmain(GtkApplication *app, gpointer user_data)
     // Create widgets
     window = gtk_application_window_new(app);
     header = gtk_header_bar_new();
+
+    const char *title_classes[] = {"titlebar", ""};
+    gtk_widget_set_css_classes(header, title_classes);
     gtk_window_set_titlebar(GTK_WINDOW(window), header);
 
     // Initalize headerbar
     gtk_header_bar_set_show_title_buttons(GTK_HEADER_BAR(header), FALSE);
+    const char *btn_classes[] = {"ctrl_btn",""};
 
     // Add a close button
     btn_close = gtk_button_new_with_label("\u00d7");
-    gtk_widget_add_css_class(btn_close, "ctrl_btn");
+    gtk_widget_set_css_classes(btn_close, btn_classes);
     gtk_header_bar_pack_start(GTK_HEADER_BAR(header), btn_close);
 
     // Add a minimize button
     btn_mini = gtk_button_new_with_label("-");
-    gtk_widget_add_css_class(btn_mini, "ctrl_btn");
+    gtk_widget_set_css_classes(btn_mini, btn_classes);
     gtk_header_bar_pack_start(GTK_HEADER_BAR(header), btn_mini);
 
     // Add style for headerbar
