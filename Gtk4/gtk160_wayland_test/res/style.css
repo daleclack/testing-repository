@@ -1,5 +1,11 @@
 
 /* A slim headerbar style for widgets */
 headerbar{
-	min-height:20px;
+	min-height:10px;
+	margin:0px;
+}
+
+button{
+	min-height: 8px;
+	margin: 0px;
 }

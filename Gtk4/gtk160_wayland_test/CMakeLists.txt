@@ -31,7 +31,10 @@ set(SOURCE_FILE src/main.cpp src/MainWin.cpp)
 #Compile Resource
 
 set(RESOURCE_LIST
-    style.css)
+    style.css
+    icons/scalable/status/win_close.svg
+    icons/scalable/status/win_maximize.svg
+    icons/scalable/status/win_minimize.svg)
 
 compile_gresources(RESOURCE_FILE
                    XML_OUT
