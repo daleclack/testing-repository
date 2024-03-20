@@ -26,7 +26,7 @@ link_directories (${GTK_LIBRARY_DIRS})
 # set(PO_DIR ${CMAKE_BINARY_DIR}/po/zh_CN/LC_MESSAGES)
 
 #Source files
-set(SOURCE_FILE src/main.cpp src/MainWin.cpp src/TestWin.cpp)
+set(SOURCE_FILE src/main.cpp src/MainWin.cpp src/TestWin.cpp src/MyTitleBar.cpp)
 
 #Compile Resource
 
