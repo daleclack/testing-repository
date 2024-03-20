@@ -1,4 +1,8 @@
 #include "MainWin.h"
+#include "../json_nlohmann/json.hpp"
+#include <fstream>
+
+using json = nlohmann::json;
 
 static void gtkmain(GtkApplication *app, gpointer user_data)
 {
@@ -15,13 +19,13 @@ static void gtkmain(GtkApplication *app, gpointer user_data)
     gtk_header_bar_set_show_title_buttons(GTK_HEADER_BAR(header), FALSE);
 
     // Add a close button
-    btn_close = gtk_button_new();
-    
+    btn_close = gtk_button_new_with_label("\u00d7");
+    gtk_widget_add_css_class(btn_close, "ctrl_btn");
     gtk_header_bar_pack_start(GTK_HEADER_BAR(header), btn_close);
 
     // Add a minimize button
-    btn_mini = gtk_button_new();
-    
+    btn_mini = gtk_button_new_with_label("-");
+    gtk_widget_add_css_class(btn_mini, "ctrl_btn");
     gtk_header_bar_pack_start(GTK_HEADER_BAR(header), btn_mini);
 
     // Add style for headerbar
@@ -35,19 +39,6 @@ static void gtkmain(GtkApplication *app, gpointer user_data)
     g_signal_connect_swapped(btn_mini, "clicked", G_CALLBACK(gtk_window_minimize), window);
     // show the window
     gtk_window_present(GTK_WINDOW(window));
-
-    // Get Scale factor
-    GdkSurface *surface = gtk_native_get_surface(GTK_NATIVE(window));
-    double scale = gdk_surface_get_scale(surface);
-    g_print("%f\n", scale);
-
-    img_close = gtk_image_new_from_icon_name("win_close");
-    gtk_image_set_pixel_size(GTK_IMAGE(img_close), 12 / scale);
-    gtk_button_set_child(GTK_BUTTON(btn_close), img_close);
-
-    img_mini = gtk_image_new_from_icon_name("win_minimize");
-    gtk_image_set_pixel_size(GTK_IMAGE(img_mini), 12 / scale);
-    gtk_button_set_child(GTK_BUTTON(btn_mini), img_mini);
 }
 
 int main(int argc, char **argv)
