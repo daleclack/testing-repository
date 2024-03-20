@@ -1,8 +1,15 @@
-#include "MainWin.h"
-#include "../json_nlohmann/json.hpp"
-#include <fstream>
+/*
+This is test for wayland support for My GtkUI Project,
+which is started in February 2021,
+before March 19, 2024, the project only tested with X11 Environment.
+(For Wayland DEs, XWayland is used for test, and GDK_BACKEND will be x11)
+However, the window management for My GtkUI 5.x and 7.x are unused for wayland protocol,
+because the minimized window and default window has the same window state varible,
+which cause the issue.
+And this is a try for another idea, which is used for My GtkUI original tests in 2020.
+*/
 
-using json = nlohmann::json;
+#include "MainWin.h"
 
 static void gtkmain(GtkApplication *app, gpointer user_data)
 {
