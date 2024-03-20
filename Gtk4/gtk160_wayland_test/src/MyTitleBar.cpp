@@ -15,6 +15,11 @@ static void ctrl_win_hide(MyTitleBar *self)
     gtk_widget_set_visible(self->ctrl_window, FALSE);
 }
 
+static void ctrl_win_close(MyTitleBar *self)
+{
+    gtk_window_close(GTK_WINDOW(self->ctrl_window));
+}
+
 void my_titlebar_set_window(MyTitleBar *self, GtkWidget *window)
 {
     gtk_window_set_titlebar(GTK_WINDOW(window), self->header);
@@ -50,7 +55,7 @@ static void my_titlebar_init(MyTitleBar *self)
                                                GTK_STYLE_PROVIDER(provider),
                                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-    g_signal_connect_swapped(self->btn_close, "clicked", G_CALLBACK(ctrl_win_hide), self);
+    g_signal_connect_swapped(self->btn_close, "clicked", G_CALLBACK(ctrl_win_close), self);
     g_signal_connect_swapped(self->btn_mini, "clicked", G_CALLBACK(ctrl_win_hide), self);
 }
 
