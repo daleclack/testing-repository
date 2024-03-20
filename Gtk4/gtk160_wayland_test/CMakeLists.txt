@@ -31,7 +31,7 @@ set(SOURCE_FILE src/main.cpp src/MainWin.cpp src/TestWin.cpp src/MyTitleBar.cpp)
 #Compile Resource
 
 set(RESOURCE_LIST
-    style.css
+    title_style.css
     icons/scalable/status/win_close.svg
     icons/scalable/status/win_maximize.svg
     icons/scalable/status/win_minimize.svg)

@@ -45,7 +45,7 @@ static void my_titlebar_init(MyTitleBar *self)
 
     // Add style for headerbar
     GtkCssProvider *provider = gtk_css_provider_new();
-    gtk_css_provider_load_from_resource(provider, "/org/gtk/daleclack/style.css");
+    gtk_css_provider_load_from_resource(provider, "/org/gtk/daleclack/title_style.css");
     gtk_style_context_add_provider_for_display(gtk_widget_get_display(GTK_WIDGET(self->header)),
                                                GTK_STYLE_PROVIDER(provider),
                                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
