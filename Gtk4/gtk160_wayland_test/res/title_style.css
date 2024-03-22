@@ -2,8 +2,8 @@
 .mytitlebar {
 	min-height: 10px;
 	margin: 0px;
-	padding-top: 3px;
-	padding-bottom: 3px;
+	padding-top: 1px;
+	padding-bottom: 1px;
 }
 
 .mytitlebar label{
@@ -16,12 +16,14 @@
 
 .ctrl_btn {
 	min-height: 8px;
-	min-width: 13px;
+	min-width: 14px;
 	margin: 0px;
 	font-weight: 900;
 	border-radius: 100%;
 	padding-top: 0px;
 	padding-bottom: 0px;
+	padding-left: 1px;
+	padding-right: 1px;
 }
 
 .ctrl_btn:hover{

@@ -37,13 +37,15 @@ static void my_titlebar_init(MyTitleBar *self)
     gtk_header_bar_set_show_title_buttons(GTK_HEADER_BAR(self->header), FALSE);
 
     // Add a close button
-    self->btn_close = gtk_button_new_with_label("\u00d7");
+    // self->btn_close = gtk_button_new_with_label("\u00d7");
+    self->btn_close = gtk_button_new_from_icon_name("window-close-symbolic");
     gtk_widget_set_css_classes(self->btn_close, NULL);
     gtk_widget_add_css_class(self->btn_close, "ctrl_btn");
+    gtk_widget_add_css_class(self->btn_close, "close");
     gtk_header_bar_pack_start(GTK_HEADER_BAR(self->header), self->btn_close);
 
     // Add a minimize button
-    self->btn_mini = gtk_button_new_with_label("-");
+    self->btn_mini = gtk_button_new_from_icon_name("window-minimize-symbolic");
     gtk_widget_set_css_classes(self->btn_mini, NULL);
     gtk_widget_add_css_class(self->btn_mini, "ctrl_btn");
     gtk_header_bar_pack_start(GTK_HEADER_BAR(self->header), self->btn_mini);
