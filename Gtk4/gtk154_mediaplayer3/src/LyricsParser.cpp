@@ -123,7 +123,7 @@ static void get_lyrics_line(const char *lyrics, char *lyrics_line1, gboolean res
         return;
     }
 
-    if (lyrics_loaded)
+    if (lyrics_loaded && lyrics)
     {
         // Find the '\n'
         while (lyrics[end_pos] != '\n' && lyrics[end_pos] != '\0')
