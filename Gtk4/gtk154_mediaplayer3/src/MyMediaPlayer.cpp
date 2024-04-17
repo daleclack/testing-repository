@@ -21,6 +21,8 @@ struct _MyMediaPlayer
     GtkWidget *btn_add, *btn_remove;
     GtkWidget *btn_load, *btn_save;
     GtkWidget *list_expander, *list_box;
+    GtkWidget *btn_color;
+    GtkColorDialog *dialog_color;
     GtkWidget *column_view;
     GtkWidget *scrolled_window, *scrolled_lyrics;
     GListStore *music_store;
@@ -638,6 +640,18 @@ static gboolean my_media_player_check_dark_theme(MyMediaPlayer *player)
     return dark_mode;
 }
 
+char *my_media_player_get_color(MyMediaPlayer *player)
+{
+    const GdkRGBA *color_rgba;
+    color_rgba = gtk_color_dialog_button_get_rgba(
+        GTK_COLOR_DIALOG_BUTTON(player->btn_color));
+    char *color_str = g_strdup_printf("#%02X%02X%02X",
+                                      (int)(color_rgba->red * 256),
+                                      (int)(color_rgba->green * 256),
+                                      (int)(color_rgba->blue * 256));
+    return color_str;
+}
+
 static void my_media_player_init(MyMediaPlayer *self)
 {
     // Initalize window
@@ -659,6 +673,8 @@ static void my_media_player_init(MyMediaPlayer *self)
     self->btn_next = player_button_new("media-skip-forward", self->dark_mode);
     self->btn_stop = player_button_new("media-playback-stop", self->dark_mode);
     self->btn_playmode = player_button_new("media-playlist-repeat", self->dark_mode);
+    self->dialog_color = gtk_color_dialog_new();
+    self->btn_color = gtk_color_dialog_button_new(self->dialog_color);
     self->btn_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
     self->btn_add = gtk_button_new_from_icon_name("list-add");
     self->scrolled_window = gtk_scrolled_window_new();
@@ -735,6 +751,7 @@ static void my_media_player_init(MyMediaPlayer *self)
     gtk_box_append(GTK_BOX(self->ctrl_box), self->btn_next);
     gtk_box_append(GTK_BOX(self->ctrl_box), self->btn_stop);
     gtk_box_append(GTK_BOX(self->ctrl_box), self->btn_playmode);
+    gtk_box_append(GTK_BOX(self->ctrl_box), self->btn_color);
     gtk_box_append(GTK_BOX(self->main_box), self->ctrl_box);
     gtk_box_append(GTK_BOX(self->btn_box), self->btn_add);
     gtk_box_append(GTK_BOX(self->btn_box), self->btn_remove);

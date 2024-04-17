@@ -242,6 +242,7 @@ static void lyric_line_process(char *lyrics_line,
 static void lyrics_label_update(gint64 &curr_time, MyMediaPlayer *player)
 {
     char label_string[lyrics_max_length];
+    char *color_str;
 
     // if time is on a lyrics, update the label
     if (curr_time >= lyric_time - 100 && curr_time <= lyric_time + 100 &&
@@ -249,12 +250,14 @@ static void lyrics_label_update(gint64 &curr_time, MyMediaPlayer *player)
         lyric_time == 0)
     {
         // Since a new line is read and time match, load lyrics
+        color_str = my_media_player_get_color(player);
         snprintf(label_string, lyrics_max_length,
-                 "<span color=\"green\" size='12pt'>%s</span>", current_lyrics);
+                 "<span color=\"%s\" size='12pt'>%s</span>", color_str, current_lyrics);
         gtk_label_set_markup(my_media_player_get_lyrics_widget(player),
                              label_string);
         line_read = FALSE;
     }
+    // free(color_str);
 }
 
 // Get lyrics for a specfied time
