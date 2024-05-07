@@ -690,8 +690,8 @@ static void my_media_player_init(MyMediaPlayer *self)
     gtk_widget_set_halign(self->ctrl_box, GTK_ALIGN_CENTER);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(self->scrolled_window),
                                    GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(self->scrolled_window),
-                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER);
+    // gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(self->scrolled_window),
+    //                                GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER);
     gtk_label_set_markup(GTK_LABEL(self->label_lyrics),
                          "<span color=\"red\" size='12pt'>No media file playing!</span>");
     gtk_video_set_autoplay(GTK_VIDEO(self->video), FALSE);
