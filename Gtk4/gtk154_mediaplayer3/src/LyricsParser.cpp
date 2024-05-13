@@ -150,7 +150,7 @@ static void get_lyrics_line(const char *lyrics, char *lyrics_line1, gboolean res
 }
 
 // Update lyrics
-void update_lyrics(MyMediaPlayer *player)
+void load_lyrics(MyMediaPlayer *player)
 {
     // Get position between filename and extension
     int point_pos;
@@ -365,7 +365,7 @@ static gboolean get_media_stream_status(MyMediaPlayer *player,
     if (timestamp == 0 && !lyrics_updated && !lyrics_loaded)
     {
         // Load lyrics when a new media loaded
-        update_lyrics(player);
+        load_lyrics(player);
     }
 
     if (get_media_playing(timestamp, stream, player))

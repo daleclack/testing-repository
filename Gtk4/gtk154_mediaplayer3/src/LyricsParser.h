@@ -6,4 +6,4 @@
 gboolean lyric_time_func(gpointer data);
 
 // Update lyrics file when a music will play
-void update_lyrics(MyMediaPlayer *player);
+void load_lyrics(MyMediaPlayer *player);

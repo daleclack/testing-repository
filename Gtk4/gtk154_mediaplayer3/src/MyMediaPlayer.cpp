@@ -262,7 +262,7 @@ static void load_audio(MyItem *item, MyMediaPlayer *player)
         g_free(label_str);
 
         // Force update lyrics file
-        update_lyrics(player);
+        load_lyrics(player);
 
         // Enable control button
         gtk_widget_set_sensitive(player->btn_play, TRUE);
