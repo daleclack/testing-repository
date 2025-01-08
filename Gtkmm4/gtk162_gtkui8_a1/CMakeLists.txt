@@ -26,28 +26,25 @@ link_directories (${GTKMM4_LIBRARY_DIRS})
 # set(PO_DIR ${CMAKE_BINARY_DIR}/po/zh_CN/LC_MESSAGES)
 
 #Source files
-set(SOURCE_FILE src/main.cc src/MainWin.cc)
+set(SOURCE_FILE src/main.cc src/MainWin.cc src/Window1.cc src/Window2.cc)
 
 #Compile Resource
 
-# set(RESOURCE_LIST
-#     custom_style.css
-#     STRIPBLANKS context_menu.xml
-#     STRIPBLANKS default_menu.xml
-#     STRIPBLANKS prefs_stack.ui
-#     )
+set(RESOURCE_LIST
+    STRIPBLANKS main_menu.xml
+    )
 
-# compile_gresources(RESOURCE_FILE
-#                    XML_OUT
-#                    TYPE EMBED_C
-#                    RESOURCES ${RESOURCE_LIST}
-#                    PREFIX "/org/gtk/daleclack"
-#                    SOURCE_DIR ${PROJECT_SOURCE_DIR}/res)
+compile_gresources(RESOURCE_FILE
+                   XML_OUT
+                   TYPE EMBED_C
+                   RESOURCES ${RESOURCE_LIST}
+                   PREFIX "/org/gtk/daleclack"
+                   SOURCE_DIR ${PROJECT_SOURCE_DIR}/res)
                    
 # Add a custom target to the makefile. Now make builds our resource file.
 # It depends on the output RESOURCE_FILE.
 
-# add_custom_target(resource ALL DEPENDS ${RESOURCE_FILE})
+add_custom_target(resource ALL DEPENDS ${RESOURCE_FILE})
 
 #For win32 platform,use rc resource and .ico icon
 if(WIN32)
@@ -56,12 +53,12 @@ if(WIN32)
 	set_property(SOURCE ../icon.rc APPEND PROPERTY
         OBJECT_DEPENDS ${PROJECT_SOURCE_DIR}/../icon.ico
         )
-	add_executable(${PROJECT_NAME} WIN32 ${app_WINRC} ${SOURCE_FILE})
+	add_executable(${PROJECT_NAME} WIN32 ${app_WINRC} ${SOURCE_FILE} ${RESOURCE_FILE})
     add_custom_command(PRE_BUILD TARGET ${PROJECT_NAME} 
                         COMMAND echo * > ${CMAKE_BINARY_DIR}/.gitignore
                         COMMAND echo **/* > ${CMAKE_BINARY_DIR}/.hgignore)
 else()
-	add_executable(${PROJECT_NAME} ${SOURCE_FILE})
+	add_executable(${PROJECT_NAME} ${SOURCE_FILE} ${RESOURCE_FILE})
     add_custom_command(PRE_BUILD TARGET ${PROJECT_NAME}
                         COMMAND echo \"*\" > ${CMAKE_BINARY_DIR}/.gitignore
                         COMMAND echo \"**/*\" > ${CMAKE_BINARY_DIR}/.hgignore)   

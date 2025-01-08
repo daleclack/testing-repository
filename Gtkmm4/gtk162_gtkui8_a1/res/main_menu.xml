@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <menu id="main_menu">
+        <submenu>
+            <attribute name="label">File</attribute>
+            <item>
+                <attribute name="label">Exit</attribute>
+                <attribute name="action">win.quit</attribute>
+            </item>
+        </submenu>
+        <submenu>
+            <attribute name="label">Window</attribute>
+            <item>
+                <attribute name="label">Go to</attribute>
+            </item>
+        </submenu>
+        <submenu>
+            <attribute name="label">Help</attribute>
+            <item>
+                <attribute name="label">About</attribute>
+                <attribute name="action">win.about</attribute>
+            </item>
+        </submenu>
+    </menu>
+</interface>
