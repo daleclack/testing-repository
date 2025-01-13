@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Frequency set for performace cores
+cpupower -c 0-7 frequency-set -u 4.3GHz
+
+# Frequency set for efficient cores
+cpupower -c 8-23 frequency-set -u 3.6GHz
