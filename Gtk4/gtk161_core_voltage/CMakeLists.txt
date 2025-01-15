@@ -1,5 +1,5 @@
 set(CMAKE_CXX_STANDARD 17)
-cmake_minimum_required(VERSION 3.5.0)
+cmake_minimum_required(VERSION 3.10.0)
 project(gtk161_core_voltage VERSION 1.0.0)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../../GCR_CMake/macros)
@@ -56,14 +56,14 @@ if(WIN32)
         OBJECT_DEPENDS ${PROJECT_SOURCE_DIR}/../icon.ico
         )
 	add_executable(${PROJECT_NAME} WIN32 ${app_WINRC} ${SOURCE_FILE})
-    add_custom_command( TARGET ${PROJECT_NAME} 
-                        COMMAND echo * > ${CMAKE_BINARY_DIR}/.gitignore
-                        COMMAND echo **/* > ${CMAKE_BINARY_DIR}/.hgignore)
+    add_custom_command(PRE_BUILD TARGET ${PROJECT_NAME} 
+                       COMMAND echo * > ${CMAKE_BINARY_DIR}/.gitignore
+                       COMMAND echo **/* > ${CMAKE_BINARY_DIR}/.hgignore)
 else()
 	add_executable(${PROJECT_NAME} ${SOURCE_FILE})
-    add_custom_command( TARGET ${PROJECT_NAME}
-                        COMMAND echo \"*\" > ${CMAKE_BINARY_DIR}/.gitignore
-                        COMMAND echo \"**/*\" > ${CMAKE_BINARY_DIR}/.hgignore)   
+    add_custom_command(PRE_BUILD TARGET ${PROJECT_NAME}
+                       COMMAND echo \"*\" > ${CMAKE_BINARY_DIR}/.gitignore
+                       COMMAND echo \"**/*\" > ${CMAKE_BINARY_DIR}/.hgignore)   
 endif(WIN32)
 
 #Add command to generate .gitignore and .mo files

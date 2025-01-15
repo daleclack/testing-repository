@@ -1,5 +1,6 @@
 #include "MainWin.h"
 #include "CoreVolt.h"
+#include <thread>
 
 struct _MainWin{
     GtkApplicationWindow parent_instance;
