@@ -61,7 +61,7 @@ if(WIN32)
                        COMMAND echo **/* > ${CMAKE_BINARY_DIR}/.hgignore)
 else()
 	add_executable(${PROJECT_NAME} ${SOURCE_FILE})
-    add_custom_command(PRE_BUILD TARGET ${PROJECT_NAME}
+    add_custom_command(POST_BUILD TARGET ${PROJECT_NAME}
                        COMMAND cp ${PROJECT_SOURCE_DIR}/src/core_voltage_gen ${PROJECT_BINARY_DIR}/core_voltage_gen
                        COMMAND chmod +x ${PROJECT_BINARY_DIR}/core_voltage_gen
                        COMMAND echo \"*\" > ${CMAKE_BINARY_DIR}/.gitignore
