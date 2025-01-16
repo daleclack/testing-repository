@@ -11,12 +11,13 @@ struct _MainWin{
 
 G_DEFINE_TYPE(MainWin, main_win, GTK_TYPE_APPLICATION_WINDOW)
 
+static char max_volt[10], curr_volt[10];
+
 gboolean core_volt_func(gpointer data){
     MainWin *self = Main_Win(data);
-    char max_volt[10], curr_volt[10];
 
     // Update core voltage values to the labels
-    get_core_voltage(curr_volt, max_volt);
+    // get_core_voltage(curr_volt, max_volt);
     gtk_label_set_text(GTK_LABEL(self->label_maxvolt), max_volt);
     gtk_label_set_text(GTK_LABEL(self->label_currvolt), curr_volt);
 
@@ -46,6 +47,10 @@ static void main_win_init(MainWin *self){
     gtk_frame_set_child(GTK_FRAME(self->main_frame), self->volt_grid);
     gtk_window_set_child(win, self->main_frame);
     g_timeout_add(1000, core_volt_func, self);
+
+    // Use a thread to update core voltage values every second
+    std::thread t(get_core_voltage, curr_volt, max_volt);
+    t.detach();
 }
 
 static void main_win_class_init(MainWinClass *klass){
