@@ -24,6 +24,16 @@ gboolean core_volt_func(gpointer data){
     return TRUE;
 }
 
+static gboolean main_win_close(GtkWindow *self, gpointer data)
+{
+    // Close the thread
+    stop_voltage_monitoring();
+
+    // Destroy the window
+    gtk_window_destroy(self);
+    return TRUE;
+}
+
 static void main_win_init(MainWin *self){
     GtkWindow *win = GTK_WINDOW(self);
     // Initialize window properties

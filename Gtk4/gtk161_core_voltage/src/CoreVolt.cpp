@@ -3,6 +3,7 @@
 #include <cstdlib>
 
 static double voltage = 0.0;
+static bool volt_enabled = true;
 void get_core_voltage(char *current_voltage_str, char *max_voltage_str)
 {
     double current_voltage = 0.0;
@@ -30,9 +31,19 @@ void get_core_voltage(char *current_voltage_str, char *max_voltage_str)
                     voltage = current_voltage;
                 }
                 snprintf(max_voltage_str, sizeof(max_voltage_str) - 1, "%0.2fV", voltage);
+
+                if (!volt_enabled)
+                {
+                    return;
+                }
             }
         }
         pclose(pipe);
         // return current_voltage;
     }
+}
+
+void stop_voltage_monitoring()
+{
+    volt_enabled = false;
 }
