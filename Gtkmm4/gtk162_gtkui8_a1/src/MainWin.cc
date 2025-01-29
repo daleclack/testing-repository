@@ -12,7 +12,8 @@ MainWin::MainWin()
 
     // Add widgets
     menu_box.set_valign(Gtk::Align::START);
-    menu_box.set_hexpand(true);
+    menu_box.set_halign(Gtk::Align::FILL);
+    // menu_box.set_hexpand(true);
     overlay.add_overlay(menu_box);
 
     dock_box.append(win1_button);
@@ -25,6 +26,7 @@ MainWin::MainWin()
     main_builder = Gtk::Builder::create_from_resource("/org/gtk/daleclack/main_menu.xml");
     auto menu = main_builder->get_object<Gio::MenuModel>("main_menu");
     global_menu.set_menu_model(menu);
+    global_menu.set_hexpand(true);
     menu_box.append(global_menu);
 
     // Set child windows
