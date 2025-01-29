@@ -8,6 +8,10 @@ public:
     Window2();
     ~Window2();
 
+protected:
+    // Override default signal handler:
+    bool on_close_request() override;
+
 private:
     // Child widgets
 

@@ -10,6 +10,7 @@ public:
 
 protected:
     // Override the "destroy" signal
+    bool on_close_request() override;
 
 private:
     // Child widgets
