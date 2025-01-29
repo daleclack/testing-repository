@@ -27,6 +27,10 @@ MainWin::MainWin()
     global_menu.set_menu_model(menu);
     menu_box.append(global_menu);
 
+    // Set child windows
+    win1.set_transient_for(*this);
+    win2.set_transient_for(*this);
+
     // Add signals
     win1_button.signal_clicked().connect(sigc::mem_fun(*this, &MainWin::btnwin1_clicked));
     win2_button.signal_clicked().connect(sigc::mem_fun(*this, &MainWin::btnwin2_clicked));
