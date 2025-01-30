@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
+<cambalache-project version="0.95.0" target_tk="gtk-4.0">
+  <ui filename="mainwin.ui" sha256="aea798bb3086666ec446d39bbb3150d3e2b461fc83b4a1bfc93f8f6e2e5d63a5"/>
+  <ui filename="overlaywin.ui" sha256="3e192da048c41c84258871e74db0f416bb0fa73ca14364fd0b83b5ccdce11adc"/>
+</cambalache-project>
