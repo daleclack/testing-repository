@@ -14,6 +14,7 @@ private:
 
     // Child widgets
     Gtk::Box login_box;
+    Gtk::Picture login_background;
     Gtk::Image login_image;
     Gtk::Label login_label;
     Gtk::Button login_button;

@@ -33,6 +33,7 @@ set(SOURCE_FILE src/main.cc src/MainWin.cc src/MyStack.cc)
 set(RESOURCE_LIST
     STRIPBLANKS cambalache/mainwin.ui
     STRIPBLANKS cambalache/overlaywin.ui
+    winpe.png
     icons/16x16/actions/finder_audio.svg
     icons/16x16/actions/finder-battery.svg
     icons/16x16/actions/finder-computer.svg
