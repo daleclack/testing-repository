@@ -39,42 +39,6 @@
                     <property name="orientation">vertical</property>
                     <property name="vexpand">True</property>
                     <property name="vexpand-set">True</property>
-                    <child>
-                      <object class="GtkButton" id="btnstart">
-                        <property name="child">
-                          <object class="GtkImage">
-                            <property name="pixel-size">48</property>
-                          </object>
-                        </property>
-                        <property name="has-frame">False</property>
-                        <property name="height-request">48</property>
-                        <property name="width-request">48</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkScrolledWindow" id="sw_apps">
-                        <property name="hscrollbar-policy">never</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="orientation">vertical</property>
-                            <property name="vexpand">True</property>
-                            <property name="vexpand-set">True</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="btntrash">
-                        <property name="child">
-                          <object class="GtkImage">
-                            <property name="pixel-size">48</property>
-                          </object>
-                        </property>
-                        <property name="has-frame">False</property>
-                        <property name="height-request">48</property>
-                        <property name="width-request">48</property>
-                      </object>
-                    </child>
                   </object>
                 </child>
                 <child>
