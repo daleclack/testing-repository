@@ -8,6 +8,12 @@ MainWin::MainWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_
     // Get widgets from the builder
     main_overlay = ref_builder->get_widget<Gtk::Overlay>("main_overlay");
     main_background = ref_builder->get_widget<Gtk::Picture>("main_background");
+
+    // Add stack to the window
+    Gtk::Stack *stack = main_stack.m_stack;
+    stack->set_halign(Gtk::Align::FILL);
+    stack->set_valign(Gtk::Align::FILL);
+    main_overlay->add_overlay(*stack);
 }
 
 MainWin *MainWin::create()

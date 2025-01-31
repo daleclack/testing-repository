@@ -13,7 +13,13 @@ public:
 protected:
     
 private:
+    // Child widgets
     Gtk::Overlay *main_overlay;
     Gtk::Picture *main_background;
+
+    // Builder for the window
     Glib::RefPtr<Gtk::Builder> ref_builder;
+
+    // Other widgets
+    MyStack main_stack;
 };

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="48"
+   height="48"
+   viewBox="0 0 48 48"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
+   sodipodi:docname="24game_right.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:snap-smooth-nodes="false"
+     inkscape:zoom="16.543545"
+     inkscape:cx="20.763385"
+     inkscape:cy="22.455888"
+     inkscape:window-width="1850"
+     inkscape:window-height="1045"
+     inkscape:window-x="70"
+     inkscape:window-y="35"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="图层 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="rect23227"
+       style="fill:#1a70e0;stroke-width:0.974598"
+       d="m 5.8524966,5.8374733 c 5.6887584,-5.75987392 31.6953694,-5.80667424 36.2003754,0 5.927763,7.6405197 5.931245,31.2845797 0,36.2849207 -6.955401,5.863759 -31.823657,5.809794 -36.2003754,0 -5.76249505,-7.649316 -5.84401942,-30.367845 0,-36.2849207 z"
+       sodipodi:nodetypes="sssss" />
+    <rect
+       style="fill:#1a70e0;stroke-width:0.999215"
+       id="rect31"
+       width="2"
+       height="48"
+       x="46"
+       y="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:21.3333px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none"
+       x="12.064167"
+       y="31.957142"
+       id="text27175"><tspan
+         sodipodi:role="line"
+         id="tspan27173"
+         x="12.064167"
+         y="31.957142">24</tspan></text>
+  </g>
+</svg>
