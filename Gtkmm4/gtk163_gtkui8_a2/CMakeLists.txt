@@ -26,12 +26,13 @@ link_directories (${GTKMM4_LIBRARY_DIRS})
 # set(PO_DIR ${CMAKE_BINARY_DIR}/po/zh_CN/LC_MESSAGES)
 
 #Source files
-set(SOURCE_FILE src/main.cc src/MainWin.cc src/MyStack.cc)
+set(SOURCE_FILE src/main.cc src/MainWin.cc src/MyStack.cc src/MyPanel.cc)
 
 #Compile Resource
 
 set(RESOURCE_LIST
     STRIPBLANKS cambalache/mainwin.ui
+    STRIPBLANKS cambalache/mypanel.ui
     STRIPBLANKS cambalache/overlaywin.ui
     winpe.png
     icons/16x16/actions/finder_audio.svg

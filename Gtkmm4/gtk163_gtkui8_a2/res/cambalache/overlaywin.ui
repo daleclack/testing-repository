@@ -34,16 +34,8 @@
                 <property name="vexpand">True</property>
                 <property name="vexpand-set">True</property>
                 <child>
-                  <object class="GtkBox" id="main_dock">
-                    <property name="halign">start</property>
+                  <object class="GtkBox" id="panel_area">
                     <property name="orientation">vertical</property>
-                    <property name="vexpand">True</property>
-                    <property name="vexpand-set">True</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkStack" id="apps_stack">
-                    <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="vexpand-set">True</property>
                   </object>

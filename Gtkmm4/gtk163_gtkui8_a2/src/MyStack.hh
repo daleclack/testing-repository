@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gtkmm.h>
+#include "MyPanel.hh"
 
 class MyStack
 {
@@ -19,5 +20,11 @@ private:
     Gtk::Label login_label;
     Gtk::Button login_button;
     Gtk::Overlay *login_page;
-    Gtk::Box *main_page;
+    Gtk::Box *main_page, *panel_area;
+
+    //
+    MyPanel panel1;
+
+    // Signal handlers
+    void login_button_clicked();
 };
