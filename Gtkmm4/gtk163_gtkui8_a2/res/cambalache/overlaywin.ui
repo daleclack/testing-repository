@@ -35,6 +35,7 @@
                 <property name="vexpand-set">True</property>
                 <child>
                   <object class="GtkBox" id="panel_area">
+                    <property name="halign">start</property>
                     <property name="orientation">vertical</property>
                     <property name="vexpand">True</property>
                     <property name="vexpand-set">True</property>

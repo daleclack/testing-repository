@@ -5,6 +5,7 @@ MainWin::MainWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_
       Gtk::ApplicationWindow(cobject),
       ref_builder(ref_builder1)
 {
+    set_default_icon_name("My_GtkUI");
     // Get widgets from the builder
     main_overlay = ref_builder->get_widget<Gtk::Overlay>("main_overlay");
     main_background = ref_builder->get_widget<Gtk::Picture>("main_background");

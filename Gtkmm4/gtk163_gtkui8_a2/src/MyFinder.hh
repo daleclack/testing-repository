@@ -25,4 +25,8 @@ private:
     Gtk::Stack *inner_stack;
 
     sigc::connection timer;
+
+    // Signal handlers
+    bool timeout_func();
+    void btnmenu_clicked();
 };

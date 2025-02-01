@@ -16,7 +16,7 @@ MyFinder::MyFinder()
     inner_switcher->set_stack(*inner_stack); // Note the use of inner_stack, not menu_stack in this line
 
     // Default stack page for debug
-    menu_stack->set_visible_child("page2");
+    // menu_stack->set_visible_child("page2");
 
     // Update button icons
     btn_audio.set_has_frame(false);
@@ -46,4 +46,36 @@ MyFinder::MyFinder()
     menu_box.append(btn_wifi);
     menu_box.append(btn_time);
     menu_box.append(btn_menu);
+
+    // Add timer and other signals
+    timer = Glib::signal_timeout().connect(sigc::mem_fun(*this, &MyFinder::timeout_func), 500);
+    btn_menu.signal_clicked().connect(sigc::mem_fun(*this, &MyFinder::btnmenu_clicked));
+}
+
+void MyFinder::btnmenu_clicked()
+{
+    // Change the visiblity of the menu
+    auto page_name = menu_stack->get_visible_child_name();
+    if (page_name == "page1")
+    {
+        menu_stack->set_visible_child("page2");
+    }else{
+        menu_stack->set_visible_child("page1");
+    }
+}
+
+bool MyFinder::timeout_func()
+{
+    time_t rawtime;
+    struct tm * timeinfo;
+    char buffer[80];
+
+    // Get current time
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+
+    // Convert time to string
+    strftime(buffer, 80, "%Y/%m/%d %H:%M:%S", timeinfo);
+    btn_time.set_label(buffer);
+    return true;
 }
