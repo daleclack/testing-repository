@@ -21,7 +21,8 @@ private:
     Gtk::Label login_label;
     Gtk::Button login_button;
     Gtk::Overlay *login_page;
-    Gtk::Box *main_page, *panel_area, *menu_area;
+    Gtk::Box *main_page, *panel_area,
+        *topmenu_area, *menu_area;
 
     // The Left Panel
     MyPanel panel1;

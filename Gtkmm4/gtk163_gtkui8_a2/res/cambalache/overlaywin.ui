@@ -23,7 +23,7 @@
             <property name="vexpand">True</property>
             <property name="vexpand-set">True</property>
             <child>
-              <object class="GtkBox" id="menu_box">
+              <object class="GtkBox" id="topmenu_area">
                 <property name="valign">start</property>
               </object>
             </child>
