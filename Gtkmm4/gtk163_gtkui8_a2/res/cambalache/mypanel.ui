@@ -58,12 +58,13 @@
             <property name="child">
               <object class="GtkBox"/>
             </property>
+            <property name="name">page1</property>
           </object>
         </child>
         <child>
           <object class="GtkStackPage">
             <property name="child">
-              <object class="GtkScrolledWindow">
+              <object class="GtkScrolledWindow" id="apps_sw">
                 <property name="child">
                   <object class="GtkGrid">
                     <child>
@@ -133,6 +134,7 @@
                 <property name="has-frame">True</property>
               </object>
             </property>
+            <property name="name">page2</property>
           </object>
         </child>
       </object>

@@ -13,6 +13,7 @@ MyStack::MyStack()
     login_page = m_builder->get_widget<Gtk::Overlay>("login_page");
     main_page = m_builder->get_widget<Gtk::Box>("main_page");
     panel_area = m_builder->get_widget<Gtk::Box>("panel_area");
+    menu_area = m_builder->get_widget<Gtk::Box>("menu_area");
 
     // Add background image for login page
     login_background.set_resource("/org/gtk/daleclack/winpe.png");
@@ -34,6 +35,9 @@ MyStack::MyStack()
 
     //  Add main page widgets
     panel_area->append(*panel1.panel_box);
+
+    // Add menu page widgets
+    menu_area->append(*finder1.menu_stack);
 
     // Connect signals
     login_button.signal_clicked().connect(sigc::mem_fun(*this, &MyStack::login_button_clicked));

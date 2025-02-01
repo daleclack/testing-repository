@@ -2,6 +2,7 @@
 
 #include <gtkmm.h>
 #include "MyPanel.hh"
+#include "MyFinder.hh"
 
 class MyStack
 {
@@ -20,10 +21,13 @@ private:
     Gtk::Label login_label;
     Gtk::Button login_button;
     Gtk::Overlay *login_page;
-    Gtk::Box *main_page, *panel_area;
+    Gtk::Box *main_page, *panel_area, *menu_area;
 
-    //
+    // The Left Panel
     MyPanel panel1;
+
+    // The Main Menu
+    MyFinder finder1;
 
     // Signal handlers
     void login_button_clicked();

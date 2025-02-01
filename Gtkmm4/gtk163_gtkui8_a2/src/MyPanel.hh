@@ -10,4 +10,11 @@ public:
 
 private:
     Glib::RefPtr<Gtk::Builder> builder;
+
+    // Child widgets
+    Gtk::Button *btnstart;
+    Gtk::Stack *apps_stack;
+
+    // Signal handlers
+    void btnstart_clicked();
 };

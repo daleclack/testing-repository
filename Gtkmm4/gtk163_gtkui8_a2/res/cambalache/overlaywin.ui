@@ -51,11 +51,8 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkStack" id="menu_stack">
-                    <property name="hexpand">True</property>
-                    <property name="hexpand-set">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="vexpand-set">True</property>
+                  <object class="GtkBox" id="menu_area">
+                    <property name="orientation">vertical</property>
                   </object>
                 </child>
               </object>
