@@ -38,13 +38,12 @@ AppMenu::AppMenu()
     inner_scroll.set_has_frame(false);
 
     // Update the outer menu
-    // auto app_list = Gio::AppInfo::get_all();
-    // for (int i = 0; i < app_list.size(); ++i)
-    // {
-    //     Glib::ustring app_name = app_list[i]->get_display_name();
-    //     std::cout << app_name << std::endl;
-    //     ext_list->append(AppItemExt::create(app_name));
-    // }
+    ext_list = Gio::ListStore<Gio::AppInfo>::create();
+    auto app_list = Gio::AppInfo::get_all();
+    for (int i = 0; i < app_list.size(); ++i)
+    {
+        ext_list->append(app_list[i]);
+    }
     ext_selection = Gtk::NoSelection::create(ext_list);
     ext_factory = Gtk::SignalListItemFactory::create();
     ext_factory->signal_setup().connect(sigc::mem_fun(*this, &AppMenu::ext_setup));
@@ -66,6 +65,9 @@ AppMenu::AppMenu()
     menu_stack.add(ext_scroll, "External", "External");
     menu_switcher.set_stack(menu_stack);
     menu_switcher.set_halign(Gtk::Align::CENTER);
+
+    // Connect signals
+    // ext_view.signal_activate().connect(sigc::mem_fun(*this, &AppMenu::ext_activate));
 
     append(menu_stack);
     append(menu_switcher);
@@ -92,6 +94,8 @@ void AppMenu::inner_bind(const Glib::RefPtr<Gtk::ListItem> &item)
     auto item1 = inner_list->get_item(position);
     auto button = dynamic_cast<AppButton *>(item->get_child());
     button->set_name_icon(item1->get_name(), item1->get_icon());
+    button->signal_clicked().connect(sigc::bind(
+        sigc::mem_fun(*this, &AppMenu::button_clicked), button));
 }
 
 void AppMenu::ext_setup(const Glib::RefPtr<Gtk::ListItem> &item)
@@ -112,5 +116,12 @@ void AppMenu::ext_bind(const Glib::RefPtr<Gtk::ListItem> &item)
     // Get the item and update the button
     auto item1 = ext_list->get_item(position);
     auto button = dynamic_cast<AppButton *>(item->get_child());
-    // button->set_name_icon(item1->get_name(), item1->get_icon());
+    button->set_name_icon(item1->get_name(), item1->get_icon());
+    button->signal_clicked().connect(sigc::bind(
+        sigc::mem_fun(*this, &AppMenu::button_clicked), button));
+}
+
+void AppMenu::button_clicked(Gtk::Button *btn)
+{
+    std::cout << "Clicked" << std::endl;
 }

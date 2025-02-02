@@ -32,32 +32,6 @@ private:
     guint app_id;
 };
 
-// List Item for extension apps
-class AppItemExt : public Glib::Object
-{
-public:
-    // Bind properties
-    AppItemExt(Glib::ustring name)
-    {
-        app_name = name;
-        // app_icon = icon;
-    }
-    // Create a new item
-    static Glib::RefPtr<AppItemExt> create(Glib::ustring name)
-    {
-        return Glib::make_refptr_for_instance<AppItemExt>(new AppItemExt(name));
-    }
-
-    // Getters
-    Glib::ustring get_name() { return app_name; }
-    Glib::RefPtr<Gio::Icon> get_icon() { return app_icon; }
-
-private:
-    // Properties
-    Glib::ustring app_name;
-    Glib::RefPtr<Gio::Icon> app_icon;
-};
-
 // Button to renderer the apps
 class AppButton : public Gtk::Button
 {
@@ -68,6 +42,9 @@ public:
         // Initalize the child widgets
         app_icon.set_pixel_size(48);
         set_has_frame(false);
+        app_name.set_justify(Gtk::Justification::CENTER);
+        app_name.set_width_chars(13);
+        app_name.set_ellipsize(Pango::EllipsizeMode::END);
 
         // Add image and label to the button
         app_box.append(app_icon);
@@ -86,7 +63,14 @@ public:
     void set_name_icon(Glib::ustring name, Glib::RefPtr<Gio::Icon> icon)
     {
         // Use the C API due to the api leakage in gtkmm 4
-        gtk_image_set_from_gicon(app_icon.gobj(), icon->gobj());
+        if (icon) // Some icon is not valid, use default icon
+        {
+            gtk_image_set_from_gicon(app_icon.gobj(), icon->gobj());
+        }
+        else
+        {
+            app_icon.set_from_icon_name("application-default-icon");
+        }
         app_name.set_label(name);
     }
 
@@ -120,11 +104,12 @@ private:
 
     // List for the external apps
     std::vector<Glib::RefPtr<Gio::AppInfo>> app_list;
-    Glib::RefPtr<Gio::ListStore<AppItemExt>> ext_list;
+    Glib::RefPtr<Gio::ListStore<Gio::AppInfo>> ext_list;
     Glib::RefPtr<Gtk::SignalListItemFactory> ext_factory;
     Glib::RefPtr<Gtk::NoSelection> ext_selection;
 
     // Signal handlers for the external view
     void ext_setup(const Glib::RefPtr<Gtk::ListItem> &item);
     void ext_bind(const Glib::RefPtr<Gtk::ListItem> &item);
+    void button_clicked(Gtk::Button *btn);
 };
