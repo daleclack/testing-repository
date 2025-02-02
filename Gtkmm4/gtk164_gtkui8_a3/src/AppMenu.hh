@@ -74,11 +74,33 @@ public:
         app_name.set_label(name);
     }
 
+    // The external app should has its app info and set to external
+    void set_app_info(Glib::RefPtr<Gio::AppInfo> info)
+    {
+        app_info = info;
+        internal = false;
+    }
+
+    // The internal app should has its id and set to internal
+    void set_app_id(guint id)
+    {
+        app_id = id;
+        internal = true;
+    }
+
+    // Getters
+    Glib::RefPtr<Gio::AppInfo> get_app_info() { return app_info; }
+    bool is_internal() { return internal; }
+    guint get_app_id() { return app_id; }
+
 private:
     // Child widgets
     Gtk::Image app_icon;
     Gtk::Label app_name;
     Gtk::Box app_box;
+    bool internal;
+    guint app_id;
+    Glib::RefPtr<Gio::AppInfo> app_info;
 };
 
 class AppMenu : public Gtk::Box
@@ -111,5 +133,5 @@ private:
     // Signal handlers for the external view
     void ext_setup(const Glib::RefPtr<Gtk::ListItem> &item);
     void ext_bind(const Glib::RefPtr<Gtk::ListItem> &item);
-    void button_clicked(Gtk::Button *btn);
+    void button_clicked(AppButton *btn);
 };

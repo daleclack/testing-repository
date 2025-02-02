@@ -96,6 +96,7 @@ void AppMenu::inner_bind(const Glib::RefPtr<Gtk::ListItem> &item)
     button->set_name_icon(item1->get_name(), item1->get_icon());
     button->signal_clicked().connect(sigc::bind(
         sigc::mem_fun(*this, &AppMenu::button_clicked), button));
+    button->set_app_id(position);
 }
 
 void AppMenu::ext_setup(const Glib::RefPtr<Gtk::ListItem> &item)
@@ -119,9 +120,16 @@ void AppMenu::ext_bind(const Glib::RefPtr<Gtk::ListItem> &item)
     button->set_name_icon(item1->get_name(), item1->get_icon());
     button->signal_clicked().connect(sigc::bind(
         sigc::mem_fun(*this, &AppMenu::button_clicked), button));
+    button->set_app_info(item1);
 }
 
-void AppMenu::button_clicked(Gtk::Button *btn)
+void AppMenu::button_clicked(AppButton *btn)
 {
-    std::cout << "Clicked" << std::endl;
+    if (btn->is_internal())
+    {
+        std::cout << "Internal App: " << btn->get_app_id() << std::endl;
+    }else{
+        auto app_info = btn->get_app_info();
+        app_info->launch(NULL);
+    }
 }
