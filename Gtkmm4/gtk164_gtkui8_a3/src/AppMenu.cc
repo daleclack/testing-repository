@@ -2,6 +2,9 @@
 
 AppMenu::AppMenu()
 {
+    // Initalize the main box
+    set_orientation(Gtk::Orientation::VERTICAL);
+
     // Update the inner menu
     inner_list = Gio::ListStore<AppItemIn>::create();
     inner_list->append(AppItemIn::create("24Game", "24game", 0));
@@ -26,15 +29,44 @@ AppMenu::AppMenu()
     // inner_view.set_max_columns(5);
     inner_view.set_min_columns(3);
 
-    // Update the outer menu
-
-    // Add inner grid view to the box
+    // Add inner grid view to the scrolled window
     inner_scroll.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC);
     inner_scroll.set_hexpand(true);
     inner_scroll.set_vexpand(true);
     inner_scroll.set_child(inner_view);
     inner_scroll.set_has_frame(false);
-    append(inner_scroll);
+
+    // Update the outer menu
+    // auto app_list = Gio::AppInfo::get_all();
+    // for (int i = 0; i < app_list.size(); ++i)
+    // {
+    //     auto app_info = app_list[i].get();
+    //     ext_list->append(Glib::make_refptr_for_instance(app_info));
+    // }
+    ext_selection = Gtk::NoSelection::create(ext_list);
+    ext_factory = Gtk::SignalListItemFactory::create();
+    ext_factory->signal_setup().connect(sigc::mem_fun(*this, &AppMenu::ext_setup));
+    ext_factory->signal_bind().connect(sigc::mem_fun(*this, &AppMenu::ext_bind));
+    ext_view.set_model(ext_selection);
+    ext_view.set_factory(ext_factory);
+    ext_view.set_min_columns(3);
+
+    // Add outer grid view to the scrolled window
+    ext_scroll.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC);
+    ext_scroll.set_hexpand(true);
+    ext_scroll.set_vexpand(true);
+    ext_scroll.set_child(ext_view);
+    ext_scroll.set_has_frame(false);
+
+    // Add a Gtk::Stack to show the to pages
+    menu_stack.set_transition_type(Gtk::StackTransitionType::SLIDE_LEFT_RIGHT);
+    menu_stack.add(inner_scroll, "Integrated", "Integrated");
+    menu_stack.add(ext_scroll, "External", "External");
+    menu_switcher.set_stack(menu_stack);
+    menu_switcher.set_halign(Gtk::Align::CENTER);
+
+    append(menu_stack);
+    append(menu_switcher);
     set_hexpand(true);
     set_vexpand(true);
 }
@@ -54,8 +86,29 @@ void AppMenu::inner_bind(const Glib::RefPtr<Gtk::ListItem> &item)
         return;
     }
 
-    // Get the item
+    // Get the item and update the button
     auto item1 = inner_list->get_item(position);
+    auto button = dynamic_cast<AppButton *>(item->get_child());
+    button->set_name_icon(item1->get_name(), item1->get_icon());
+}
+
+void AppMenu::ext_setup(const Glib::RefPtr<Gtk::ListItem> &item)
+{
+    auto button = Gtk::make_managed<AppButton>();
+    item->set_child(*button);
+}
+
+void AppMenu::ext_bind(const Glib::RefPtr<Gtk::ListItem> &item)
+{
+    // Get the position of the item
+    auto position = item->get_position();
+    if (position == GTK_INVALID_LIST_POSITION)
+    {
+        return;
+    }
+
+    // Get the item and update the button
+    auto item1 = ext_list->get_item(position);
     auto button = dynamic_cast<AppButton *>(item->get_child());
     button->set_name_icon(item1->get_name(), item1->get_icon());
 }

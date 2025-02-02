@@ -32,11 +32,6 @@ private:
     guint app_id;
 };
 
-// List item for external app
-class AppItemExt : public Glib::Object
-{
-};
-
 // Button to renderer the apps
 class AppButton : public Gtk::Button
 {
@@ -54,9 +49,18 @@ public:
         set_child(app_box);
     }
 
+    // Set the name and icon of the button, use icon name to set the icon
     void set_name_icon(Glib::ustring name, Glib::ustring icon)
     {
         app_icon.set_from_icon_name(icon);
+        app_name.set_label(name);
+    }
+
+    // Set the name and icon of the button, use Gio::Icon to set the icon
+    void set_name_icon(Glib::ustring name, Glib::RefPtr<Gio::Icon> icon)
+    {
+        // Use the C API due to the api leakage in gtkmm 4
+        gtk_image_set_from_gicon(app_icon.gobj(), icon->gobj());
         app_name.set_label(name);
     }
 
@@ -89,5 +93,12 @@ private:
     void inner_bind(const Glib::RefPtr<Gtk::ListItem> &item);
 
     // List for the external apps
-    Glib::RefPtr<Gio::ListStore<AppItemExt>> ext_list;
+    std::vector<Glib::RefPtr<Gio::AppInfo>> app_list;
+    Glib::RefPtr<Gio::ListStore<Gio::AppInfo>> ext_list;
+    Glib::RefPtr<Gtk::SignalListItemFactory> ext_factory;
+    Glib::RefPtr<Gtk::NoSelection> ext_selection;
+
+    // Signal handlers for the external view
+    void ext_setup(const Glib::RefPtr<Gtk::ListItem> &item);
+    void ext_bind(const Glib::RefPtr<Gtk::ListItem> &item);
 };
