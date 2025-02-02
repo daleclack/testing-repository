@@ -14,6 +14,8 @@ set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
 include_directories(.)
 include_directories(..)
+include_directories(src/core)
+include_directories(src/ui)
 
 #Find PkgConfig to use gtkmm
 find_package (PkgConfig REQUIRED)
@@ -26,7 +28,8 @@ link_directories (${GTKMM4_LIBRARY_DIRS})
 # set(PO_DIR ${CMAKE_BINARY_DIR}/po/zh_CN/LC_MESSAGES)
 
 #Source files
-set(SOURCE_FILE src/main.cc src/MainWin.cc src/MyStack.cc src/MyPanel.cc src/MyFinder.cc src/AppMenu.cc)
+set(SOURCE_FILE src/core/main.cc src/core/MainWin.cc src/core/MyStack.cc 
+    src/ui/MyPanel.cc src/ui/MyFinder.cc src/ui/AppMenu.cc)
 
 #Compile Resource
 
