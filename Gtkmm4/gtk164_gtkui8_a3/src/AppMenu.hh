@@ -32,6 +32,32 @@ private:
     guint app_id;
 };
 
+// List Item for extension apps
+class AppItemExt : public Glib::Object
+{
+public:
+    // Bind properties
+    AppItemExt(Glib::ustring name)
+    {
+        app_name = name;
+        // app_icon = icon;
+    }
+    // Create a new item
+    static Glib::RefPtr<AppItemExt> create(Glib::ustring name)
+    {
+        return Glib::make_refptr_for_instance<AppItemExt>(new AppItemExt(name));
+    }
+
+    // Getters
+    Glib::ustring get_name() { return app_name; }
+    Glib::RefPtr<Gio::Icon> get_icon() { return app_icon; }
+
+private:
+    // Properties
+    Glib::ustring app_name;
+    Glib::RefPtr<Gio::Icon> app_icon;
+};
+
 // Button to renderer the apps
 class AppButton : public Gtk::Button
 {
@@ -94,7 +120,7 @@ private:
 
     // List for the external apps
     std::vector<Glib::RefPtr<Gio::AppInfo>> app_list;
-    Glib::RefPtr<Gio::ListStore<Gio::AppInfo>> ext_list;
+    Glib::RefPtr<Gio::ListStore<AppItemExt>> ext_list;
     Glib::RefPtr<Gtk::SignalListItemFactory> ext_factory;
     Glib::RefPtr<Gtk::NoSelection> ext_selection;
 

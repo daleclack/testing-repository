@@ -1,4 +1,5 @@
 #include "AppMenu.hh"
+#include <iostream>
 
 AppMenu::AppMenu()
 {
@@ -40,8 +41,9 @@ AppMenu::AppMenu()
     // auto app_list = Gio::AppInfo::get_all();
     // for (int i = 0; i < app_list.size(); ++i)
     // {
-    //     auto app_info = app_list[i].get();
-    //     ext_list->append(Glib::make_refptr_for_instance(app_info));
+    //     Glib::ustring app_name = app_list[i]->get_display_name();
+    //     std::cout << app_name << std::endl;
+    //     ext_list->append(AppItemExt::create(app_name));
     // }
     ext_selection = Gtk::NoSelection::create(ext_list);
     ext_factory = Gtk::SignalListItemFactory::create();
@@ -110,5 +112,5 @@ void AppMenu::ext_bind(const Glib::RefPtr<Gtk::ListItem> &item)
     // Get the item and update the button
     auto item1 = ext_list->get_item(position);
     auto button = dynamic_cast<AppButton *>(item->get_child());
-    button->set_name_icon(item1->get_name(), item1->get_icon());
+    // button->set_name_icon(item1->get_name(), item1->get_icon());
 }
