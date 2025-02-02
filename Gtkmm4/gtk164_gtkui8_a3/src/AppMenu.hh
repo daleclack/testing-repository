@@ -37,6 +37,36 @@ class AppItemExt : public Glib::Object
 {
 };
 
+// Button to renderer the apps
+class AppButton : public Gtk::Button
+{
+public:
+    AppButton()
+        : app_box(Gtk::Orientation::VERTICAL, 5)
+    {
+        // Initalize the child widgets
+        app_icon.set_pixel_size(48);
+        set_has_frame(false);
+
+        // Add image and label to the button
+        app_box.append(app_icon);
+        app_box.append(app_name);
+        set_child(app_box);
+    }
+
+    void set_name_icon(Glib::ustring name, Glib::ustring icon)
+    {
+        app_icon.set_from_icon_name(icon);
+        app_name.set_label(name);
+    }
+
+private:
+    // Child widgets
+    Gtk::Image app_icon;
+    Gtk::Label app_name;
+    Gtk::Box app_box;
+};
+
 class AppMenu : public Gtk::Box
 {
 public:
@@ -47,9 +77,16 @@ private:
     Gtk::GridView inner_view, ext_view;
     Gtk::Stack menu_stack;
     Gtk::StackSwitcher menu_switcher;
+    Gtk::ScrolledWindow inner_scroll, ext_scroll;
 
     // List for the inner apps
     Glib::RefPtr<Gio::ListStore<AppItemIn>> inner_list;
+    Glib::RefPtr<Gtk::SignalListItemFactory> inner_factory;
+    Glib::RefPtr<Gtk::NoSelection> inner_selection;
+
+    // Signal handlers for the inner view
+    void inner_setup(const Glib::RefPtr<Gtk::ListItem> &item);
+    void inner_bind(const Glib::RefPtr<Gtk::ListItem> &item);
 
     // List for the external apps
     Glib::RefPtr<Gio::ListStore<AppItemExt>> ext_list;

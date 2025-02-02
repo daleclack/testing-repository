@@ -3,6 +3,6 @@
 <cambalache-project version="0.95.0" target_tk="gtk-4.0">
   <ui filename="mainwin.ui" sha256="207f304707e35a78350d2de45ca2da10ff8ef8b4f06256e292aca59981affe94"/>
   <ui filename="overlaywin.ui" sha256="d7e7651cefd2c6e9ac146c072d03e4d9c26969236834ef4a0a601ec3a5012607"/>
-  <ui filename="mypanel.ui" sha256="a633e21362963468746c992f4f9b51111bbf042ad71fb0b9ad664b93de05718c"/>
+  <ui filename="mypanel.ui" sha256="a869fecce1e7ebc65fdc9aaa2c89a384db18aac8692711ec4772cc3650f4ee17"/>
   <ui filename="findermenu.ui" sha256="002f63618415880d634f25e9184d881f8d7d09e7bded77475c1a6c65fddac7fe"/>
 </cambalache-project>

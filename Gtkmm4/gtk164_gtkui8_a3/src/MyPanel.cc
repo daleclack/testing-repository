@@ -7,9 +7,13 @@ MyPanel::MyPanel()
     panel_box = builder->get_widget<Gtk::Box>("panel_box");
     btnstart = builder->get_widget<Gtk::Button>("btnstart");
     apps_stack = builder->get_widget<Gtk::Stack>("apps_stack");
+    apps_box = builder->get_widget<Gtk::Box>("apps_box");
 
     // Connect signal handlers
     btnstart->signal_clicked().connect(sigc::mem_fun(*this, &MyPanel::btnstart_clicked));
+
+    // Add apps view
+    apps_box->append(app_menu);
 }
 
 void MyPanel::btnstart_clicked()
@@ -19,7 +23,9 @@ void MyPanel::btnstart_clicked()
     if (child_name == "page1")
     {
         apps_stack->set_visible_child("page2");
-    }else{
+    }
+    else
+    {
         apps_stack->set_visible_child("page1");
     }
 }
