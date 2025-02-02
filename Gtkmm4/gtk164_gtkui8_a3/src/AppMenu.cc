@@ -33,6 +33,7 @@ AppMenu::AppMenu()
     inner_scroll.set_hexpand(true);
     inner_scroll.set_vexpand(true);
     inner_scroll.set_child(inner_view);
+    inner_scroll.set_has_frame(false);
     append(inner_scroll);
     set_hexpand(true);
     set_vexpand(true);

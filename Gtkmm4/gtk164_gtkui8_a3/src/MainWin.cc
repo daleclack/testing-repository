@@ -10,6 +10,12 @@ MainWin::MainWin(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &ref_
     main_overlay = ref_builder->get_widget<Gtk::Overlay>("main_overlay");
     main_background = ref_builder->get_widget<Gtk::Picture>("main_background");
 
+    // Default background image
+    main_background->set_keep_aspect_ratio(false);
+    main_background->set_hexpand(true);
+    main_background->set_vexpand(true);
+    main_background->set_resource("/org/gtk/daleclack/shizuku.png");
+
     // Add stack to the window
     Gtk::Stack *stack = main_stack.m_stack;
     stack->set_halign(Gtk::Align::FILL);

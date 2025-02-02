@@ -35,6 +35,11 @@ set(RESOURCE_LIST
     STRIPBLANKS cambalache/mainwin.ui
     STRIPBLANKS cambalache/mypanel.ui
     STRIPBLANKS cambalache/overlaywin.ui
+    c182rg_1.png
+    c182rg_2.png
+    final_approach.png
+    img7.png
+    shizuku.png
     winpe.png
     icons/16x16/actions/finder_audio.svg
     icons/16x16/actions/finder-battery.svg
