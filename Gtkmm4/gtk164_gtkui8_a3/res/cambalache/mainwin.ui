@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.95.0 -->
+<interface>
+  <!-- interface-name mainwin.ui -->
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkApplicationWindow" id="mainwin">
+    <property name="default-height">576</property>
+    <property name="default-width">1024</property>
+    <property name="title">My GtkUI Technical Alpha</property>
+    <child>
+      <object class="GtkOverlay" id="main_overlay">
+        <child>
+          <object class="GtkPicture" id="main_background"/>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

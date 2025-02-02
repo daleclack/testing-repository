@@ -1,0 +1,371 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.95.0 -->
+<interface>
+  <!-- interface-name mypanel.ui -->
+  <requires lib="gtk" version="4.12"/>
+  <object class="GtkBox" id="panel_box">
+    <child>
+      <object class="GtkBox" id="dock_box">
+        <property name="halign">start</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkButton" id="btnstart">
+            <property name="child">
+              <object class="GtkImage">
+                <property name="icon-name">My_GtkUI</property>
+                <property name="pixel-size">48</property>
+              </object>
+            </property>
+            <property name="has-frame">False</property>
+            <property name="height-request">48</property>
+            <property name="width-request">48</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="sw_apps">
+            <property name="hscrollbar-policy">never</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="vexpand">True</property>
+                <property name="vexpand-set">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="btntrash">
+            <property name="child">
+              <object class="GtkImage">
+                <property name="icon-name">my_trash</property>
+                <property name="pixel-size">48</property>
+              </object>
+            </property>
+            <property name="has-frame">False</property>
+            <property name="height-request">48</property>
+            <property name="width-request">48</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkStack" id="apps_stack">
+        <property name="hexpand">True</property>
+        <property name="transition-type">crossfade</property>
+        <property name="vexpand">True</property>
+        <property name="vexpand-set">True</property>
+        <child>
+          <object class="GtkStackPage">
+            <property name="child">
+              <object class="GtkBox"/>
+            </property>
+            <property name="name">page1</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage">
+            <property name="child">
+              <object class="GtkScrolledWindow" id="apps_sw">
+                <property name="child">
+                  <object class="GtkGrid">
+                    <property name="column-homogeneous">True</property>
+                    <child>
+                      <object class="GtkButton" id="pad24game">
+                        <property name="child">
+                          <object class="GtkBox">
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon-name">24game</property>
+                                <property name="pixel-size">48</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="justify">center</property>
+                                <property name="label">24game</property>
+                              </object>
+                            </child>
+                          </object>
+                        </property>
+                        <property name="has-frame">False</property>
+                        <property name="height-request">48</property>
+                        <property name="width-request">48</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="padabout">
+                        <property name="has-frame">False</property>
+                        <property name="height-request">48</property>
+                        <property name="width-request">48</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon-name">btnabout</property>
+                                <property name="pixel-size">48</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="justify">center</property>
+                                <property name="label">about</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="column-span">1</property>
+                          <property name="row">0</property>
+                          <property name="row-span">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="padaud">
+                        <property name="has-frame">False</property>
+                        <property name="height-request">48</property>
+                        <property name="width-request">48</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon-name">audacious_whitesur</property>
+                                <property name="pixel-size">48</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="justify">center</property>
+                                <property name="label">audacious</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <layout>
+                          <property name="column">2</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="padcalc">
+                        <property name="has-frame">False</property>
+                        <property name="height-request">48</property>
+                        <property name="width-request">48</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon-name">calcapp</property>
+                                <property name="pixel-size">48</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="justify">center</property>
+                                <property name="label">Calculator</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <layout>
+                          <property name="column">3</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="paddraw">
+                        <property name="has-frame">False</property>
+                        <property name="height-request">48</property>
+                        <property name="width-request">48</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon-name">drawing_app</property>
+                                <property name="pixel-size">48</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="justify">center</property>
+                                <property name="label">Drawing</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <layout>
+                          <property name="column">4</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="padfinder">
+                        <property name="has-frame">False</property>
+                        <property name="height-request">48</property>
+                        <property name="width-request">48</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="has-frame">False</property>
+                        <property name="height-request">48</property>
+                        <property name="width-request">48</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="has-frame">False</property>
+                        <property name="height-request">48</property>
+                        <property name="width-request">48</property>
+                        <layout>
+                          <property name="column">2</property>
+                          <property name="row">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="has-frame">False</property>
+                        <property name="height-request">48</property>
+                        <property name="width-request">48</property>
+                        <layout>
+                          <property name="column">3</property>
+                          <property name="row">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="has-frame">False</property>
+                        <property name="height-request">48</property>
+                        <property name="width-request">48</property>
+                        <layout>
+                          <property name="column">4</property>
+                          <property name="row">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="has-frame">False</property>
+                        <property name="height-request">48</property>
+                        <property name="width-request">48</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="has-frame">False</property>
+                        <property name="height-request">48</property>
+                        <property name="width-request">48</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="has-frame">False</property>
+                        <property name="height-request">48</property>
+                        <property name="width-request">48</property>
+                        <layout>
+                          <property name="column">2</property>
+                          <property name="row">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="has-frame">False</property>
+                        <property name="height-request">48</property>
+                        <property name="width-request">48</property>
+                        <layout>
+                          <property name="column">3</property>
+                          <property name="row">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="has-frame">False</property>
+                        <property name="height-request">48</property>
+                        <property name="width-request">48</property>
+                        <layout>
+                          <property name="column">4</property>
+                          <property name="row">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="has-frame">False</property>
+                        <property name="height-request">48</property>
+                        <property name="width-request">48</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">3</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="has-frame">False</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">3</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="has-frame">False</property>
+                        <property name="height-request">48</property>
+                        <property name="width-request">48</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="column-span">1</property>
+                          <property name="row">3</property>
+                          <property name="row-span">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+                <property name="has-frame">True</property>
+                <property name="hexpand">True</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="vexpand">True</property>
+              </object>
+            </property>
+            <property name="name">page2</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
