@@ -10,10 +10,10 @@ public:
     FileBtn(const Glib::ustring &label)
     {
         set_label(label);
+        set_has_frame(false);
     }
 
     Glib::ustring file_path;
-    guint id;
 };
 
 class FileWindow : public Gtk::Window
@@ -81,6 +81,6 @@ private:
     // Signal handlers
     void btnadd_clicked();
     void btnup_clicked();
-    void btnhome_clicked();
+    void placebtn_clicked(FileBtn *btn);
     void btndel_clicked();
 };

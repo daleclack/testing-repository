@@ -48,7 +48,27 @@ FileWindow::FileWindow()
     auto column_sizes = Gtk::ColumnViewColumn::create("Size", size_factory);
     main_view.append_column(column_sizes);
 
+    // Places store
+    places_list = Gtk::StringList::create();
+    places_list->append(Glib::get_home_dir());
+    places_list->append(Glib::get_user_special_dir(Glib::UserDirectory::DESKTOP));
+    places_list->append(Glib::get_user_special_dir(Glib::UserDirectory::DOCUMENTS));
+    places_list->append(Glib::get_user_special_dir(Glib::UserDirectory::DOWNLOAD));
+    places_list->append(Glib::get_user_special_dir(Glib::UserDirectory::MUSIC));
+    places_list->append(Glib::get_user_special_dir(Glib::UserDirectory::PICTURES));
+    places_list->append(Glib::get_user_special_dir(Glib::UserDirectory::VIDEOS));
+
     // Add the places sidebar
+    places_selection = Gtk::SingleSelection::create(places_list);
+    places_view.set_model(places_selection);
+    places_scroller.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC);
+    places_scroller.set_child(places_view);
+
+    // Create factory for places
+    places_factory = Gtk::SignalListItemFactory::create();
+    places_factory->signal_setup().connect(sigc::mem_fun(*this, &FileWindow::places_setup));
+    places_factory->signal_bind().connect(sigc::mem_fun(*this, &FileWindow::places_bind));
+    places_view.set_factory(places_factory);
 
     // Add topbar for the places
     btn_up.set_icon_name("go-up");
@@ -115,8 +135,11 @@ void FileWindow::btnup_clicked()
     }
 }
 
-void FileWindow::btnhome_clicked()
+void FileWindow::placebtn_clicked(FileBtn *btn)
 {
+    auto path = btn->file_path;
+    dir_list->set_file(Gio::File::create_for_path(path));
+    place_entry.set_text(path);
 }
 
 void FileWindow::folder_item_activated(guint pos)
@@ -188,6 +211,9 @@ void FileWindow::places_bind(const Glib::RefPtr<Gtk::ListItem> &item)
 
     auto display_name = path.substr(end_pos + 1);
     btn->set_label(display_name);
+    btn->file_path = path;
+    btn->signal_clicked().connect(sigc::bind(
+        sigc::mem_fun(*this, &FileWindow::placebtn_clicked), btn));
 }
 
 // Setup and bind the icon
