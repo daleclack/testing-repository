@@ -1,6 +1,8 @@
 #pragma once
 
 #include <gtkmm.h>
+#include "NewDialog.hh"
+#include "MsgDialog.hh"
 
 class FileBtn : public Gtk::Button
 {
@@ -11,6 +13,7 @@ public:
     }
 
     Glib::ustring file_path;
+    guint id;
 };
 
 class FileWindow : public Gtk::Window
@@ -35,7 +38,7 @@ private:
     Gtk::ListView places_view;
     Gtk::ScrolledWindow main_scroller, places_scroller;
     Gtk::ColumnView main_view;
-    Gtk::Button btn_add, btn_up, btn_home, btn_del;
+    Gtk::Button btn_add, btn_up, btn_del;
 
     // List for sidebar
     Glib::RefPtr<Gtk::StringList> places_list;
@@ -68,6 +71,12 @@ private:
     Glib::RefPtr<Gtk::SignalListItemFactory> size_factory;
     void size_setup(const Glib::RefPtr<Gtk::ListItem> &item);
     void size_bind(const Glib::RefPtr<Gtk::ListItem> &item);
+
+    // Dialog for new folder
+    NewDialog new_dialog;
+
+    // Dialog for message
+    MsgDialog msg_dialog;
 
     // Signal handlers
     void btnadd_clicked();

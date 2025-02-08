@@ -28,7 +28,7 @@ link_directories (${GTKMM4_LIBRARY_DIRS})
 # set(PO_DIR ${CMAKE_BINARY_DIR}/po/zh_CN/LC_MESSAGES)
 
 #Source files
-set(SOURCE_FILE src/main.cc src/FileWindow.cc)
+set(SOURCE_FILE src/main.cc src/FileWindow.cc src/NewDialog.cc src/MsgDialog.cc)
 
 #Compile Resource
 

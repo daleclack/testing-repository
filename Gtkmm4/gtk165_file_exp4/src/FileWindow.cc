@@ -71,6 +71,10 @@ FileWindow::FileWindow()
     views_box.append(main_scroller);
     set_child(main_box);
 
+    // Initalize dialogs
+    new_dialog.set_transient_for(*this);
+    msg_dialog.set_transient_for(*this);
+
     // Connect signals
     main_view.signal_activate().connect(sigc::mem_fun(*this, &FileWindow::folder_item_activated));
     btn_add.signal_clicked().connect(sigc::mem_fun(*this, &FileWindow::btnadd_clicked));
@@ -80,11 +84,14 @@ FileWindow::FileWindow()
 
 void FileWindow::btnadd_clicked()
 {
-    
+    auto file = dir_list->get_file();
+    auto path = file->get_path();
+    new_dialog.show_dialog(path);
 }
 
 void FileWindow::btndel_clicked()
 {
+    msg_dialog.show_message("Delete failed");
 }
 
 void FileWindow::btnup_clicked()
