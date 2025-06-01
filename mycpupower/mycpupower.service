@@ -1,6 +1,7 @@
 [Unit]
 Description=Apply cpupower configuration
 ConditionVirtualization=!container
+After=multi-user.target
 
 [Service]
 Type=oneshot
