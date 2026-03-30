@@ -1,0 +1,52 @@
+diff -Naru crrcsim-hg/PKGBUILD crrcsim-hg.patched/PKGBUILD
+--- crrcsim-hg/PKGBUILD	2017-10-30 12:31:34.000000000 +0300
++++ crrcsim-hg.patched/PKGBUILD	2023-02-17 23:54:37.737573212 +0300
+@@ -14,13 +14,19 @@
+ arch=('i686' 'x86_64')
+ url="http://sourceforge.net/projects/crrcsim/"
+ license=('GPL')
+-depends=('sdl>=1.2.5' 'portaudio' 'libjpeg' 'cgal')
++depends=('sdl>=1.2.5' 'portaudio' 'libjpeg' 'gmp')
+ groups=()
+-makedepends=('mercurial' 'gawk' 'plib>=1.8.4')
++makedepends=('git' 'mercurial' 'gawk' 'mpfr' 'plib>=1.8.4')
+ provides=('crrcsim')
+ conflicts=('crrcsim')
+-source=('hg+https://hg.code.sf.net/p/crrcsim/code')
+-sha256sums=('SKIP')
++source=(
++  'git+https://github.com/CGAL/cgal.git'
++  'hg+http://hg.code.sf.net/p/crrcsim/code'
++)
++sha256sums=(
++  'SKIP'
++  'SKIP'
++)
+ 
+ pkgver() {
+   cd code
+@@ -29,6 +35,12 @@
+ }
+ 
+ build() {
++  mkdir -p "$srcdir/cgal/build"
++  cd "$srcdir/cgal/build"
++  local _cgal_pkg="$srcdir/cgal-pkg"
++  cmake ../ -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$_cgal_pkg"
++  make install
++
+   cd "$srcdir"
+   msg "Connecting to Mercurial server...."
+ 
+@@ -40,9 +52,9 @@
+   # BUILD HERE
+   #
+   sed -i "s/boost_thread-mt/boost_thread/g" ./configure.ac
+-  sed -i "s/-lCGAL/\"-lCGAL -lgmp\"/g" ./configure.ac
++  sed -i "s/-lCGAL/-lgmp/g" ./configure.ac
+   ./autogen.sh
+-  ./configure --prefix=/usr
++  CPPFLAGS="-I $_cgal_pkg/include" ./configure --prefix=/usr
+   make
+ }
+ 

@@ -1,3 +1,5 @@
+mkdir ~/.local/share/icons/hicolor/scalable
+mkdir ~/.local/share/icons/hicolor/symbolic
 mkdir ~/.local/share/icons/hicolor/scalable/apps
 mkdir ~/.local/share/icons/hicolor/symbolic/apps
 cp ./org.gtk.daleclack.png ~/.local/share/icons/hicolor/48x48/apps/org.gtk.daleclack.png

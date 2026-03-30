@@ -1,0 +1,28 @@
+diff -Naru crrcsim-hg/PKGBUILD crrcsim-hg.patched/PKGBUILD
+--- crrcsim-hg/PKGBUILD	2017-10-30 12:31:34.000000000 +0300
++++ crrcsim-hg.patched/PKGBUILD	2023-02-17 23:52:43.103406527 +0300
+@@ -14,12 +14,12 @@
+ arch=('i686' 'x86_64')
+ url="http://sourceforge.net/projects/crrcsim/"
+ license=('GPL')
+-depends=('sdl>=1.2.5' 'portaudio' 'libjpeg' 'cgal')
++depends=('sdl>=1.2.5' 'portaudio' 'libjpeg' 'gmp')
+ groups=()
+-makedepends=('mercurial' 'gawk' 'plib>=1.8.4')
++makedepends=('mercurial' 'gawk' 'cgal>=5.0' 'plib>=1.8.4')
+ provides=('crrcsim')
+ conflicts=('crrcsim')
+-source=('hg+https://hg.code.sf.net/p/crrcsim/code')
++source=('hg+http://hg.code.sf.net/p/crrcsim/code')
+ sha256sums=('SKIP')
+ 
+ pkgver() {
+@@ -40,7 +40,7 @@
+   # BUILD HERE
+   #
+   sed -i "s/boost_thread-mt/boost_thread/g" ./configure.ac
+-  sed -i "s/-lCGAL/\"-lCGAL -lgmp\"/g" ./configure.ac
++  sed -i "s/-lCGAL/-lgmp/g" ./configure.ac
+   ./autogen.sh
+   ./configure --prefix=/usr
+   make
